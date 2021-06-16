@@ -1,0 +1,7 @@
+type Lineup @model {
+  id: ID!
+  name: String!
+  agent: String
+  ability: String
+  description: String
+}
