@@ -1,4 +1,10 @@
 // @ts-nocheck
+
+/**
+ * Taken from https://github.com/bradstiff/react-responsive-pinch-zoom-pan
+ * modified to disable event.preventdefault on mousewheel
+ */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createSelector } from 'reselect';
@@ -505,6 +511,7 @@ export default class PinchZoomPan extends React.Component {
             : undefined;
 
         const containerStyle = {
+            position: 'relative',
             width: '100%', 
             height: '100%',
             overflow: 'hidden',

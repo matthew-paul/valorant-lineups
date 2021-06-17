@@ -20,7 +20,7 @@ const ZoomOutButton = ({ disabled, onClick }) => (
 );
 
 const ZoomInButton = ({ disabled, onClick }) => (
-    <button className='iconButton' style={{ margin: '10px', marginLeft: '0px' }} onClick={onClick} disabled={disabled}>
+    <button className='iconButton' style={{ marginTop: '10px', marginLeft: '0px' }} onClick={onClick} disabled={disabled}>
         <FontAwesomeIcon icon={faPlus} fixedWidth />
     </button>
 );

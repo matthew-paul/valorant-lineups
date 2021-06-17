@@ -1,0 +1,22 @@
+[
+    {
+        "id": "alsdfmk12341928r",
+        "name": "Ascent A Attack Recon Bolt",
+        "description": "reveals all of a site except left generator and in front of dice",
+        "agent": "Sova",
+        "ability": "Recon Bolt",
+        "map": "Ascent",
+        "tags": [
+            "attacking"
+        ],
+        "images": [
+            ""
+        ],
+        "video": "7A0_-C4HSFw",
+        "credits": "https://docs.google.com/presentation/d/1lC66dZQBioIc2E_sOvXS3ZoNykfSPl0Xj5qaDqknwwA/present?slide=id.g8be6325e34_0_110",
+        "x": 24.8,
+        "y": 7.5,
+        "start-x": 55.1,
+        "start-y": 28.1
+    }
+]

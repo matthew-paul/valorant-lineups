@@ -2,24 +2,17 @@ import MapInteractionCSS from './MapInteractionCSS'
 import Marker from './Marker'
 import Map from './Map'
 import React from 'react'
+import lineups from './sampleLineup.json'
 
 const MapFrame = ({ mapName, onMarkerClick }) => {
+
     return (
         <div className='map-frame'>
             <MapInteractionCSS>
                 <Map mapName={mapName} />
 
                 <div className='marker-frame'>
-                <Marker
-                    id={1}
-                    agent='Sova'
-                    icon='Recon Bolt'
-                    x={24.8}
-                    y={7.5}
-                    startX={55.1}
-                    startY={28.1}
-                    onClick={() => onMarkerClick(1)}
-                    />
+                    {lineups.map((lineup) => <Marker key={lineup.id} lineup={lineup} onClick={() => onMarkerClick(lineup.id)}/>)}
                 </div>
             </MapInteractionCSS>
         </div>
