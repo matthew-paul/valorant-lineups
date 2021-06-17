@@ -27,7 +27,7 @@ const ContentFrame = ({ image }) => {
     return (
         <div id='content-frame' className='content-frame' >
             <div className='video-frame'>
-                <YoutubeEmbed embedId="7A0_-C4HSFw" />
+                <YoutubeEmbed embedId="eoYbtmXt5iI" />
             </div>
             < ImageFrame image={image} enterImageFocus={enterImageFocus} exitImageFocus={exitImageFocus} />
             < ImageFrame image={image} enterImageFocus={enterImageFocus} exitImageFocus={exitImageFocus} />

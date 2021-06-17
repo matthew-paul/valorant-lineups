@@ -1,14 +1,24 @@
+import React from 'react'
 import AscentMap from '../resources/Maps/ascent_map.png'
+import { MAP_LIST } from './constants'
 
-const Map = ({ mapName }) => {
+const Map = ({ mapId }) => {
 
     const onClick = (e) => {
         console.log(e.nativeEvent.offsetX-15, e.nativeEvent.offsetY-15)
     }
 
-    const getMap = (mapName) => {
+    const getMap = (mapId) => {
+
+        if(!(mapId in MAP_LIST)) {
+            console.warn('map id not recognized:', mapId);
+            return null;
+        }
+
+        let mapName = MAP_LIST[mapId]
+
         switch(mapName) {
-            case 'ascent':
+            case 'Ascent':
                 return AscentMap
             default:
                 console.error('Map not recognized:', mapName)
@@ -19,8 +29,8 @@ const Map = ({ mapName }) => {
     return (
         <img
             className='map-icon'
-            alt={mapName + ' map'}
-            src={getMap(mapName)}
+            alt={(mapId in MAP_LIST ? MAP_LIST[mapId] : 'unrecognized') + ' map'}
+            src={getMap(mapId)}
             onClick={onClick}
         />
         

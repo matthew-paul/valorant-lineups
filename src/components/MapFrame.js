@@ -4,12 +4,12 @@ import Map from './Map'
 import React from 'react'
 import lineups from './sampleLineup.json'
 
-const MapFrame = ({ mapName, onMarkerClick }) => {
+const MapFrame = ({ mapId, onMarkerClick }) => {
 
     return (
         <div className='map-frame'>
             <MapInteractionCSS>
-                <Map mapName={mapName} />
+                <Map mapId={mapId} />
 
                 <div className='marker-frame'>
                     {lineups.map((lineup) => <Marker key={lineup.id} lineup={lineup} onClick={() => onMarkerClick(lineup.id)}/>)}

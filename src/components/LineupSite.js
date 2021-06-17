@@ -1,27 +1,36 @@
 // @ts-nocheck
-import React from "react";
+import React, { Component } from "react";
 import MapFrame from "./MapFrame";
 import ContentFrame from "./ContentFrame";
-import lineupImage from '../resources/Agents/Sova/lineups/lineup-1-1.png'
-import { useState } from 'react'
 
-const LineupSite = () => {
 
-  const [image, setImage] = useState(lineupImage)
+export class LineupSite extends Component {
 
-  const onMarkerClick = (id) => {
+  constructor(props) {
+    super(props)
+    this.activeMarker = null;
+  }
+
+  componentDidMount() {
+    console.log('site mounted')
+
+    // TODO: retrieve all lineups for this map from api
+  }
+
+  onMarkerClick = (id) => {
     // Connect to db and get images for marker id
-    setImage(lineupImage)
 
     console.log(id)
   }
 
-  return (
-    <div className='outer-frame'>
-      <MapFrame mapName='ascent' onMarkerClick={onMarkerClick}/>
-      <ContentFrame image={image}/>
-    </div>
-  );
+  render() {
+    return (
+      <div className='outer-frame'>
+        <MapFrame mapId={this.props.mapId} onMarkerClick={this.onMarkerClick} />
+        <ContentFrame image={'https://valorant-lineups.s3.amazonaws.com/Agents/Sova/LineupImages/lineup-1-1.png'} />
+      </div>
+    );
+  }
 
 }
 

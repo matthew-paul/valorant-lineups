@@ -1,19 +1,37 @@
 import React from 'react'
 import ReconBolt from '../resources/Agents/Sova/Recon_Bolt.png'
+import { AGENT_LIST, ABILITY_LIST } from './constants'
 
 const Marker = ({ lineup, onClick }) => {
-    const getIcon = (agent, ability) => {
-        switch(agent) {
+
+    const getIcon = (agentId, abilityId) => {
+
+
+        if (!(agentId in AGENT_LIST)) {
+            console.warn('agent ID not recognized:', agentId)
+            return null;
+        }
+
+        if (!(abilityId in ABILITY_LIST)) {
+            console.warn('ability ID not recognized:', abilityId)
+            return null;
+        }
+
+        let agentName = AGENT_LIST[agentId]
+        let abilityName = ABILITY_LIST[abilityId]
+
+        
+        switch(agentName) {
             case 'Sova':
-                switch(ability) {
+                switch(abilityName) {
                     case 'Recon Bolt':
                         return ReconBolt
                     default:
-                        console.log(agent, 'icon:', ability, 'not recognized')
+                        console.warn(agentName, 'icon:', abilityName, 'not recognized')
                         return null;
                 }
             default:
-                console.log('agent not recognized:', agent)
+                console.warn('agent not recognized:', agentName)
                 return null;
         }
     }
