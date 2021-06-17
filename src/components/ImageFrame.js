@@ -1,16 +1,17 @@
-import React, { Component } from 'react'
-import PinchZoomPan from 'react-responsive-pinch-zoom-pan'
+import React from 'react'
+import PinchZoomPan from './responsive-pinch-zoom-pan/PinchZoomPan'
 
-export class ImageFrame extends Component {
-    render() {
-        return (
-            <div className='image-frame' onWheel={() => { console.log('wheel') }}>
-                <PinchZoomPan doubleTapBehavior='zoom' position='center' initialScale={1} minScale={1} maxScale={4} zoomButtons={false}>
-                    <img className='image-1' src={this.props.image} alt='' />
-                </PinchZoomPan>
-            </div>
-        )
-    }
+
+
+export const ImageFrame = (props) => {
+
+    return (
+        <div className='image-frame' >
+            <PinchZoomPan doubleTapBehavior='zoom' position='center' initialScale={1} minScale={1} maxScale={6} zoomButtons={false}>
+                <img className='lineup-image' src={props.image} alt='' onMouseEnter={props.enterImageFocus} onMouseLeave={props.exitImageFocus} />
+            </PinchZoomPan>
+        </div>
+    )
 }
 
 export default ImageFrame

@@ -3,11 +3,11 @@ import Marker from './Marker'
 import Map from './Map'
 import React from 'react'
 
-const MapFrame = ({ onMarkerClick }) => {
+const MapFrame = ({ mapName, onMarkerClick }) => {
     return (
         <div className='map-frame'>
             <MapInteractionCSS>
-                <Map mapName='ascent' />
+                <Map mapName={mapName} />
 
                 <div className='marker-frame'>
                 <Marker
