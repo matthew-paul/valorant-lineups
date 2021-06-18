@@ -6,9 +6,13 @@ import ContentFrame from "./ContentFrame";
 
 export class LineupSite extends Component {
 
-  constructor(props) {
-    super(props)
-    this.activeMarker = null;
+  state = {
+    activeMarkerId: null,
+    images: [],
+    video: null,
+    description: '',
+    name: '',
+    credits: '',
   }
 
   componentDidMount() {
@@ -18,7 +22,7 @@ export class LineupSite extends Component {
   }
 
   onMarkerClick = (id) => {
-    // Connect to db and get images for marker id
+    // TODO: update state with lineup info
 
     console.log(id)
   }

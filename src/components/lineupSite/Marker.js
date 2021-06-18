@@ -1,6 +1,6 @@
 import React from 'react'
-import ReconBolt from '../resources/Agents/Sova/Recon_Bolt.png'
-import { AGENT_LIST, ABILITY_LIST } from './constants'
+import ReconBolt from '../../resources/Agents/Sova/Recon_Bolt.png'
+import { AGENT_LIST, ABILITY_LIST } from '../component-utils/constants'
 
 const Marker = ({ lineup, onClick }) => {
 
@@ -12,13 +12,14 @@ const Marker = ({ lineup, onClick }) => {
             return null;
         }
 
-        if (!(abilityId in ABILITY_LIST)) {
+        let agentName = AGENT_LIST[agentId]
+
+        if (!(abilityId in ABILITY_LIST[agentId])) {
             console.warn('ability ID not recognized:', abilityId)
             return null;
         }
 
-        let agentName = AGENT_LIST[agentId]
-        let abilityName = ABILITY_LIST[abilityId]
+        let abilityName = ABILITY_LIST[agentId][abilityId]
 
         
         switch(agentName) {

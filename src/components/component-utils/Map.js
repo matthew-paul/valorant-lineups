@@ -1,12 +1,9 @@
 import React from 'react'
-import AscentMap from '../resources/Maps/ascent_map.png'
+import AscentMap from '../../resources/Maps/ascent_map.png'
 import { MAP_LIST } from './constants'
+import PropTypes from 'prop-types'
 
-const Map = ({ mapId }) => {
-
-    const onClick = (e) => {
-        console.log(e.nativeEvent.offsetX-15, e.nativeEvent.offsetY-15)
-    }
+const Map = (props) => {
 
     const getMap = (mapId) => {
 
@@ -29,12 +26,17 @@ const Map = ({ mapId }) => {
     return (
         <img
             className='map-icon'
-            alt={(mapId in MAP_LIST ? MAP_LIST[mapId] : 'unrecognized') + ' map'}
-            src={getMap(mapId)}
-            onClick={onClick}
+            alt={(props.mapId in MAP_LIST ? MAP_LIST[props.mapId] : 'unrecognized') + ' map'}
+            src={getMap(props.mapId)}
+            onClick={props.onMapClick != null ? props.onMapClick : null}
         />
         
     )
+}
+
+Map.propTypes = {
+    mapId: PropTypes.number.isRequired,
+    onMapClick: PropTypes.func
 }
 
 export default Map

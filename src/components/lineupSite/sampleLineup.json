@@ -7,7 +7,10 @@
         "ability": 1,
         "map": 1,
         "tags": [
-            1, 5, 8, 11
+            1,
+            5,
+            8,
+            11
         ],
         "images": [
             "https://valorant-lineups.s3.amazonaws.com/Agents/Sova/LineupImages/lineup-1-1.png"
