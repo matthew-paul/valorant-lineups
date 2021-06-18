@@ -1,4 +1,3 @@
-
 /* Styles for react-tag input */
 
 .ReactTags__tagInput {
@@ -7,7 +6,8 @@
     display: inline-block;
 }
 
-.ReactTags__tagInput input.ReactTags__tagInputField, .ReactTags__tagInput input.ReactTags__tagInputField:focus {
+.ReactTags__tagInput input.ReactTags__tagInputField,
+.ReactTags__tagInput input.ReactTags__tagInputField:focus {
     height: 31px;
     margin: 0;
     font-size: 12px;

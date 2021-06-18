@@ -21,10 +21,10 @@ const Marker = ({ lineup, onClick }) => {
 
         let abilityName = ABILITY_LIST[agentId][abilityId]
 
-        
-        switch(agentName) {
+
+        switch (agentName) {
             case 'Sova':
-                switch(abilityName) {
+                switch (abilityName) {
                     case 'Recon Bolt':
                         return ReconBolt
                     default:
@@ -41,11 +41,11 @@ const Marker = ({ lineup, onClick }) => {
 
     return (
         <img
-          className='marker-icon'
-          src={getIcon(lineup.agent, lineup.ability)}
-          alt='recon bolt'
-          style={{ left: `${lineup.x}%`, top: `${lineup.y}%`}}
-          onClick={onClick}
+            className='marker-icon'
+            src={getIcon(lineup.agent, lineup.ability)}
+            alt='recon bolt'
+            style={{ left: `${lineup.x}%`, top: `${lineup.y}%` }}
+            onClick={onClick}
         />
     )
 }

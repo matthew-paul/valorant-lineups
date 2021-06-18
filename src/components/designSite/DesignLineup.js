@@ -8,7 +8,7 @@ import Map from '../component-utils/Map.js'
 const DesignLineup = () => {
 
     const onMapClick = (e) => {
-        console.log((e.nativeEvent.offsetX-15)/10.0, (e.nativeEvent.offsetY-15)/10.0)
+        console.log((e.nativeEvent.offsetX - 15) / 10.0, (e.nativeEvent.offsetY - 15) / 10.0)
     }
 
     return (
@@ -17,7 +17,7 @@ const DesignLineup = () => {
             <div className='design-form-frame'>
                 <div className='design-map-frame'>
                     <MapInteractionCSS>
-                        <Map mapId={1} onMapClick={onMapClick}/>
+                        <Map mapId={1} onMapClick={onMapClick} />
 
                     </MapInteractionCSS>
                 </div>

@@ -1,5 +1,5 @@
-@import 'react-tags';
-@import '../../utils';
+@import "react-tags";
+@import "../../utils";
 
 .design-form-frame {
     @include outer-frame;
@@ -21,8 +21,6 @@ select.first-opt-hidden option:first-of-type {
     width: 20%;
 }
 
-
 .lineup-form-label {
     color: white;
 }
-

@@ -7,14 +7,14 @@ const Map = (props) => {
 
     const getMap = (mapId) => {
 
-        if(!(mapId in MAP_LIST)) {
+        if (!(mapId in MAP_LIST)) {
             console.warn('map id not recognized:', mapId);
             return null;
         }
 
         let mapName = MAP_LIST[mapId]
 
-        switch(mapName) {
+        switch (mapName) {
             case 'Ascent':
                 return AscentMap
             default:
@@ -22,7 +22,7 @@ const Map = (props) => {
                 return null
         }
     }
-    
+
     return (
         <img
             className='map-icon'
@@ -30,7 +30,7 @@ const Map = (props) => {
             src={getMap(props.mapId)}
             onClick={props.onMapClick != null ? props.onMapClick : null}
         />
-        
+
     )
 }
 

@@ -1,6 +1,6 @@
-@import 'map';
-@import 'content';
-@import '../utils';
+@import "map";
+@import "content";
+@import "../utils";
 
 .outer-frame {
     @include outer-frame(flex);

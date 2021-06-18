@@ -7,20 +7,19 @@ $height-aspect-ratio: 22.5vw;
 
     margin: auto;
     margin-bottom: 2%;
-    @include debug-border($debug-color)
+    @include debug-border($debug-color);
 }
 
 .content-frame {
     height: 100%;
     width: 50%;
     display: block;
-    overflow-y: scroll; 
+    overflow-y: scroll;
     @include debug-border(green);
 }
 
-
-.image-frame { 
-    @include frame-settings(yellow)
+.image-frame {
+    @include frame-settings(yellow);
 }
 
 .lineup-image {
@@ -30,7 +29,7 @@ $height-aspect-ratio: 22.5vw;
 }
 
 .video-frame {
-    @include frame-settings(red)
+    @include frame-settings(red);
 }
 
 .video-responsive {

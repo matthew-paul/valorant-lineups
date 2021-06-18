@@ -7,7 +7,7 @@ import lineups from './sampleLineup.json'
 const MapFrame = ({ mapId, onMarkerClick }) => {
 
     const onMapClick = (e) => {
-        console.log(e.nativeEvent.offsetX-15, e.nativeEvent.offsetY-15)
+        console.log(e.nativeEvent.offsetX - 15, e.nativeEvent.offsetY - 15)
     }
 
     return (
@@ -16,7 +16,7 @@ const MapFrame = ({ mapId, onMarkerClick }) => {
                 <Map mapId={mapId} onMapClick={onMapClick} />
 
                 <div className='marker-frame'>
-                    {lineups.map((lineup) => <Marker key={lineup.id} lineup={lineup} onClick={() => onMarkerClick(lineup.id)}/>)}
+                    {lineups.map((lineup) => <Marker key={lineup.id} lineup={lineup} onClick={() => onMarkerClick(lineup.id)} />)}
                 </div>
             </MapInteractionCSS>
         </div>
