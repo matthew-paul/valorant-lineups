@@ -1,0 +1,35 @@
+
+/* Styles for react-tag input */
+
+.ReactTags__tagInput {
+    width: 200px;
+    border-radius: 2px;
+    display: inline-block;
+}
+
+.ReactTags__tagInput input.ReactTags__tagInputField, .ReactTags__tagInput input.ReactTags__tagInputField:focus {
+    height: 31px;
+    margin: 0;
+    font-size: 12px;
+    width: 100%;
+    border: 1px solid #eee;
+}
+
+/* Styles for react-tag selected tags */
+
+.ReactTags__selected span.ReactTags__tag {
+    border: 1px solid #ddd;
+    background: #63bcfd;
+    color: white;
+    font-size: 12px;
+    display: inline-block;
+    padding: 5px;
+    margin: 0px 5px;
+    border-radius: 2px;
+}
+
+.ReactTags__selected a.ReactTags__remove {
+    color: #aaa;
+    margin-left: 5px;
+    cursor: pointer;
+}

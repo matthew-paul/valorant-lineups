@@ -131,7 +131,7 @@ export class Form extends Component {
                     handleDelete={this.handleImageDelete}
                     handleAddition={this.handleImageAdd}
                     allowDragDrop={false}
-                    inline={false}
+                    inputFieldPosition="top"
                 />
 
                 {/* X */}

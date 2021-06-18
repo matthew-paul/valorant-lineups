@@ -1,0 +1,22 @@
+@import '../utils';
+
+.map-frame {
+    height: 100%;
+    width: 50%;
+    cursor: grab;
+    @include debug-border(white);
+}
+
+.map-frame:active {
+    cursor: grabbing
+}
+
+.marker-icon {
+    height: 25px;
+    width: 25px;
+    position: absolute;
+}
+
+.marker-icon:hover {
+    cursor: pointer;
+}

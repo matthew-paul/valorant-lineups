@@ -1,0 +1,45 @@
+$height-aspect-ratio: 22.5vw;
+
+@mixin frame-settings($debug-color: white) {
+    width: 80%;
+    /* this keeps aspect ratio i think */
+    height: $height-aspect-ratio;
+
+    margin: auto;
+    margin-bottom: 2%;
+    @include debug-border($debug-color)
+}
+
+.content-frame {
+    height: 100%;
+    width: 50%;
+    display: block;
+    overflow-y: scroll; 
+    @include debug-border(green);
+}
+
+
+.image-frame { 
+    @include frame-settings(yellow)
+}
+
+.lineup-image {
+    width: 100%;
+    height: 100%;
+    @include debug-border(purple);
+}
+
+.video-frame {
+    @include frame-settings(red)
+}
+
+.video-responsive {
+    height: 100%;
+    @include debug-border(teal);
+}
+
+.video-responsive iframe {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}

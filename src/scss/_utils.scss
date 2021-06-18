@@ -1,0 +1,13 @@
+$debug-border-style: dotted;
+
+@mixin debug-border($color: white) {
+    border-style: $debug-border-style;
+    border-color: $color;
+}
+
+@mixin outer-frame($display: flex) {
+    width: 100vw;
+    height: 100vh;
+    display: $display;
+    justify-content: center;
+}

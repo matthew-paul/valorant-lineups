@@ -1,0 +1,28 @@
+@import 'react-tags';
+@import '../../utils';
+
+.design-form-frame {
+    @include outer-frame;
+    @include debug-border(yellow);
+}
+
+.lineup-form {
+    height: 100%;
+    width: 50%;
+    margin-bottom: -1000px;
+    @include debug-border(red);
+}
+
+select.first-opt-hidden option:first-of-type {
+    display: none;
+}
+
+.multi-select {
+    width: 20%;
+}
+
+
+.lineup-form-label {
+    color: white;
+}
+
