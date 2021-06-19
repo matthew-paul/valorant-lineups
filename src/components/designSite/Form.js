@@ -168,7 +168,7 @@ export class Form extends Component {
                 {/* Images */}
                 <div className='row'>
                     <ReactTags
-                        placeholder="Add image link(s)"
+                        placeholder="Add image link(s) and press enter"
                         tags={this.state.images}
                         handleDelete={this.handleImageDelete}
                         handleAddition={this.handleImageAdd}

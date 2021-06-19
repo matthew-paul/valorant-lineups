@@ -7,6 +7,8 @@ import Map from '../component-utils/Map.js'
 import Marker from '../lineupSite/Marker.js'
 import startIcon from '../../resources/start-icon.png'
 
+
+
 export class DesignLineup extends Component {
 
     constructor(props) {
@@ -65,51 +67,84 @@ export class DesignLineup extends Component {
         this.settingStartPosition = false
     }
 
-    onSubmit = e => {
-        // prevent page auto refresh
-        e.preventDefault()
-
-        // validate input
-
+    validLineupState = () => {
         // Get tag list
         if (this.state.name === '') {
             this.setState({
                 infoMessage: { type: 'error', value: 'Enter a lineup title' }
             })
-            return;
+            return false;
         }
 
         if (this.state.agent === 0) {
             this.setState({
                 infoMessage: { type: 'error', value: 'Select an agent' }
             })
-            return;
+            return false;
         }
 
         if (this.state.ability === 0) {
             this.setState({
                 infoMessage: { type: 'error', value: 'Select an ability' }
             })
-            return;
+            return false;
         }
 
         if (this.state.images.length === 0) {
             this.setState({
                 infoMessage: { type: 'error', value: 'Enter an image link' }
             })
-            return;
+            return false;
         }
 
         if (this.state.video === '') {
             this.setState({
                 infoMessage: { type: 'error', value: 'Enter a youtube video id' }
             })
-            return;
+            return false;
         }
 
-        console.log('state VALIDDDD')
+        if (this.state.x === -1) {
+            this.setState({
+                infoMessage: { type: 'error', value: 'Select a lineup position' }
+            })
+            return false;
+        }
 
-        // send state to dynamodb
+        return true;
+
+    }
+
+    sendLineupToDB = () => {
+
+        // only use tag numbers to save data
+        let tagList = this.state.tags.map((pair) => pair.value)
+
+        // id will be created on server side
+        let lineupData = {
+            'name': this.state.name,
+            'description': this.state.description,
+            'agent': this.state.agent,
+            'ability': this.state.ability,
+            'mapId': this.state.mapId,
+            'tags': tagList,
+            'images': this.state.images,
+            'video': this.state.video,
+            'credits': this.state.credits,
+            'x': this.state.x,
+            'y': this.state.y,
+            'start-x': this.state.startX,
+            'start-y': this.state.startY
+        }
+
+        let requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(lineupData),
+        }
+        fetch('https://uh5it8zn19.execute-api.us-east-1.amazonaws.com/development', requestOptions)
+            .then(response => response.text())
+            .then(data => console.log(data))
 
 
         this.setState({
@@ -121,8 +156,19 @@ export class DesignLineup extends Component {
                 infoMessage: { type: 'success', value: 'Sent lineup to database' }
             })
         }, 100)
+    }
 
+    onSubmit = e => {
+        // prevent page auto refresh
+        e.preventDefault()
 
+        // validate input
+        if (!this.validLineupState()) {
+            return
+        }
+
+        // send state to dynamodb
+        this.sendLineupToDB()
     }
 
     onContextMenu = (event) => {
@@ -156,12 +202,12 @@ export class DesignLineup extends Component {
                             <button className='map-button' onClick={this.setStartPositionClicked}>Set Start Position</button>
                         </div>
                         <div className='design-map-frame' onContextMenu={this.onContextMenu} >
-                            <MapInteractionCSS>
+                            <MapInteractionCSS maxScale={6}>
                                 <Map mapId={this.state.mapId} onMapClick={this.onMapClick} />
 
                                 <div className='marker-frame'>
                                     {this.state.x !== -1 ?
-                                        <Marker key={1} lineup={this.state} onClick={() => { this.setState({ x: -1, y: -1 }) }} /> : ''
+                                        <Marker lineup={this.state} onClick={() => { this.setState({ x: -1, y: -1 }) }} /> : ''
                                     }
                                     {this.state.startX !== -1 ?
                                         <img

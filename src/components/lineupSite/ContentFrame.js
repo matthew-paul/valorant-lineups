@@ -2,9 +2,10 @@ import React from 'react'
 import ImageFrame from './ImageFrame'
 import YoutubeEmbed from "../component-utils/YoutubeEmbed"
 import disableScroll from 'disable-scroll'
+import PropTypes from 'prop-types'
 
 
-const ContentFrame = ({ image }) => {
+const ContentFrame = (props) => {
 
 
     // disable page scrolling when hovering over image, so user can zoom in on photo without scrolling page
@@ -26,13 +27,30 @@ const ContentFrame = ({ image }) => {
 
     return (
         <div id='content-frame' className='content-frame' >
-            <div className='video-frame'>
-                <YoutubeEmbed embedId="eoYbtmXt5iI" />
-            </div>
-            < ImageFrame image={image} enterImageFocus={enterImageFocus} exitImageFocus={exitImageFocus} />
-            < ImageFrame image={image} enterImageFocus={enterImageFocus} exitImageFocus={exitImageFocus} />
+            {
+                props.videoId !== '' ?
+                    <div className='video-frame'>
+                        <YoutubeEmbed embedId={props.videoId} />
+                    </div>
+                    : ''
+            }
+            {
+                props.images.map((image) =>
+                    <ImageFrame image={image} enterImagefocus={enterImageFocus} exitImageFocus={exitImageFocus} />
+                )
+            }
         </div>
     )
+}
+
+ContentFrame.propTypes = {
+    images: PropTypes.array,
+    videoId: PropTypes.string
+}
+
+ContentFrame.defaultProps = {
+    images: [],
+    videoId: ''
 }
 
 export default ContentFrame

@@ -23,6 +23,12 @@
   cursor: pointer;
 }
 
+.arrow {
+  stroke: black;
+  stroke-width: 2;
+  marker-end: url(#markerArrow);
+}
+
 .content-frame {
   height: 100%;
   width: 50%;

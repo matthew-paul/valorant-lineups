@@ -38,6 +38,7 @@ const Marker = (props) => {
 
     return (
         <img
+            id={'id' in props ? props.id : ''}
             className='marker-icon'
             src={getIcon(props.lineup.agent, props.lineup.ability)}
             alt='recon bolt'

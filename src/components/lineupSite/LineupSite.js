@@ -1,15 +1,18 @@
 // @ts-nocheck
 import React, { Component } from "react";
-import MapFrame from "./MapFrame";
 import ContentFrame from "./ContentFrame";
+import MapInteractionCSS from '../component-utils/MapInteractionCSS'
+import Map from "../component-utils/Map";
+import Marker from "./Marker";
+import lineups from './sampleLineup.json'
 
 
 export class LineupSite extends Component {
 
   state = {
     activeMarkerId: null,
-    images: [],
-    video: null,
+    images: lineups[0].images,
+    video: lineups[0].video,
     description: '',
     name: '',
     credits: '',
@@ -21,6 +24,10 @@ export class LineupSite extends Component {
     // TODO: retrieve all lineups for this map from api
   }
 
+  onMapClick = (e) => {
+    console.log(e.nativeEvent.offsetX - 12.5, e.nativeEvent.offsetY - 12.5)
+  }
+
   onMarkerClick = (id) => {
     // TODO: update state with lineup info
 
@@ -30,8 +37,17 @@ export class LineupSite extends Component {
   render() {
     return (
       <div className='outer-frame'>
-        <MapFrame mapId={this.props.mapId} onMarkerClick={this.onMarkerClick} />
-        <ContentFrame image={'https://valorant-lineups.s3.amazonaws.com/Agents/Sova/LineupImages/lineup-1-1.png'} />
+        <div className='map-frame'>
+          <MapInteractionCSS maxScale={6}>
+            <Map mapId={this.props.mapId} onMapClick={this.onMapClick} />
+
+            <div className='marker-frame'>
+              {lineups.map((lineup) => <Marker key={lineup.id} lineup={lineup} onClick={() => this.onMarkerClick(lineup.id)} />)}
+            </div>
+          </MapInteractionCSS>
+        </div>
+
+        <ContentFrame images={this.state.images} videoId={this.state.video} />
       </div>
     );
   }
