@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { AGENT_LIST, ABILITY_LIST, TAG_LIST } from '../component-utils/constants';
 import MultiSelect from 'react-multi-select-component';
+import PropTypes from 'prop-types'
 
 import { WithContext as ReactTags } from 'react-tag-input'
 
@@ -9,17 +10,14 @@ export class Form extends Component {
     state = {
         name: '',
         description: '',
-        agent: 0,   // actual agent list starts at 1
-        ability: 0, // actual ability list starts at 1
+        agent: 0,   // agent list starts at 1
+        ability: 0, // ability list starts at 1
         tags: [],
         images: [],
-        video: [],
+        video: '',
+        credits: '',
         agentList: [],
         abilityList: [],
-        x: -1,
-        y: -1,
-        startX: -1,
-        startY: -1,
     }
 
     constructor(props) {
@@ -32,8 +30,13 @@ export class Form extends Component {
 
     }
 
+    updateChildAndParent = (values) => {
+        this.setState(values)
+        this.props.updateParent(values)
+    }
+
     onTagChange = (tagList) => {
-        this.setState({
+        this.updateChildAndParent({
             tags: tagList
         })
     }
@@ -48,105 +51,171 @@ export class Form extends Component {
         return arr;
     }
 
-
-    change = (e) => {
-        this.setState({
+    updateState = (e) => {
+        this.updateChildAndParent({
             [e.target.name]: e.target.value
         });
     }
 
     changedAgent = (e) => {
-        console.log('agent selected:', e.target.value)
-
         // update agent, then get and update abilities for that agent
         this.setState({
             agent: e.target.value,
+            ability: 0,
             abilityList: this.dictToArray(ABILITY_LIST[e.target.value])
+        })
+        this.props.updateParent({
+            agent: e.target.value,
+            ability: 0
         })
     }
 
-    onSubmit = e => {
-        // TODO: validate input
-
-
-        // prevent page auto refresh
-        e.preventDefault()
-        console.log(this.state)
-    }
-
-    handleImageDelete(i) {
+    handleImageDelete = (i) => {
         const { images } = this.state;
-        this.setState({
+        this.updateChildAndParent({
             images: images.filter((tag, index) => index !== i)
         });
     }
 
-    handleImageAdd(tag) {
-        this.setState(state => ({ images: [...state.images, tag] }));
+    handleImageAdd = (image) => {
+        this.updateChildAndParent({
+            images: [...this.state.images, image]
+        });
+    }
+
+    onKeyPress = (event) => {
+        // problem with react tag when pressing enter in video input
+        if (event.key === "Enter") {
+            event.preventDefault();
+            // allow submit from last input
+            if (event.target.name === 'credits') {
+                this.props.onSubmit(event);
+            }
+        }
     }
 
     render() {
         return (
             <form className='lineup-form'>
-                {/* Lineup Name */}
-                <label className='lineup-form-label'>TEST</label>
-                <input
-                    name='name'
-                    placeholder='lineup name'
-                    value={this.state.name}
-                    onChange={e => this.change(e)}
-                />
+                {/* Info Message */}
+                {
+                    this.props.infoMessage.value !== '' ?
+                        <div className='row'>
+                            <h2 className={'info-box ' + this.props.infoMessage.type}>{this.props.infoMessage.value}</h2>
+                        </div>
+                        :
+                        ''
+                }
+                {/* Lineup Title */}
+                <div className='row'>
+                    <input
+                        className='design-label'
+                        name='name'
+                        placeholder='Lineup Title'
+                        value={this.state.name}
+                        onChange={e => this.updateState(e)}
+                        autoComplete='off'
+                        onKeyDown={this.onKeyPress}
+                    />
+                </div>
+                {/* Description */}
+                <div className='row'>
+                    <input
+                        className='description'
+                        name='description'
+                        placeholder='Lineup Description'
+                        value={this.state.description}
+                        onChange={e => this.updateState(e)}
+                        autoComplete='off'
+                        onKeyDown={this.onKeyPress}
+                    />
+                </div>
                 {/* Agent */}
-                <select className='first-opt-hidden' name='agent' onChange={e => this.changedAgent(e)}>
-                    <option value={0}> -- Agent -- </option>
-                    {this.state.agentList.map((agent) =>
-                        <option key={agent[0]} value={agent[0]}>
-                            {agent[1]}
-                        </option>
-                    )}
-                </select>
+                <div className='row'>
+                    <select className='first-opt-hidden design-label' name='agent' onChange={e => this.changedAgent(e)}>
+                        <option value={0}> -- Agent -- </option>
+                        {this.state.agentList.map((agent) =>
+                            <option key={agent[0]} value={agent[0]}>
+                                {agent[1]}
+                            </option>
+                        )}
+                    </select>
+                </div>
                 {/* Ability */}
-                <select className='first-opt-hidden' name='ability' onChange={e => this.change(e)}>
-                    <option value={0}> -- Ability -- </option>
-                    {this.state.abilityList.map((ability) =>
-                        <option key={ability[0]} value={ability[0]}>
-                            {ability[1]}
-                        </option>
-                    )}
-                </select>
+                <div className='row'>
+                    <select className='first-opt-hidden design-label' name='ability' onChange={e => this.updateState(e)}>
+                        <option value={0}> -- Ability -- </option>
+                        {this.state.abilityList.map((ability) =>
+                            <option key={ability[0]} value={ability[0]}>
+                                {ability[1]}
+                            </option>
+                        )}
+                    </select>
+                </div>
                 {/* Tags */}
-                <MultiSelect
-                    className='multi-select'
-                    options={TAG_LIST}
-                    value={this.state.tags}
-                    onChange={this.onTagChange}
-                    labelledBy="Select"
-                    hasSelectAll={false}
-                    disableSearch={true}
-                />
+                <div className='row'>
+                    <MultiSelect
+                        className='multi-select'
+                        options={TAG_LIST}
+                        value={this.state.tags}
+                        onChange={this.onTagChange}
+                        labelledBy="Select"
+                        hasSelectAll={false}
+                        disableSearch={true}
+                        overrideStrings={{ 'selectSomeItems': 'Select Tags...' }}
+                    />
+                </div>
                 {/* Images */}
-                <ReactTags
-                    placeholder="Add image link"
-                    tags={this.state.images}
-                    handleDelete={this.handleImageDelete}
-                    handleAddition={this.handleImageAdd}
-                    allowDragDrop={false}
-                    inputFieldPosition="top"
-                />
-
-                {/* X */}
-
-                {/* Y */}
-
-                {/* Start X */}
-
-                {/* Start Y */}
-
-                <button onClick={(e) => this.onSubmit(e)}>Enter</button>
+                <div className='row'>
+                    <ReactTags
+                        placeholder="Add image link(s)"
+                        tags={this.state.images}
+                        handleDelete={this.handleImageDelete}
+                        handleAddition={this.handleImageAdd}
+                        allowDragDrop={false}
+                        inputFieldPosition="top"
+                        allowDeleteFromEmptyInput={true}
+                    />
+                </div>
+                {/* Video */}
+                <div className='row'>
+                    <input
+                        className='design-label'
+                        name='video'
+                        placeholder='Youtube embed ID'
+                        value={this.state.video}
+                        onChange={e => this.updateState(e)}
+                        autoComplete='off'
+                        onKeyDown={this.onKeyPress}
+                    />
+                </div>
+                {/* Credits */}
+                <div className='row'>
+                    <input
+                        className='design-label'
+                        name='credits'
+                        placeholder='Credits'
+                        value={this.state.credits}
+                        onChange={e => this.updateState(e)}
+                        autoComplete='off'
+                        onKeyDown={this.onKeyPress}
+                    />
+                </div>
+                {/* Submit Button */}
+                <div className='row'>
+                    <button className='submit-button' onClick={(e) => this.props.onSubmit(e)}>Enter</button>
+                </div>
 
             </form>
         )
     }
+}
+
+
+Form.propTypes = {
+    updateParent: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    infoMessage: PropTypes.object
 }
 
 export default Form

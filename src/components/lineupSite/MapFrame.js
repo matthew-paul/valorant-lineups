@@ -7,7 +7,7 @@ import lineups from './sampleLineup.json'
 const MapFrame = ({ mapId, onMarkerClick }) => {
 
     const onMapClick = (e) => {
-        console.log(e.nativeEvent.offsetX - 15, e.nativeEvent.offsetY - 15)
+        console.log(e.nativeEvent.offsetX - 12.5, e.nativeEvent.offsetY - 12.5)
     }
 
     return (

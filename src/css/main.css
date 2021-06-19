@@ -1,9 +1,10 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins");
 .map-frame {
   height: 100%;
   width: 50%;
   cursor: -webkit-grab;
   cursor: grab;
-  border-style: dotted;
+  border-style: hidden;
   border-color: white;
 }
 
@@ -27,7 +28,7 @@
   width: 50%;
   display: block;
   overflow-y: scroll;
-  border-style: dotted;
+  border-style: hidden;
   border-color: green;
 }
 
@@ -37,14 +38,14 @@
   height: 22.5vw;
   margin: auto;
   margin-bottom: 2%;
-  border-style: dotted;
+  border-style: hidden;
   border-color: yellow;
 }
 
 .lineup-image {
   width: 100%;
   height: 100%;
-  border-style: dotted;
+  border-style: hidden;
   border-color: purple;
 }
 
@@ -54,13 +55,13 @@
   height: 22.5vw;
   margin: auto;
   margin-bottom: 2%;
-  border-style: dotted;
+  border-style: hidden;
   border-color: red;
 }
 
 .video-responsive {
   height: 100%;
-  border-style: dotted;
+  border-style: hidden;
   border-color: teal;
 }
 
@@ -84,25 +85,63 @@
 
 .design-map-frame {
   height: 100%;
-  width: 50%;
+  width: 100%;
   margin-bottom: -1000px;
-  border-style: var(--border-style);
-  border-color: white;
   cursor: -webkit-grab;
   cursor: grab;
+  border-style: hidden;
+  border-color: white;
+}
+
+.design-map-frame:active {
+  cursor: -webkit-grabbing;
+  cursor: grabbing;
+}
+
+.map-and-buttons {
+  width: 50%;
+  height: 100%;
+  border-style: hidden;
+  border-color: purple;
+}
+
+.map-select-point {
+  height: 5%;
+  min-height: 60px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  border-style: hidden;
+  border-color: red;
+}
+
+.map-button {
+  height: 100%;
+  width: 48%;
+  margin: auto;
+  font-size: 20px;
 }
 
 /* Styles for react-tag input */
 .ReactTags__tagInput {
-  width: 200px;
-  border-radius: 2px;
+  width: 100%;
+  padding: 0px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
   display: inline-block;
 }
 
-.ReactTags__tagInput input.ReactTags__tagInputField, .ReactTags__tagInput input.ReactTags__tagInputField:focus {
-  height: 31px;
+.ReactTags__tagInput input.ReactTags__tagInputField,
+.ReactTags__tagInput input.ReactTags__tagInputField:focus {
+  height: 45px;
+  padding-left: 12px;
   margin: 0;
-  font-size: 12px;
+  font-size: 15px;
   width: 100%;
   border: 1px solid #eee;
 }
@@ -110,12 +149,12 @@
 /* Styles for react-tag selected tags */
 .ReactTags__selected span.ReactTags__tag {
   border: 1px solid #ddd;
-  background: #63bcfd;
-  color: white;
-  font-size: 12px;
+  background: #def1ff;
+  color: #c40000;
+  font-size: 14px;
   display: inline-block;
   padding: 5px;
-  margin: 0px 5px;
+  margin: 5px 10px 0px 0px;
   border-radius: 2px;
 }
 
@@ -123,6 +162,19 @@
   color: #aaa;
   margin-left: 5px;
   cursor: pointer;
+}
+
+.ReactTags__remove {
+  margin-left: 5px;
+}
+
+@media screen and (max-width: 600px) {
+  .col-25,
+  .col-75,
+  input[type="submit"] {
+    width: 100%;
+    margin-top: 0;
+  }
 }
 
 .design-form-frame {
@@ -134,16 +186,71 @@
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  border-style: dotted;
-  border-color: yellow;
 }
 
 .lineup-form {
+  background-color: #444442;
+  border-radius: 4px;
   height: 100%;
   width: 50%;
-  margin-bottom: -1000px;
-  border-style: dotted;
+  display: block;
+  overflow: auto;
+  border-style: hidden;
   border-color: red;
+}
+
+.info-box {
+  font-family: sans-serif;
+  font-size: 18px;
+  font-weight: 100;
+  margin: 0px 0px 10px 0px;
+}
+
+.error {
+  color: red;
+}
+
+.success {
+  color: #00d40b;
+}
+
+input.design-label,
+select.design-label,
+textarea.design-label {
+  width: 100%;
+  height: 45px;
+  padding-left: 10px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+input.description,
+select.description,
+textarea.description {
+  width: 100%;
+  height: 90px;
+  padding-left: 10px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding-bottom: 45px;
+}
+
+input[type="text"] {
+  word-wrap: break-word;
+  word-break: break-all;
+  height: 80px;
+}
+
+.row {
+  margin: 10px;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
 select.first-opt-hidden option:first-of-type {
@@ -151,11 +258,17 @@ select.first-opt-hidden option:first-of-type {
 }
 
 .multi-select {
-  width: 20%;
+  width: 100%;
 }
 
-.lineup-form-label {
-  color: white;
+.dropdown-container {
+  height: 45px;
+}
+
+.submit-button {
+  width: 20%;
+  height: 40px;
+  margin: 0 40%;
 }
 
 .design-outer-frame {
@@ -171,11 +284,11 @@ select.first-opt-hidden option:first-of-type {
 }
 
 .design-site-header {
-  margin: 0;
-  border-style: var(--border-style);
-  border-color: red;
+  margin: 10px 0px;
+  padding-bottom: 10px;
   color: white;
   text-align: center;
+  border-bottom-style: solid;
 }
 
 * {
@@ -188,7 +301,7 @@ select.first-opt-hidden option:first-of-type {
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
@@ -196,6 +309,6 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 /*# sourceMappingURL=main.css.map */

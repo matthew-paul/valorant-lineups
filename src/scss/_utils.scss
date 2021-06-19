@@ -1,4 +1,5 @@
-$debug-border-style: dotted;
+$debug-border-style: hidden;
+$input-label-height: 45px;
 
 @mixin debug-border($color: white) {
     border-style: $debug-border-style;
@@ -10,4 +11,12 @@ $debug-border-style: dotted;
     height: 100vh;
     display: $display;
     justify-content: center;
+}
+
+@mixin input-label {
+    width: 100%;
+    padding: 0px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
 }

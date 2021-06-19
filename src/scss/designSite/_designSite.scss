@@ -1,5 +1,6 @@
-@import "map";
-@import "form/form";
+@import 'map';
+@import 'form/form';
+@import '../utils';
 
 .design-outer-frame {
     width: 100vw;
@@ -9,9 +10,10 @@
 }
 
 .design-site-header {
-    margin: 0;
-    border-style: var(--border-style);
-    border-color: red;
+    margin: 10px 0px;
+    padding-bottom: 10px;
     color: white;
     text-align: center;
+    border-bottom-style: solid;
 }
+

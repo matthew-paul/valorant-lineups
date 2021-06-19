@@ -1,22 +1,22 @@
 import React from 'react'
 import ReconBolt from '../../resources/Agents/Sova/Recon_Bolt.png'
+import xIcon from '../../resources/x-icon.png'
+
 import { AGENT_LIST, ABILITY_LIST } from '../component-utils/constants'
 
-const Marker = ({ lineup, onClick }) => {
+const Marker = (props) => {
 
     const getIcon = (agentId, abilityId) => {
 
 
         if (!(agentId in AGENT_LIST)) {
-            console.warn('agent ID not recognized:', agentId)
-            return null;
+            return xIcon;
         }
 
         let agentName = AGENT_LIST[agentId]
 
-        if (!(abilityId in ABILITY_LIST[agentId])) {
-            console.warn('ability ID not recognized:', abilityId)
-            return null;
+        if (ABILITY_LIST[agentId] === undefined || !(abilityId in ABILITY_LIST[agentId])) {
+            return xIcon;
         }
 
         let abilityName = ABILITY_LIST[agentId][abilityId]
@@ -28,24 +28,21 @@ const Marker = ({ lineup, onClick }) => {
                     case 'Recon Bolt':
                         return ReconBolt
                     default:
-                        console.warn(agentName, 'icon:', abilityName, 'not recognized')
-                        return null;
+                        return xIcon;
                 }
             default:
-                console.warn('agent not recognized:', agentName)
-                return null;
+                return xIcon;
         }
     }
 
-    console.log(lineup)
 
     return (
         <img
             className='marker-icon'
-            src={getIcon(lineup.agent, lineup.ability)}
+            src={getIcon(props.lineup.agent, props.lineup.ability)}
             alt='recon bolt'
-            style={{ left: `${lineup.x}%`, top: `${lineup.y}%` }}
-            onClick={onClick}
+            style={{ left: `${props.lineup.x}%`, top: `${props.lineup.y}%` }}
+            onClick={'onClick' in props ? props.onClick : null}
         />
     )
 }

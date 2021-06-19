@@ -1,8 +1,34 @@
+@import '../utils';
+
 .design-map-frame {
     height: 100%;
-    width: 50%;
+    width: 100%;
     margin-bottom: -1000px;
-    border-style: var(--border-style);
-    border-color: white;
     cursor: grab;
+    @include debug-border(white)
+}
+
+.design-map-frame:active {
+    cursor: grabbing
+}
+
+.map-and-buttons {
+    width: 50%;
+    height: 100%;
+    @include debug-border(purple);
+}
+
+.map-select-point {
+    height: 5%;
+    min-height: 60px;
+    display: flex;
+    flex-direction: row;
+    @include debug-border(red)
+}
+
+.map-button {
+    height: 100%;
+    width: 48%;
+    margin: auto;
+    font-size: 20px;
 }

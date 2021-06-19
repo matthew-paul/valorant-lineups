@@ -36,7 +36,7 @@ const Map = (props) => {
 
 Map.propTypes = {
     mapId: PropTypes.number.isRequired,
-    onMapClick: PropTypes.func
+    onMapClick: PropTypes.func,
 }
 
 export default Map
