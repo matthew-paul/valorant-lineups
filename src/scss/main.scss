@@ -1,8 +1,10 @@
 @import "lineupSite/lineupSite";
 @import "designSite/designSite";
 @import "utils"; 
-@import 'sidebar/sidebar';
-
+@import 'navbar/navbar';
+@import 'home/home';
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+ 
 * {
     -webkit-box-sizing: border-box;
     /* Safari/Chrome, other WebKit */
@@ -10,6 +12,9 @@
     /* Firefox, other Gecko */
     box-sizing: border-box;
     /* Opera/IE 8+ */
+    margin: 0;
+    padding: 0;
+    font-family: 'Lato', sans-serif;
 }
 
 body {
@@ -24,4 +29,8 @@ body {
 
 code { 
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+h1 {
+    color: white;
 }

@@ -1,4 +1,4 @@
-@import '../utils';
+@import "../utils";
 
 .map-frame {
     height: 100%;
@@ -8,7 +8,11 @@
 }
 
 .map-frame:active {
-    cursor: grabbing
+    cursor: grabbing;
+}
+
+.map-icon {
+
 }
 
 .marker-icon {
@@ -21,8 +25,8 @@
     cursor: pointer;
 }
 
-.arrow{
-    stroke:rgb(0,0,0);
-    stroke-width:2; 
-    marker-end:url(#markerArrow)
-  }
+.arrow {
+    stroke: rgb(0, 0, 0);
+    stroke-width: 2;
+    marker-end: url(#markerArrow);
+}

@@ -16,6 +16,7 @@ $height-aspect-ratio: 22.5vw;
     display: block;
     overflow-y: scroll;
     @include debug-border(green);
+    border-left-style: solid;
 }
 
 .image-frame {

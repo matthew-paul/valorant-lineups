@@ -20,6 +20,7 @@
     "react-multi-select-component": "^4.0.2",
     "react-pro-sidebar": "^0.6.0",
     "react-responsive-pinch-zoom-pan": "^0.3.0",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "react-scrolllock": "^5.0.1",
     "react-tag-input": "^6.6.1",

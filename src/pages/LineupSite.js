@@ -4,7 +4,7 @@ import ContentFrame from "../component-utils/ContentFrame";
 import MapInteractionCSS from '../component-utils/MapInteractionCSS'
 import Map from "../component-utils/Map";
 import Marker from "../component-utils/Marker";
-import lineups from '../components/lineupSite/sampleLineup.json'
+import lineups from '../component-utils/sampleLineup.json'
 
 
 export class LineupSite extends Component {
