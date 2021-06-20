@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { AGENT_LIST, ABILITY_LIST, TAG_LIST } from '../component-utils/constants';
+import { AGENT_LIST, ABILITY_LIST, TAG_LIST } from './constants';
 import MultiSelect from 'react-multi-select-component';
 import PropTypes from 'prop-types'
 

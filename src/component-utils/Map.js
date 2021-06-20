@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import AscentMap from '../../resources/Maps/ascent_map.png'
+import AscentMap from '../resources/Maps/ascent_map.png'
 import { MAP_LIST } from './constants'
 import PropTypes from 'prop-types'
 

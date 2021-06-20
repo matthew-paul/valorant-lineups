@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 //import { AGENT_LIST, ABILITY_LIST, MAP_LIST, TAG_LIST } from './constants'
 
-import Form from './Form.js'
+import Form from '../component-utils/Form.js'
 import MapInteractionCSS from '../component-utils/MapInteractionCSS.js'
 import Map from '../component-utils/Map.js'
-import Marker from '../lineupSite/Marker.js'
-import startIcon from '../../resources/start-icon.png'
+import Marker from '../component-utils/Marker.js'
+import startIcon from '../resources/start-icon.png'
 
 
 

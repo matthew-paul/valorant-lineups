@@ -1,10 +1,10 @@
 // @ts-nocheck
 import React, { Component } from "react";
-import ContentFrame from "./ContentFrame";
+import ContentFrame from "../component-utils/ContentFrame";
 import MapInteractionCSS from '../component-utils/MapInteractionCSS'
 import Map from "../component-utils/Map";
-import Marker from "./Marker";
-import lineups from './sampleLineup.json'
+import Marker from "../component-utils/Marker";
+import lineups from '../components/lineupSite/sampleLineup.json'
 
 
 export class LineupSite extends Component {

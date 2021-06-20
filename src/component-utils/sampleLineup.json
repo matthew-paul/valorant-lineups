@@ -5,7 +5,7 @@
         "description": "Reveals all of a site except left generator and in front of dice",
         "agent": 13,
         "ability": 1,
-        "map": 1,
+        "mapId": 1,
         "tags": [
             1,
             5,

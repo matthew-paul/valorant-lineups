@@ -1,6 +1,6 @@
 import React from 'react'
 import ImageFrame from './ImageFrame'
-import YoutubeEmbed from "../component-utils/YoutubeEmbed"
+import YoutubeEmbed from "./YoutubeEmbed"
 import disableScroll from 'disable-scroll'
 import PropTypes from 'prop-types'
 

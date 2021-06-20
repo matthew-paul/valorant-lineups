@@ -1,5 +1,5 @@
 import React from 'react'
-import PinchZoomPan from '../component-utils/responsive-pinch-zoom-pan/PinchZoomPan'
+import PinchZoomPan from './responsive-pinch-zoom-pan/PinchZoomPan'
 
 
 

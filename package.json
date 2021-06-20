@@ -14,6 +14,7 @@
     "react-dnd": "",
     "react-dnd-html5-backend": "",
     "react-dom": "^17.0.2",
+    "react-icons": "^4.2.0",
     "react-image-marker": "^1.2.0",
     "react-map-interaction": "^2.0.0",
     "react-multi-select-component": "^4.0.2",
