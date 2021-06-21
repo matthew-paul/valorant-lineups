@@ -1,20 +1,19 @@
 $navbar-color: #060b26;
 
 .navbar {
-    background-color: black;
+    background-color: transparent;
     height: 50px;
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: center;
     position: fixed;
-    z-index: 1;
+    z-index: 9;
 }
 
 .menu-bars {
-    margin: 0.25rem 1rem 0rem 1rem;
+    margin: 1rem 0.5rem 0rem 0.75rem;
+    height: 32px;
     font-size: 2rem;
-    background: none;
-    transform: scale(0.75);
 }
 
 .nav-menu {
@@ -27,7 +26,7 @@ $navbar-color: #060b26;
     top: 0;
     left: -100%;
     transition: 850ms;
-    z-index: 3;
+    z-index: 10;
 }
 
 .nav-menu.active {
@@ -37,7 +36,7 @@ $navbar-color: #060b26;
 
 .nav-text {
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: center;
     padding: 8px 0px 8px 16px;
     list-style: none;
@@ -69,7 +68,7 @@ $navbar-color: #060b26;
     width: 100%;
     height: 80px;
     display: flex;
-    justify-content: start;
+    justify-content: flex-start;
     align-items: center;
 }
 

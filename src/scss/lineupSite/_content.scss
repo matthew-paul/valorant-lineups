@@ -1,3 +1,5 @@
+@import '../utils';
+
 $height-aspect-ratio: 22.5vw;
 
 @mixin frame-settings($debug-color: white) {
@@ -12,7 +14,7 @@ $height-aspect-ratio: 22.5vw;
 
 .content-frame {
     height: 100%;
-    width: 50%;
+    width: 100% - $lineup-site-map-width;
     display: block;
     overflow-y: scroll;
     @include debug-border(green);

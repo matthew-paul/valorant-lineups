@@ -5,3 +5,37 @@
 .outer-frame {
     @include outer-frame(flex);
 }
+
+$select-height: 45px;
+
+.filters-frame {
+    width: $lineup-site-map-width;
+    height: 55px;
+    margin-top: 10px;
+    padding-right: 10px;
+    padding-left: 55px;
+    z-index: 1;
+    background: transparent;
+    position: absolute;
+    display: flex;
+    @include debug-border(red);
+}
+
+
+.lineup-filter-select {
+    width: 25%;
+    height: $select-height;
+    padding-left: 10px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 2px;
+}
+
+.rmsc.lineup-filter-multi-select {
+    width: 25%;
+}
+
+.first-select {
+    margin-left: 50px;
+}

@@ -1,8 +1,8 @@
 import React from 'react'
-import ReconBolt from '../resources/Agents/Sova/Recon_Bolt.png'
-import xIcon from '../resources/x-icon.png'
+import ReconBolt from '../../resources/Agents/Sova/Recon_Bolt.png'
+import xIcon from '../../resources/x-icon.png'
 
-import { AGENT_LIST, ABILITY_LIST } from './constants'
+import { AGENT_LIST, ABILITY_LIST } from '../constants'
 
 const Marker = (props) => {
 

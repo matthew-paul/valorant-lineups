@@ -1,3 +1,5 @@
+export const API_URL = 'https://uh5it8zn19.execute-api.us-east-1.amazonaws.com/development'
+
 export const AGENT_LIST = {
     1: "Astra",
     2: "Breach",
@@ -37,10 +39,10 @@ export const TAG_LIST = [
     { value: 5, label: "A Site" },
     { value: 6, label: "B Site" },
     { value: 7, label: "C Site" },
-    { value: 8, label: "Easy" },
-    { value: 9, label: "Medium" },
-    { value: 10, label: "Hard" },
-    { value: 11, label: "Crosshair Lineup" },
-    { value: 12, label: "UI Lineup" },
-    { value: 13, label: "Mid" }
+    { value: 8, label: "Mid" },
+    { value: 9, label: "Easy" },
+    { value: 10, label: "Medium" },
+    { value: 11, label: "Hard" },
+    { value: 12, label: "Crosshair Lineup" },
+    { value: 13, label: "UI Lineup" },
 ]

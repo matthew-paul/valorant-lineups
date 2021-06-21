@@ -35,8 +35,8 @@ const ContentFrame = (props) => {
                     : ''
             }
             {
-                props.images.map((image) =>
-                    <ImageFrame image={image} enterImagefocus={enterImageFocus} exitImageFocus={exitImageFocus} />
+                props.images.map((image, index) =>
+                    <ImageFrame key={index} image={image} enterImagefocus={enterImageFocus} exitImageFocus={exitImageFocus} />
                 )
             }
         </div>

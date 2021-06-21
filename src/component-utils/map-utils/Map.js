@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import AscentMap from '../resources/Maps/ascent_map.png'
-import { MAP_LIST } from './constants'
+import AscentMap from '../../resources/Maps/ascent_map.png'
+import BindMap from '../../resources/Maps/bind_map.png'
+import { MAP_LIST } from '../constants'
 import PropTypes from 'prop-types'
 
 export class Map extends Component {
@@ -17,6 +18,8 @@ export class Map extends Component {
         switch (mapName) {
             case 'Ascent':
                 return AscentMap
+            case 'Bind':
+                return BindMap
             default:
                 console.error('Map not recognized:', mapName)
                 return null
@@ -26,7 +29,7 @@ export class Map extends Component {
     render() {
         return (
             <img
-                className='map-icon'
+                id='map-icon'
                 alt={(this.props.mapId in MAP_LIST ? MAP_LIST[this.props.mapId] : 'unrecognized') + ' map'}
                 src={this.getMap(this.props.mapId)}
                 onClick={this.props.onMapClick != null ? this.props.onMapClick : null}

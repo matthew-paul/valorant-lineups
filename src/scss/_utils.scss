@@ -1,5 +1,6 @@
 $debug-border-style: hidden;
 $input-label-height: 45px;
+$lineup-site-map-width: 55%;
 
 @mixin debug-border($color: white) {
     border-style: $debug-border-style;

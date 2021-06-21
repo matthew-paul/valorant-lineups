@@ -1,10 +1,5 @@
-import React, { useState, Component } from 'react'
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link
-} from 'react-router-dom';
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom';
 
 import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
@@ -21,7 +16,7 @@ const Navbar = () => {
 
     return (
         <div>
-            <IconContext.Provider value={{color: 'white'}}>
+            <IconContext.Provider value={{ color: 'white' }}>
 
                 <div className='navbar'>
                     <Link to='#' className='menu-bars'>

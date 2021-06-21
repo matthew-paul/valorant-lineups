@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 //import { AGENT_LIST, ABILITY_LIST, MAP_LIST, TAG_LIST } from './constants'
 
-import Form from '../component-utils/Form.js'
-import MapInteractionCSS from '../component-utils/MapInteractionCSS.js'
-import Map from '../component-utils/Map.js'
-import Marker from '../component-utils/Marker.js'
+import Form from '../component-utils/design-utils/Form.js'
+import MapInteractionCSS from '../component-utils/map-utils/MapInteractionCSS.js'
+import Map from '../component-utils/map-utils/Map.js'
+import Marker from '../component-utils/map-utils/Marker.js'
 import startIcon from '../resources/start-icon.png'
 
 
@@ -31,6 +31,10 @@ export class DesignLineup extends Component {
             startX: -1,
             startY: -1,
             infoMessage: { type: 'info', value: '' },
+            mapValues: {
+                scale: 0.85,
+                translation: { x: 10, y: 0 }
+            }
         }
         this.state = this.defaultState
 
@@ -119,6 +123,7 @@ export class DesignLineup extends Component {
 
         // only use tag numbers to save data
         let tagList = this.state.tags.map((pair) => pair.value)
+        let imageList = this.state.images.map((pair) => pair.text)
 
         // id will be created on server side
         let lineupData = {
@@ -128,7 +133,7 @@ export class DesignLineup extends Component {
             'ability': this.state.ability,
             'mapId': this.state.mapId,
             'tags': tagList,
-            'images': this.state.images,
+            'images': imageList,
             'video': this.state.video,
             'credits': this.state.credits,
             'x': this.state.x,
@@ -137,6 +142,8 @@ export class DesignLineup extends Component {
             'start-y': this.state.startY
         }
 
+        console.log(lineupData);
+
         let requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -144,18 +151,12 @@ export class DesignLineup extends Component {
         }
         fetch('https://uh5it8zn19.execute-api.us-east-1.amazonaws.com/development', requestOptions)
             .then(response => response.text())
-            .then(data => console.log(data))
-
-
-        this.setState({
-            infoMessage: { type: 'info', value: '' }
-        })
-
-        setTimeout(() => {
-            this.setState({
-                infoMessage: { type: 'success', value: 'Sent lineup to database' }
+            .then(data => {
+                console.log(data);
+                this.setState({
+                    infoMessage: { type: 'success', value: 'Sent lineup to database' }
+                })
             })
-        }, 100)
     }
 
     onSubmit = e => {
@@ -202,7 +203,10 @@ export class DesignLineup extends Component {
                             <button className='map-button' onClick={this.setStartPositionClicked}>Set Start Position</button>
                         </div>
                         <div className='design-map-frame' onContextMenu={this.onContextMenu} >
-                            <MapInteractionCSS maxScale={6}>
+                            <MapInteractionCSS
+                                value={this.state.mapValues}
+                                onChange={(value) => this.setState({ mapValues: value })}
+                                maxScale={6}>
                                 <Map mapId={this.state.mapId} onMapClick={this.onMapClick} />
 
                                 <div className='marker-frame'>

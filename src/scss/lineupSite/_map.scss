@@ -2,17 +2,13 @@
 
 .map-frame {
     height: 100%;
-    width: 50%;
+    width: $lineup-site-map-width;
     cursor: grab;
     @include debug-border(white);
 }
 
 .map-frame:active {
     cursor: grabbing;
-}
-
-.map-icon {
-
 }
 
 .marker-icon {

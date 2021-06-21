@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { AGENT_LIST, ABILITY_LIST, TAG_LIST } from './constants';
+import { AGENT_LIST, ABILITY_LIST, TAG_LIST } from '../constants';
 import MultiSelect from 'react-multi-select-component';
 import PropTypes from 'prop-types'
+import { dictToArray }  from '../Utils.js';
 
 import { WithContext as ReactTags } from 'react-tag-input'
 
@@ -24,7 +25,7 @@ export class Form extends Component {
         super(props);
 
         // add agents from file
-        this.state.agentList = this.dictToArray(AGENT_LIST)
+        this.state.agentList = dictToArray(AGENT_LIST)
         this.handleImageDelete = this.handleImageDelete.bind(this);
         this.handleImageAdd = this.handleImageAdd.bind(this);
 
@@ -41,16 +42,6 @@ export class Form extends Component {
         })
     }
 
-    dictToArray = (dictionary) => {
-        var arr = [];
-
-        for (var key in dictionary) {
-            arr.push([key, dictionary[key]]);
-        }
-
-        return arr;
-    }
-
     updateState = (e) => {
         this.updateChildAndParent({
             [e.target.name]: e.target.value
@@ -62,7 +53,7 @@ export class Form extends Component {
         this.setState({
             agent: e.target.value,
             ability: 0,
-            abilityList: this.dictToArray(ABILITY_LIST[e.target.value])
+            abilityList: dictToArray(ABILITY_LIST[e.target.value])
         })
         this.props.updateParent({
             agent: e.target.value,
@@ -98,14 +89,12 @@ export class Form extends Component {
         return (
             <form className='lineup-form'>
                 {/* Info Message */}
-                {
-                    this.props.infoMessage.value !== '' ?
-                        <div className='row'>
-                            <h2 className={'info-box ' + this.props.infoMessage.type}>{this.props.infoMessage.value}</h2>
-                        </div>
-                        :
-                        ''
-                }
+                {this.props.infoMessage.value !== '' ?
+                    <div className='row'>
+                        <h2 className={'info-box ' + this.props.infoMessage.type}>{this.props.infoMessage.value}</h2>
+                    </div>
+                    :
+                    ''}
                 {/* Lineup Title */}
                 <div className='row'>
                     <input
