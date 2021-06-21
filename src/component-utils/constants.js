@@ -19,7 +19,10 @@ export const AGENT_LIST = {
 }
 
 export const ABILITY_LIST = {
-    13: { 1: "Recon Bolt" }
+    13: {
+        1: "Recon Bolt",
+        2: "Shock Dart"
+    }
 }
 
 export const MAP_LIST = {

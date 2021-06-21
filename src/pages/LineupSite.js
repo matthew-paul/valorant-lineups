@@ -33,7 +33,6 @@ export class LineupSite extends PureComponent {
   }
 
   componentDidMount() {
-    // TODO: retrieve all lineups for this map from api and save to state
     this.requestMapMarkers(this.state.mapId);
 
   }
@@ -47,6 +46,9 @@ export class LineupSite extends PureComponent {
     fetch(`${CONSTANTS.API_URL}?mapId=${mapId}`, requestOptions)
       .then(response => response.json())
       .then(data => this.recievedLineups(data))
+      .catch(err => {
+        console.log('error retrieving lineups:', err)
+      })
   }
 
   recievedLineups(data) {
@@ -61,13 +63,11 @@ export class LineupSite extends PureComponent {
     })
   }
 
-
-  onMapClick(e)  {
+  onMapClick(e) {
 
   }
 
   onMarkerClick = (marker) => {
-    // TODO: update state with lineup info
 
     this.setState({
       images: marker.images,
@@ -77,7 +77,7 @@ export class LineupSite extends PureComponent {
     console.log(marker.id)
   }
 
-  async onMapChange(e)  {
+  async onMapChange(e) {
 
     let selectedMap = parseInt(e.target.value);
 
@@ -100,35 +100,48 @@ export class LineupSite extends PureComponent {
 
     // update map with markers
     this.updateMap()
-    
+
   }
 
-  onAgentChange(e)  {
+  onAgentChange(e) {
+    // clear map
+
+    this.setState({
+      visibleMarkers: []
+    })
+
     // update abilities
     this.setState({
       agentId: e.target.value,
       abilityId: 0,
       abilityList: CONSTANTS.ABILITY_LIST[e.target.value]
-    }, () => this.updateMap())
+    }, () => {
+      this.updateMap()
+    })
   }
 
-  onAbilityChange(e)  {
+  onAbilityChange(e) {
 
     this.setState({
       abilityId: e.target.value
-    }, () => this.updateMap());
+    }, () => {
+      this.updateMap()
+    });
 
   }
 
   onTagChange = (newTags) => {
     this.setState({
       tags: newTags
+    }, () => {
+      this.updateMap();
     })
+
   }
 
   updateMap() {
-    // make sure map, agent, and ability is selected
-    if (this.state.abilityId === 0 || this.state.agentId === 0 || this.state.mapId === 0) {
+    // make sure map and agent is selected
+    if (this.state.agentId === 0 || this.state.mapId === 0) {
       this.setState({
         visibleMarkers: []
       })
@@ -139,16 +152,25 @@ export class LineupSite extends PureComponent {
     if (!(this.state.mapId in this.state.savedMarkers) || this.state.savedMarkers[this.state.mapId].length === 0)
       return;
 
-    // get marker list
-    let prefilterList = this.state.savedMarkers[this.state.mapId];
-    let filteredList = [];
-
-    this.setState({
-      visibleMarkers: prefilterList
+    // get marker list and filter based on agent/ability
+    let filteredList = this.state.savedMarkers[this.state.mapId].filter(marker => {
+      // Check agent and ability matches
+      if (marker.agent !== this.state.agentId) return false;
+      if (this.state.abilityId !== 0 && marker.ability !== this.state.abilityId) return false;
+      return true;
     })
 
     // filter based on tags
+    let selectedTagsList = this.state.tags.map((pair) => pair.value);
+    if (selectedTagsList.length !== 0) {
+      filteredList = filteredList.filter((marker) => {
+        return selectedTagsList.every((selectedTag) => marker.tags.includes(selectedTag));
+      })
+    }
 
+    this.setState({
+      visibleMarkers: filteredList
+    })
 
   }
 
@@ -186,7 +208,7 @@ export class LineupSite extends PureComponent {
               options={CONSTANTS.TAG_LIST}
               value={this.state.tags}
               labelledBy="Select"
-              hasSelectAll={true}
+              hasSelectAll={false}
               disableSearch={true}
               overrideStrings={{ 'selectSomeItems': 'Select Tags...' }}
               onChange={this.onTagChange} />
