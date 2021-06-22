@@ -1,4 +1,10 @@
 import ReconBolt from '../resources/Agents/Sova/Recon_Bolt.png'
+import AscentMap from '../resources/Maps/ascent_map.png'
+import BindMap from '../resources/Maps/bind_map.png'
+import BreezeMap from '../resources/Maps/breeze_map.png'
+import HavenMap from '../resources/Maps/haven_map.png'
+import IceboxMap from '../resources/Maps/icebox_map.png'
+import SplitMap from '../resources/Maps/split_map.png'
 
 export const API_URL = 'https://uh5it8zn19.execute-api.us-east-1.amazonaws.com/development'
 
@@ -28,12 +34,12 @@ export const ABILITY_LIST = {
 }
 
 export const MAP_LIST = [
-    { value: 1, label: "Ascent"},
-    { value: 2, label: "Bind"},
-    { value: 3, label: "Breeze"},
-    { value: 4, label: "Haven"},
-    { value: 5, label: "Icebox"},
-    { value: 6, label: "Split"},
+    { value: 1, label: "Ascent", icon: AscentMap},
+    { value: 2, label: "Bind", icon: BindMap},
+    { value: 3, label: "Breeze", icon: BreezeMap},
+    { value: 4, label: "Haven", icon: HavenMap},
+    { value: 5, label: "Icebox", icon: IceboxMap},
+    { value: 6, label: "Split", icon: SplitMap},
 ]
 
 export const TAG_LIST = [
