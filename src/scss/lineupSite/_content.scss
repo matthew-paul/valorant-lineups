@@ -9,6 +9,7 @@ $height-aspect-ratio: 22vw;
 
     margin: auto;
     margin-top: 2%;
+    margin-bottom: 2%;
     @include debug-border($debug-color);
 }
 
