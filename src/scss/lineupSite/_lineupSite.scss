@@ -21,14 +21,11 @@ $select-height: 45px;
     @include debug-border(red);
 }
 
-
 .lineup-filter-select {
     width: 25%;
     height: $select-height;
     padding-left: 10px;
     font-size: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
     margin-right: 2px;
 }
 

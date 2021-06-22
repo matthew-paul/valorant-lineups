@@ -30,11 +30,7 @@ export class DesignLineup extends Component {
             y: -1,
             startX: -1,
             startY: -1,
-            infoMessage: { type: 'info', value: '' },
-            mapValues: {
-                scale: 0.85,
-                translation: { x: 10, y: 0 }
-            }
+            infoMessage: { type: 'info', value: '' }
         }
         this.state = this.defaultState
 
@@ -46,10 +42,10 @@ export class DesignLineup extends Component {
     }
 
     onMapClick = (e) => {
-        let x = (e.nativeEvent.offsetX - 12.5) / 10.0
-        let y = (e.nativeEvent.offsetY - 12.5) / 10.0
+        let x = e.nativeEvent.offsetX - 12.5  // 1/2 icon size
+        let y = e.nativeEvent.offsetY - 12.5
 
-        if (0 > x || x > 100 || 0 > y || y > 100) {
+        if (0 > x || x > 1000 || 0 > y || y > 1000) {
             return;
         }
 
@@ -138,8 +134,8 @@ export class DesignLineup extends Component {
             'credits': this.state.credits,
             'x': this.state.x,
             'y': this.state.y,
-            'start-x': this.state.startX,
-            'start-y': this.state.startY
+            'startX': this.state.startX,
+            'startY': this.state.startY
         }
 
         console.log(lineupData);
@@ -189,10 +185,11 @@ export class DesignLineup extends Component {
             this.settingLineupPosition = false;
         }
         this.settingStartPosition = true;
-
     }
 
     render() {
+        console.log(this.state)
+        
         return (
             <div className='design-outer-frame'>
                 <h1 className='design-site-header' >LINEUP CREATION</h1>
@@ -203,10 +200,7 @@ export class DesignLineup extends Component {
                             <button className='map-button' onClick={this.setStartPositionClicked}>Set Start Position</button>
                         </div>
                         <div className='design-map-frame' onContextMenu={this.onContextMenu} >
-                            <MapInteractionCSS
-                                value={this.state.mapValues}
-                                onChange={(value) => this.setState({ mapValues: value })}
-                                maxScale={6}>
+                            <MapInteractionCSS maxScale={6}>
                                 <Map mapId={this.state.mapId} onMapClick={this.onMapClick} />
 
                                 <div className='marker-frame'>
@@ -218,7 +212,7 @@ export class DesignLineup extends Component {
                                             className='marker-icon'
                                             src={startIcon}
                                             alt='recon bolt'
-                                            style={{ left: `${this.state.startX}%`, top: `${this.state.startY}%` }}
+                                            style={{ left: `${this.state.startX}px`, top: `${this.state.startY}px` }}
                                             onClick={() => { this.setState({ startX: -1, startY: -1 }) }}
                                         /> : ''
                                     }

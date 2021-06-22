@@ -34,3 +34,17 @@ code {
 h1 {
     color: white;
 }
+
+.rmsc .dropdown-heading {
+    padding: 5px 20px 0px 0px !important;
+}
+
+
+.rmsc {
+    --rmsc-gray: gray !important;
+    --rmsc-selected: #bfe0ff !important; //#2684ff !important;
+}
+
+span {
+    margin-left: 10px;
+}

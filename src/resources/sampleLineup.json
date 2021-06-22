@@ -2,7 +2,7 @@
     {
         "id": "",
         "name": "Ascent A Attack Recon Bolt",
-        "description": "Reveals all of a site except left generator and in front of dice",
+        "description": "Reveals most of a site and heaven except left generator and in front of dice",
         "agent": 13,
         "ability": 1,
         "mapId": 1,

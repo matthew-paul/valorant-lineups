@@ -8,12 +8,14 @@ export class Map extends Component {
 
     getMap = (mapId) => {
 
-        if (!(mapId in MAP_LIST)) {
-            console.warn('map id not recognized:', mapId);
-            return null;
-        }
+        let mapName = '';
 
-        let mapName = MAP_LIST[mapId]
+        for (const map of MAP_LIST) {
+            if (mapId === map.value) {
+                mapName = map.label
+                break;
+            }
+        }
 
         switch (mapName) {
             case 'Ascent':
@@ -21,7 +23,7 @@ export class Map extends Component {
             case 'Bind':
                 return BindMap
             default:
-                console.error('Map not recognized:', mapName)
+                console.error('map not recognized:', mapName)
                 return null
         }
     }
@@ -29,7 +31,6 @@ export class Map extends Component {
     render() {
         return (
             <img
-                id='map-icon'
                 alt={(this.props.mapId in MAP_LIST ? MAP_LIST[this.props.mapId] : 'unrecognized') + ' map'}
                 src={this.getMap(this.props.mapId)}
                 onClick={this.props.onMapClick != null ? this.props.onMapClick : null}

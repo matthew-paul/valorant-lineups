@@ -24,14 +24,14 @@ $navbar-color: #060b26;
     justify-content: center;
     position: fixed;
     top: 0;
-    left: -100%;
+    left: -200%;
     transition: 850ms;
     z-index: 10;
 }
 
 .nav-menu.active {
     left: 0;
-    transition: 350ms;
+    transition: 250ms;
 }
 
 .nav-text {

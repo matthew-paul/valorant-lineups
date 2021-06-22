@@ -1,38 +1,40 @@
+import ReconBolt from '../resources/Agents/Sova/Recon_Bolt.png'
+
 export const API_URL = 'https://uh5it8zn19.execute-api.us-east-1.amazonaws.com/development'
 
-export const AGENT_LIST = {
-    1: "Astra",
-    2: "Breach",
-    3: "Brimstone",
-    4: "Cypher",
-    5: "Jett",
-    6: "Killjoy",
-    7: "Omen",
-    8: "Phoenix",
-    9: "Raze",
-    10: "Reyna",
-    11: "Sage",
-    12: "Skye",
-    13: "Sova",
-    14: "Viper",
-    15: "Yoru"
-}
+export const AGENT_LIST = [
+    { value: 1, label: "Astra"},
+    { value: 2, label: "Breach"},
+    { value: 3, label: "Brimstone"},
+    { value: 4, label: "Cypher"},
+    { value: 5, label: "Jett"},
+    { value: 6, label: "Killjoy"},
+    { value: 7, label: "Omen"},
+    { value: 8, label: "Phoenix"},
+    { value: 9, label: "Raze"},
+    { value: 10, label: "Reyna"},
+    { value: 11, label: "Sage"},
+    { value: 12, label: "Skye"},
+    { value: 13, label: "Sova"},
+    { value: 14, label: "Viper"},
+    { value: 15, label: "Yoru"},
+]
 
 export const ABILITY_LIST = {
-    13: {
-        1: "Recon Bolt",
-        2: "Shock Dart"
-    }
+    13: [
+        { value: 1, label: "Recon Bolt", icon: ReconBolt},
+        { value: 2, label: "Shock Dart"},
+    ]
 }
 
-export const MAP_LIST = {
-    1: "Ascent",
-    2: "Bind",
-    3: "Breeze",
-    4: "Haven",
-    5: "Icebox",
-    6: "Split"
-}
+export const MAP_LIST = [
+    { value: 1, label: "Ascent"},
+    { value: 2, label: "Bind"},
+    { value: 3, label: "Breeze"},
+    { value: 4, label: "Haven"},
+    { value: 5, label: "Icebox"},
+    { value: 6, label: "Split"},
+]
 
 export const TAG_LIST = [
     { value: 1, label: "Attacking" },
@@ -48,4 +50,6 @@ export const TAG_LIST = [
     { value: 11, label: "Hard" },
     { value: 12, label: "Crosshair Lineup" },
     { value: 13, label: "UI Lineup" },
+    { value: 14, label: "Double Shock Dart"},
+    { value: 15, label: "Single Shock Dart"},
 ]

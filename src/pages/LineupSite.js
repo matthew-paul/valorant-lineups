@@ -1,16 +1,27 @@
 // @ts-nocheck
-import React, { PureComponent } from "react";
+import React, { Component } from "react";
 import ContentFrame from "../component-utils/lineup-site-utils/ContentFrame";
 import MapInteractionCSS from '../component-utils/map-utils/MapInteractionCSS'
 import Map from "../component-utils/map-utils/Map";
 import Marker from "../component-utils/map-utils/Marker";
 import MultiSelect from "react-multi-select-component";
 import * as CONSTANTS from "../component-utils/constants";
-import { dictToArray } from "../component-utils/Utils";
+import Select from 'react-select'
 
+export class LineupSite extends Component {
 
-export class LineupSite extends PureComponent {
-
+  customStyles = {
+    container: (styles) => ({
+      ...styles,
+      width: '25%',
+      height: '45px',
+      paddingRight: '5px'
+    }),
+    control: (styles) => ({
+      ...styles,
+      height: '100%',
+    })
+  }
 
   state = {
     savedMarkers: {},
@@ -26,10 +37,14 @@ export class LineupSite extends PureComponent {
     description: '',
     name: '',
     credits: '',
-    mapValues: {
-      scale: 0.9,
-      translation: { x: 50, y: 30 }
-    }
+    mapArrowVisible: false,
+    mapArrowPos: {
+      x: -1,
+      y: -1,
+      startX: -1,
+      startY: -1,
+    },
+    selectedAbility: null,
   }
 
   componentDidMount() {
@@ -37,7 +52,7 @@ export class LineupSite extends PureComponent {
 
   }
 
-  requestMapMarkers(mapId) {
+  requestMapMarkers(mapId, callback) {
     let requestOptions = {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
@@ -45,13 +60,13 @@ export class LineupSite extends PureComponent {
 
     fetch(`${CONSTANTS.API_URL}?mapId=${mapId}`, requestOptions)
       .then(response => response.json())
-      .then(data => this.recievedLineups(data))
+      .then(data => { this.recievedLineups(data, callback) })
       .catch(err => {
         console.log('error retrieving lineups:', err)
       })
   }
 
-  recievedLineups(data) {
+  recievedLineups = (data, callback) => {
     // append lineups for this map to what we already saved
     // so we don't make unecessary api calls when switching maps
 
@@ -60,10 +75,10 @@ export class LineupSite extends PureComponent {
         ...this.state.savedMarkers,
         [this.state.mapId]: data
       }
-    })
+    }, callback)
   }
 
-  onMapClick(e) {
+  onMapClick = (e) => {
 
   }
 
@@ -71,59 +86,91 @@ export class LineupSite extends PureComponent {
 
     this.setState({
       images: marker.images,
-      video: marker.video
+      video: marker.video,
+      name: marker.name,
+      description: marker.description,
+      credits: marker.credits
     })
 
-    console.log(marker.id)
   }
 
-  async onMapChange(e) {
+  onMarkerHover = (marker) => {
+    // if start position not given
+    if (marker.startX === -1) return;
 
-    let selectedMap = parseInt(e.target.value);
+    this.setState({
+      mapArrowPos: {
+        x: marker.x + 12.5,
+        y: marker.y + 12.5,
+        startX: marker.startX + 12.5,
+        startY: marker.startY + 12.5
+      },
+      mapArrowVisible: true
+    })
+
+  }
+
+  onMarkerOut = (marker) => {
+    this.setState({
+      mapArrowVisible: false
+    })
+  }
+
+  onMapChange = (e) => {
+
+    let selectedMap = e.value
 
     // remove markers
     this.setState({
-      visibleMarkers: []
+      visibleMarkers: [],
+      tags: []
     })
 
     // update map image
 
-    await this.setState({
+    this.setState({
       mapId: selectedMap
+    }, () => {
+      // check if we already have markers in state for this map
+      if (!(selectedMap in this.state.savedMarkers)) {
+        // request api for new markers and update
+        this.requestMapMarkers(selectedMap, this.updateMap)
+      } else {
+        this.updateMap();
+      }
     })
 
-    // check if we already have markers in state for this map
-    if (!(selectedMap in this.state.savedMarkers)) {
-      // request api for new markers
-      await this.requestMapMarkers(selectedMap)
-    }
 
-    // update map with markers
-    this.updateMap()
 
   }
 
-  onAgentChange(e) {
-    // clear map
+  onAgentChange = (agent) => {
+    // agent = { value: number, label: string }
 
+    // clear map
     this.setState({
       visibleMarkers: []
     })
 
     // update abilities
     this.setState({
-      agentId: e.target.value,
+      agentId: agent.value,
       abilityId: 0,
-      abilityList: CONSTANTS.ABILITY_LIST[e.target.value]
+      selectedAbility: null,
+      abilityList: CONSTANTS.ABILITY_LIST[agent.value]
     }, () => {
       this.updateMap()
     })
+
   }
 
-  onAbilityChange(e) {
+  onAbilityChange = (ability) => {
+
+    // ability = { value: number, label: string }
 
     this.setState({
-      abilityId: e.target.value
+      abilityId: ability.value,
+      selectedAbility: ability
     }, () => {
       this.updateMap()
     });
@@ -139,7 +186,8 @@ export class LineupSite extends PureComponent {
 
   }
 
-  updateMap() {
+  updateMap = () => {
+
     // make sure map and agent is selected
     if (this.state.agentId === 0 || this.state.mapId === 0) {
       this.setState({
@@ -152,11 +200,11 @@ export class LineupSite extends PureComponent {
     if (!(this.state.mapId in this.state.savedMarkers) || this.state.savedMarkers[this.state.mapId].length === 0)
       return;
 
-    // get marker list and filter based on agent/ability
+      // get marker list and filter based on agent/ability
     let filteredList = this.state.savedMarkers[this.state.mapId].filter(marker => {
       // Check agent and ability matches
-      if (marker.agent !== this.state.agentId) return false;
-      if (this.state.abilityId !== 0 && marker.ability !== this.state.abilityId) return false;
+      if (parseInt(marker.agent) !== this.state.agentId) return false;
+      if (this.state.abilityId !== 0 && parseInt(marker.ability) !== this.state.abilityId) return false;
       return true;
     })
 
@@ -168,64 +216,68 @@ export class LineupSite extends PureComponent {
       })
     }
 
+
     this.setState({
       visibleMarkers: filteredList
     })
 
   }
 
+  onFilterClick = (e) => {
+    e.preventDefault();
+  }
+
+  getMarkers = () => {
+    return (
+      this.state.visibleMarkers.map((marker) =>
+                  <Marker
+                    key={marker.id}
+                    lineup={marker}
+                    onClick={() => this.onMarkerClick(marker)}
+                    onHover={() => this.onMarkerHover(marker)}
+                    onLeave={() => this.onMarkerOut(marker)} />)
+    )
+  }
+
+
   render() {
+
     return (
       <div className='outer-frame'>
         <div className='map-frame'>
           <div className='filters-frame' >
-            <select className='lineup-filter-select' name='map' onChange={e => this.onMapChange(e)}>
-              {/*<option value={0}> -- Map -- </option>*/}
-              {dictToArray(CONSTANTS.MAP_LIST).map((map) =>
-                <option key={map[0]} value={map[0]}>
-                  {map[1]}
-                </option>
-              )}
-            </select>
-            <select className='first-opt-hidden lineup-filter-select' name='agent' onChange={e => this.onAgentChange(e)}>
-              <option value={0}> -- Agent -- </option>
-              {dictToArray(CONSTANTS.AGENT_LIST).map((agent) =>
-                <option key={agent[0]} value={agent[0]}>
-                  {agent[1]}
-                </option>
-              )}
-            </select>
-            <select className='first-opt-hidden lineup-filter-select' name='ability' onChange={e => this.onAbilityChange(e)}>
-              <option value={0}> -- Ability -- </option>
-              {dictToArray(this.state.abilityList).map((ability) =>
-                <option key={ability[0]} value={ability[0]}>
-                  {ability[1]}
-                </option>
-              )}
-            </select>
+            <Select label="Map select" defaultValue={CONSTANTS.MAP_LIST[0]} options={CONSTANTS.MAP_LIST} styles={this.customStyles} onChange={this.onMapChange} />
+            <Select label="Agent select" placeholder='Agent...' options={CONSTANTS.AGENT_LIST} styles={this.customStyles} onChange={this.onAgentChange} />
+            <Select value={this.state.selectedAbility} label="Ability select" placeholder='Ability...' options={this.state.abilityList} styles={this.customStyles} onChange={this.onAbilityChange} />
             <MultiSelect
               className='lineup-filter-multi-select'
               options={CONSTANTS.TAG_LIST}
               value={this.state.tags}
               labelledBy="Select"
               hasSelectAll={false}
-              disableSearch={true}
-              overrideStrings={{ 'selectSomeItems': 'Select Tags...' }}
+              disableSearch={false}
+              overrideStrings={{ 'selectSomeItems': 'Filters...' }}
               onChange={this.onTagChange} />
           </div>
           <MapInteractionCSS
-            value={this.state.mapValues}
-            onChange={(value) => this.setState({ mapValues: value })}
             maxScale={6}>
-            <Map mapId={this.state.mapId} onMapClick={this.onMapClick} />
+            <div id='lineup-site-map' style={{ margin: '40px 0px 0px 40px', display: 'flex' }}>
+              <Map mapId={this.state.mapId} onMapClick={this.onMapClick} />
 
-            <div className='marker-frame'>
-              {this.state.visibleMarkers.map((marker) => <Marker key={marker.id} lineup={marker} onClick={() => this.onMarkerClick(marker)} />)}
+              {this.state.mapArrowVisible &&
+                <svg width="1000" height="1000" style={{ position: 'fixed' }}>
+                  <line x1={this.state.mapArrowPos.x} y1={this.state.mapArrowPos.y} x2={this.state.mapArrowPos.startX} y2={this.state.mapArrowPos.startY} stroke="red" />
+                </svg>
+              }
+
+              <div className='marker-frame' style={{ position: 'fixed'}}>
+                {this.getMarkers()}
+              </div>
             </div>
           </MapInteractionCSS>
         </div>
 
-        <ContentFrame images={this.state.images} videoId={this.state.video} />
+        <ContentFrame {...this.state} />
       </div>
     );
   }

@@ -1,12 +1,26 @@
 import React, { Component } from 'react'
-import { AGENT_LIST, ABILITY_LIST, TAG_LIST } from '../constants';
+import * as CONSTANTS from '../constants';
 import MultiSelect from 'react-multi-select-component';
 import PropTypes from 'prop-types'
-import { dictToArray }  from '../Utils.js';
 
 import { WithContext as ReactTags } from 'react-tag-input'
+import Select from 'react-select';
 
 export class Form extends Component {
+
+    customStyles = {
+        container: (styles) => ({
+          ...styles,
+          width: '100%',
+          height: '45px',
+          padding: '0px 10px',
+          marginBottom: '10px',
+        }),
+        control: (styles) => ({
+          ...styles,
+          height: '100%',
+        })
+      }
 
     state = {
         name: '',
@@ -25,7 +39,6 @@ export class Form extends Component {
         super(props);
 
         // add agents from file
-        this.state.agentList = dictToArray(AGENT_LIST)
         this.handleImageDelete = this.handleImageDelete.bind(this);
         this.handleImageAdd = this.handleImageAdd.bind(this);
 
@@ -48,16 +61,23 @@ export class Form extends Component {
         });
     }
 
-    changedAgent = (e) => {
+    onAgentChange = (agent) => {
         // update agent, then get and update abilities for that agent
         this.setState({
-            agent: e.target.value,
+            agent: agent.value,
             ability: 0,
-            abilityList: dictToArray(ABILITY_LIST[e.target.value])
+            abilityList: CONSTANTS.ABILITY_LIST[agent.value]
         })
         this.props.updateParent({
-            agent: e.target.value,
+            agent: agent.value,
             ability: 0
+        })
+    }
+
+    onAbilityChange = (ability) => {
+        // update agent, then get and update abilities for that agent
+        this.updateChildAndParent({
+            ability: ability.value,
         })
     }
 
@@ -120,37 +140,19 @@ export class Form extends Component {
                     />
                 </div>
                 {/* Agent */}
-                <div className='row'>
-                    <select className='first-opt-hidden design-label' name='agent' onChange={e => this.changedAgent(e)}>
-                        <option value={0}> -- Agent -- </option>
-                        {this.state.agentList.map((agent) =>
-                            <option key={agent[0]} value={agent[0]}>
-                                {agent[1]}
-                            </option>
-                        )}
-                    </select>
-                </div>
+                <Select label="Agent select" options={CONSTANTS.AGENT_LIST} styles={this.customStyles} onChange={this.onAgentChange} />
                 {/* Ability */}
-                <div className='row'>
-                    <select className='first-opt-hidden design-label' name='ability' onChange={e => this.updateState(e)}>
-                        <option value={0}> -- Ability -- </option>
-                        {this.state.abilityList.map((ability) =>
-                            <option key={ability[0]} value={ability[0]}>
-                                {ability[1]}
-                            </option>
-                        )}
-                    </select>
-                </div>
+                <Select label="Agent select" options={this.state.abilityList} styles={this.customStyles} onChange={this.onAbilityChange} />
                 {/* Tags */}
                 <div className='row'>
                     <MultiSelect
                         className='multi-select'
-                        options={TAG_LIST}
+                        options={CONSTANTS.TAG_LIST}
                         value={this.state.tags}
                         onChange={this.onTagChange}
                         labelledBy="Select"
                         hasSelectAll={false}
-                        disableSearch={true}
+                        disableSearch={false}
                         overrideStrings={{ 'selectSomeItems': 'Select Tags...' }}
                     />
                 </div>
