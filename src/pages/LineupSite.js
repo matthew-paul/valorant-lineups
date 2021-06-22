@@ -147,13 +147,9 @@ export class LineupSite extends Component {
   onAgentChange = (agent) => {
     // agent = { value: number, label: string }
 
-    // clear map
+    // clear map and update abilities
     this.setState({
-      visibleMarkers: []
-    })
-
-    // update abilities
-    this.setState({
+      visibleMarkers: [],
       agentId: agent.value,
       abilityId: 0,
       selectedAbility: null,

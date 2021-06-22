@@ -10,17 +10,17 @@ export class Form extends Component {
 
     customStyles = {
         container: (styles) => ({
-          ...styles,
-          width: '100%',
-          height: '45px',
-          padding: '0px 10px',
-          marginBottom: '10px',
+            ...styles,
+            width: '100%',
+            height: '45px',
+            padding: '0px 10px',
+            marginBottom: '10px',
         }),
         control: (styles) => ({
-          ...styles,
-          height: '100%',
+            ...styles,
+            height: '100%',
         })
-      }
+    }
 
     state = {
         name: '',
@@ -33,6 +33,8 @@ export class Form extends Component {
         credits: '',
         agentList: [],
         abilityList: [],
+        apiKey: '',
+        selectedAbility: null,
     }
 
     constructor(props) {
@@ -66,7 +68,8 @@ export class Form extends Component {
         this.setState({
             agent: agent.value,
             ability: 0,
-            abilityList: CONSTANTS.ABILITY_LIST[agent.value]
+            abilityList: CONSTANTS.ABILITY_LIST[agent.value],
+            selectedAbility: null,
         })
         this.props.updateParent({
             agent: agent.value,
@@ -76,6 +79,9 @@ export class Form extends Component {
 
     onAbilityChange = (ability) => {
         // update agent, then get and update abilities for that agent
+        this.setState({
+            selectedAbility: ability
+        })
         this.updateChildAndParent({
             ability: ability.value,
         })
@@ -99,7 +105,7 @@ export class Form extends Component {
         if (event.key === "Enter") {
             event.preventDefault();
             // allow submit from last input
-            if (event.target.name === 'credits') {
+            if (event.target.name === 'apiKey') {
                 this.props.onSubmit(event);
             }
         }
@@ -140,9 +146,9 @@ export class Form extends Component {
                     />
                 </div>
                 {/* Agent */}
-                <Select label="Agent select" options={CONSTANTS.AGENT_LIST} styles={this.customStyles} onChange={this.onAgentChange} />
+                <Select label="Agent select" placeholder='Agent...' options={CONSTANTS.AGENT_LIST} styles={this.customStyles} onChange={this.onAgentChange} />
                 {/* Ability */}
-                <Select label="Agent select" options={this.state.abilityList} styles={this.customStyles} onChange={this.onAbilityChange} />
+                <Select label="Ability select" value={this.state.selectedAbility} placeholder='Ability...' options={this.state.abilityList} styles={this.customStyles} onChange={this.onAbilityChange} />
                 {/* Tags */}
                 <div className='row'>
                     <MultiSelect
@@ -187,6 +193,18 @@ export class Form extends Component {
                         name='credits'
                         placeholder='Credits'
                         value={this.state.credits}
+                        onChange={e => this.updateState(e)}
+                        autoComplete='off'
+                        onKeyDown={this.onKeyPress}
+                    />
+                </div>
+                {/* Api Key */}
+                <div className='row'>
+                    <input
+                        className='design-label'
+                        name='apiKey'
+                        placeholder='Api Key'
+                        value={this.state.apiKey}
                         onChange={e => this.updateState(e)}
                         autoComplete='off'
                         onKeyDown={this.onKeyPress}

@@ -6,10 +6,24 @@ import MapInteractionCSS from '../component-utils/map-utils/MapInteractionCSS.js
 import Map from '../component-utils/map-utils/Map.js'
 import Marker from '../component-utils/map-utils/Marker.js'
 import startIcon from '../resources/start-icon.png'
-
+import { MAP_LIST } from '../component-utils/constants.js'
+import Select from 'react-select'
 
 
 export class DesignLineup extends Component {
+
+    customStyles = {
+        container: (styles) => ({
+            ...styles,
+            width: '33%',
+            height: '100%',
+            margin: 'auto'
+        }),
+        control: (styles) => ({
+            ...styles,
+            height: '100%',
+        })
+    }
 
     constructor(props) {
         super(props);
@@ -30,12 +44,12 @@ export class DesignLineup extends Component {
             y: -1,
             startX: -1,
             startY: -1,
-            infoMessage: { type: 'info', value: '' }
+            infoMessage: { type: 'info', value: '' },
+            apiKey: '',
         }
         this.state = this.defaultState
 
     }
-
 
     updateState = (values) => {
         this.setState(values)
@@ -138,11 +152,9 @@ export class DesignLineup extends Component {
             'startY': this.state.startY
         }
 
-        console.log(lineupData);
-
         let requestOptions = {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'x-api-key': this.state.apiKey },
             body: JSON.stringify(lineupData),
         }
         fetch('https://uh5it8zn19.execute-api.us-east-1.amazonaws.com/development', requestOptions)
@@ -151,6 +163,12 @@ export class DesignLineup extends Component {
                 console.log(data);
                 this.setState({
                     infoMessage: { type: 'success', value: 'Sent lineup to database' }
+                })
+            })
+            .catch(err => {
+                console.log('error sending lineup:', err);
+                this.setState({
+                    infoMessage: { type: 'error', value: 'Error sending lineup to database: ' + err}
                 })
             })
     }
@@ -187,15 +205,22 @@ export class DesignLineup extends Component {
         this.settingStartPosition = true;
     }
 
+    onMapChange = (map) => {
+        this.setState({
+            mapId: map.value
+        })
+
+    }
+
     render() {
-        console.log(this.state)
-        
+
         return (
             <div className='design-outer-frame'>
                 <h1 className='design-site-header' >LINEUP CREATION</h1>
                 <div className='design-form-frame'>
                     <div className='map-and-buttons'>
                         <div className='map-select-point'>
+                            <Select label="Map select" defaultValue={MAP_LIST[0]} options={MAP_LIST} styles={this.customStyles} onChange={this.onMapChange} />
                             <button className='map-button' onClick={this.setLineupPositionClicked}>Set Lineup Position</button>
                             <button className='map-button' onClick={this.setStartPositionClicked}>Set Start Position</button>
                         </div>

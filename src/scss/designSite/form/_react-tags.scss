@@ -32,10 +32,11 @@
 
 .ReactTags__selected a.ReactTags__remove {
     color: #aaa;
-    margin-left: 5px;
     cursor: pointer;
 }
 
 .ReactTags__remove {
     margin-left: 5px;
+    padding-left: 4px;
+    padding-right: 4px;
 }
