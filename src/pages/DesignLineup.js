@@ -160,7 +160,6 @@ export class DesignLineup extends Component {
         fetch('https://uh5it8zn19.execute-api.us-east-1.amazonaws.com/development', requestOptions)
             .then(response => response.text())
             .then(data => {
-                console.log(data);
                 this.setState({
                     infoMessage: { type: 'success', value: 'Sent lineup to database' }
                 })
