@@ -4,25 +4,24 @@ import PropTypes from 'prop-types'
 
 export class Map extends Component {
 
+    
     getMap = (mapId) => {
-
-        let mapName = '';
-
         for (const map of MAP_LIST) {
             if (mapId === map.value) {
-                return map.icon
+                return { icon: map.icon, label: map.label }
             }
         }
 
-        console.error('map not recognized:', mapName)
+        console.error('map not recognized:', mapId)
         return null;
     }
 
     render() {
+        
         return (
             <img
-                alt={(this.props.mapId in MAP_LIST ? MAP_LIST[this.props.mapId] : 'unrecognized') + ' map'}
-                src={this.getMap(this.props.mapId)}
+                alt={this.getMap(this.props.mapId).label + ' map'}
+                src={this.getMap(this.props.mapId).icon}
                 onClick={this.props.onMapClick != null ? this.props.onMapClick : null}
                 onMouseDown={this.props.onMouseDown}
             />
@@ -38,7 +37,7 @@ Map.propTypes = {
 
 Map.defaultProps = {
     onMapClick: null,
-    onMouseDown: null
+    onMouseDown: null,
 }
 
 export default Map

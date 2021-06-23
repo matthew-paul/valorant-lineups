@@ -21,11 +21,11 @@ const Marker = (props) => {
             }
 
             return xIcon
-        } catch(err) {
+        } catch (err) {
             console.log(`error getting icon for agent ${agentId} ability ${abilityId}`)
             return xIcon
         }
-   }
+    }
 
 
     return (
@@ -34,7 +34,12 @@ const Marker = (props) => {
             className='marker-icon'
             src={getIcon(props.lineup.agent, props.lineup.ability)}
             alt='recon bolt'
-            style={{ left: `${props.lineup.x}px`, top: `${props.lineup.y}px` }}
+            style={{
+                position: 'absolute',
+                transform: `scale(${1/props.scale})`,
+                left: `${props.lineup.x}px`,
+                top: `${props.lineup.y}px`
+            }}
             onClick={props.onClick}
             onMouseOver={props.onHover}
             onMouseOut={props.onLeave}
@@ -48,6 +53,7 @@ Marker.propTypes = {
     onClick: PropTypes.func,
     onHover: PropTypes.func,
     onLeave: PropTypes.func,
+    scale: PropTypes.number,
     id: PropTypes.string
 }
 
@@ -56,6 +62,7 @@ Marker.defaultProps = {
     onClick: null,
     onHover: null,
     onLeave: null,
+    scale: 1,
 }
 
 

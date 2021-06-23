@@ -45,6 +45,7 @@ export class LineupSite extends Component {
       startY: -1,
     },
     selectedAbility: null,
+    markerScale: 1,
   }
 
   componentDidMount() {
@@ -116,7 +117,7 @@ export class LineupSite extends Component {
     })
   }
 
-  onMapChange = (e) => {
+  onMapSwitch = (e) => {
 
     let selectedMap = e.value
 
@@ -231,10 +232,18 @@ export class LineupSite extends Component {
                     lineup={marker}
                     onClick={() => this.onMarkerClick(marker)}
                     onHover={() => this.onMarkerHover(marker)}
-                    onLeave={() => this.onMarkerOut(marker)} />)
+                    onLeave={() => this.onMarkerOut(marker)} 
+                    scale={this.state.markerScale} />)
     )
   }
 
+  updateParentState = (scale) => {
+    if (scale !== this.state.markerScale) {
+      this.setState({
+        markerScale: scale
+      })
+    }
+  }
 
   render() {
 
@@ -242,7 +251,7 @@ export class LineupSite extends Component {
       <div className='outer-frame'>
         <div className='map-frame'>
           <div className='filters-frame' >
-            <Select label="Map select" defaultValue={CONSTANTS.MAP_LIST[0]} options={CONSTANTS.MAP_LIST} styles={this.customStyles} onChange={this.onMapChange} />
+            <Select label="Map select" defaultValue={CONSTANTS.MAP_LIST[0]} options={CONSTANTS.MAP_LIST} styles={this.customStyles} onChange={this.onMapSwitch} />
             <Select label="Agent select" placeholder='Agent...' options={CONSTANTS.AGENT_LIST} styles={this.customStyles} onChange={this.onAgentChange} />
             <Select value={this.state.selectedAbility} label="Ability select" placeholder='Ability...' options={this.state.abilityList} styles={this.customStyles} onChange={this.onAbilityChange} />
             <MultiSelect
@@ -256,6 +265,7 @@ export class LineupSite extends Component {
               onChange={this.onTagChange} />
           </div>
           <MapInteractionCSS
+            updateParentState={this.updateParentState}
             maxScale={6}>
             <div id='lineup-site-map' style={{ margin: '40px 0px 0px 40px', display: 'flex' }}>
               <Map mapId={this.state.mapId} onMapClick={this.onMapClick} />

@@ -14,7 +14,7 @@ export const ImageFrame = (props) => {
             <PinchZoomPan doubleTapBehavior='zoom' position='center' initialScale={1} minScale={1} maxScale={6} zoomButtons={false}>
                 <img
                     className='lineup-image'
-                    src={props.image} alt='lineup icon'
+                    src={props.image} alt='lineup info'
                     onMouseEnter={handleEnter}
                     onMouseLeave={handleLeave} />
             </PinchZoomPan>

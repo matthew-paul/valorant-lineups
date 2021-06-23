@@ -211,6 +211,8 @@ export class DesignLineup extends Component {
 
     }
 
+    updateParentState = () => {}
+
     render() {
 
         return (
@@ -224,7 +226,9 @@ export class DesignLineup extends Component {
                             <button className='map-button' onClick={this.setStartPositionClicked}>Set Start Position</button>
                         </div>
                         <div className='design-map-frame' onContextMenu={this.onContextMenu} >
-                            <MapInteractionCSS maxScale={6}>
+                            <MapInteractionCSS 
+                                updateParentState={this.updateParentState}
+                                maxScale={6}>
                                 <Map mapId={this.state.mapId} onMapClick={this.onMapClick} />
 
                                 <div className='marker-frame'>
