@@ -22,6 +22,8 @@ $height-aspect-ratio: 22vw;
 .content-frame-description {
     color: white;
     margin-top: 2%;
+    padding-left: 1%;
+    padding-right: 1%;
     text-align: center;
 }
 
@@ -29,7 +31,7 @@ $height-aspect-ratio: 22vw;
     height: 100%;
     width: 100% - $lineup-site-map-width;
     display: block;
-    overflow-y: scroll;
+    overflow-y: auto;
     @include debug-border(green);
     border-left-style: solid;
 }

@@ -49,6 +49,7 @@ export const TAG_LIST = [
     { value: 2, label: "Defending" },
     { value: 3, label: "Post Plant" },
     { value: 4, label: "Retake" },
+    { value: 16, label: "Fake" },
     { value: 5, label: "A Site" },
     { value: 6, label: "B Site" },
     { value: 7, label: "C Site" },

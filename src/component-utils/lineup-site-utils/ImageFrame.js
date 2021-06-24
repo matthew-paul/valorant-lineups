@@ -3,7 +3,6 @@ import PinchZoomPan from '../responsive-pinch-zoom-pan/PinchZoomPan'
 import disableScroll from 'disable-scroll'
 
 
-
 export const ImageFrame = (props) => {
 
     const handleEnter = () => disableScroll['on'](document.getElementById('content-frame'))
@@ -11,7 +10,7 @@ export const ImageFrame = (props) => {
 
     return (
         <div className='image-frame' >
-            <PinchZoomPan doubleTapBehavior='zoom' position='center' initialScale={1} minScale={1} maxScale={6} zoomButtons={false}>
+            <PinchZoomPan doubleTapBehavior='zoom' position='center' initialScale={1} minScale={1} maxScale={8} zoomButtons={false}>
                 <img
                     className='lineup-image'
                     src={props.image} alt='lineup info'

@@ -176,6 +176,10 @@ export class DesignLineup extends Component {
         // prevent page auto refresh
         e.preventDefault()
 
+        this.setState({
+            infoMessage: { type: 'info', value: '' }
+        })
+
         // validate input
         if (!this.validLineupState()) {
             return

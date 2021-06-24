@@ -2,3 +2,13 @@
     text-align: center;
     justify-content: center;
 }
+
+.home-content {
+    justify-content: center;
+    display: flex;
+}
+
+.home-content > h2 { 
+    text-align: center;
+    color: white;
+}

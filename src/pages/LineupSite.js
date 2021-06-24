@@ -86,11 +86,13 @@ export class LineupSite extends Component {
   onMarkerClick = (marker) => {
 
     this.setState({
+      activeMarkerId: marker.id,
       images: marker.images,
       video: marker.video,
       name: marker.name,
       description: marker.description,
-      credits: marker.credits
+      credits: marker.credits,
+      mapArrowVisible: true
     })
 
   }
@@ -99,6 +101,7 @@ export class LineupSite extends Component {
     // if start position not given
     if (marker.startX === -1) return;
 
+    // add coordinates for line
     this.setState({
       mapArrowPos: {
         x: marker.x + 12.5,
@@ -112,9 +115,12 @@ export class LineupSite extends Component {
   }
 
   onMarkerOut = (marker) => {
-    this.setState({
-      mapArrowVisible: false
-    })
+    if (this.state.activeMarkerId !== marker.id) {
+      this.setState({
+        activeMarkerId: null,
+        mapArrowVisible: false
+      })
+    }
   }
 
   onMapSwitch = (e) => {
@@ -123,6 +129,7 @@ export class LineupSite extends Component {
 
     // remove markers
     this.setState({
+      mapArrowVisible: false,
       visibleMarkers: [],
       tags: []
     })
@@ -197,7 +204,7 @@ export class LineupSite extends Component {
     if (!(this.state.mapId in this.state.savedMarkers) || this.state.savedMarkers[this.state.mapId].length === 0)
       return;
 
-      // get marker list and filter based on agent/ability
+    // get marker list and filter based on agent/ability
     let filteredList = this.state.savedMarkers[this.state.mapId].filter(marker => {
       // Check agent and ability matches
       if (parseInt(marker.agent) !== this.state.agentId) return false;
@@ -227,13 +234,13 @@ export class LineupSite extends Component {
   getMarkers = () => {
     return (
       this.state.visibleMarkers.map((marker) =>
-                  <Marker
-                    key={marker.id}
-                    lineup={marker}
-                    onClick={() => this.onMarkerClick(marker)}
-                    onHover={() => this.onMarkerHover(marker)}
-                    onLeave={() => this.onMarkerOut(marker)} 
-                    scale={this.state.markerScale} />)
+        <Marker
+          key={marker.id}
+          lineup={marker}
+          onClick={() => this.onMarkerClick(marker)}
+          onHover={() => this.onMarkerHover(marker)}
+          onLeave={() => this.onMarkerOut(marker)}
+          scale={this.state.markerScale} />)
     )
   }
 
@@ -276,7 +283,7 @@ export class LineupSite extends Component {
                 </svg>
               }
 
-              <div className='marker-frame' style={{ position: 'fixed'}}>
+              <div className='marker-frame' style={{ position: 'fixed' }}>
                 {this.getMarkers()}
               </div>
             </div>
