@@ -135,7 +135,7 @@ export class Form extends Component {
                 </div>
                 {/* Description */}
                 <div className='row'>
-                    <input
+                    <textarea
                         className='description'
                         name='description'
                         placeholder='Lineup Description'

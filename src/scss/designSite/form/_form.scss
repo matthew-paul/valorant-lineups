@@ -59,7 +59,8 @@ input.description,
 select.description,
 textarea.description {
     @include textbox-format($input-label-height * 2);
-    padding-bottom: $input-label-height;
+    //padding-bottom: $input-label-height;
+    padding-top: 10px;
 }
 
 
