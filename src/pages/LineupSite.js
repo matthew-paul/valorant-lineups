@@ -101,13 +101,15 @@ export class LineupSite extends Component {
     // if start position not given
     if (marker.startX === -1) return;
 
+    let adjustment = 13;
+
     // add coordinates for line
     this.setState({
       mapArrowPos: {
-        x: marker.x + 12.5,
-        y: marker.y + 12.5,
-        startX: marker.startX + 12.5,
-        startY: marker.startY + 12.5
+        x: marker.x + adjustment,
+        y: marker.y + adjustment,
+        startX: marker.startX + adjustment,
+        startY: marker.startY + adjustment
       },
       mapArrowVisible: true
     })
@@ -273,7 +275,7 @@ export class LineupSite extends Component {
           </div>
           <MapInteractionCSS
             updateParentState={this.updateParentState}
-            maxScale={6}>
+            maxScale={15}>
             <div id='lineup-site-map' style={{ margin: '40px 0px 0px 40px', display: 'flex' }}>
               <Map mapId={this.state.mapId} onMapClick={this.onMapClick} />
 

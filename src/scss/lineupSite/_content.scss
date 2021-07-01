@@ -3,7 +3,7 @@
 $height-aspect-ratio: 22vw;
 
 @mixin frame-settings($debug-color: white) {
-    width: 90%;
+    width: 80%;
     /* this keeps aspect ratio i think */
     height: $height-aspect-ratio;
 

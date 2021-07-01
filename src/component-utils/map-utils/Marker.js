@@ -35,7 +35,6 @@ const Marker = (props) => {
             src={getIcon(props.lineup.agent, props.lineup.ability)}
             alt='recon bolt'
             style={{
-                position: 'absolute',
                 transform: `scale(${1/props.scale})`,
                 left: `${props.lineup.x}px`,
                 top: `${props.lineup.y}px`
