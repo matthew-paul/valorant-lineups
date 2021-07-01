@@ -4,7 +4,7 @@ import React from "react";
 const YoutubeEmbed = ({ embedId }) => (
   <div className='video-responsive'>
     <iframe
-      src={`https://www.youtube.com/embed/${embedId}`}
+      src={`https://www.youtube.com/embed/${embedId}?rel=0`}
       frameBorder="0"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowFullScreen
