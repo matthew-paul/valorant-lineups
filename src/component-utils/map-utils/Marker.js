@@ -33,7 +33,7 @@ const Marker = (props) => {
             id={props.id}
             className='marker-icon'
             src={getIcon(props.lineup.agent, props.lineup.ability)}
-            alt='recon bolt'
+            alt='ability marker'
             style={{
                 transform: `scale(${1/props.scale})`,
                 left: `${props.lineup.x}px`,
