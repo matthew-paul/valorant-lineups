@@ -11,6 +11,7 @@
     "react-icons": "^4.2.0",
     "react-map-interaction": "^2.0.0",
     "react-multi-select-component": "^4.0.2",
+    "react-public-ip": "^1.0.0",
     "react-responsive-pinch-zoom-pan": "^0.3.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
