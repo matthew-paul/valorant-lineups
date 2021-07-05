@@ -80,19 +80,26 @@ export class LineupSite extends Component {
   }
 
   onMapClick = (e) => {
+    let x = e.nativeEvent.offsetX - 12.5  // 1/2 icon size
+    let y = e.nativeEvent.offsetY - 12.5
 
+    console.log(x, y)
   }
 
   onMarkerClick = (marker) => {
 
     this.setState({
-      activeMarkerId: marker.id,
-      images: marker.images,
-      video: marker.video,
-      name: marker.name,
-      description: marker.description,
-      credits: marker.credits,
-      mapArrowVisible: true
+      images: []
+    }, () => {
+      this.setState({
+        activeMarkerId: marker.id,
+        images: marker.images,
+        video: marker.video,
+        name: marker.name,
+        description: marker.description,
+        credits: marker.credits,
+        mapArrowVisible: true
+      })
     })
 
   }
@@ -224,6 +231,7 @@ export class LineupSite extends Component {
 
 
     this.setState({
+      mapArrowVisible: false,
       visibleMarkers: filteredList
     })
 

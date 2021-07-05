@@ -1,16 +1,18 @@
 @import '../utils';
 
-$height-aspect-ratio: 22vw;
+$height-aspect-ratio: 23vw;
 
 @mixin frame-settings($debug-color: white) {
-    width: 80%;
+    width: 82%;
     /* this keeps aspect ratio i think */
     height: $height-aspect-ratio;
 
     margin: auto;
     margin-top: 2%;
     margin-bottom: 2%;
-    @include debug-border($debug-color);
+    border-style: solid;
+    border-color: white;
+    //@include debug-border($debug-color);
 }
 
 .content-frame-title {
