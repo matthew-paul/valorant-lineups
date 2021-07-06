@@ -12,14 +12,19 @@ const ContentFrame = (props) => {
                 <h1 className='content-frame-title'>Click a lineup icon to view info</h1>
             }
             {props.description !== '' && <h2 className='content-frame-description'>{props.description}</h2>}
-            {props.credits !== '' && <h4 className='content-frame-description'>Credits: {props.credits}</h4>}
+            {props.credits !== '' && (
+                <div className='content-frame-credits-frame'>
+                    <h4 className='content-frame-credits'>Credits: </h4>
+                    <h4 className='content-frame-credits'>{props.credits}</h4>
+                </div>
+            )}
             {props.video !== '' &&
                 <div className='video-frame'>
                     <YoutubeEmbed embedId={props.video} />
                 </div>
             }
             {props.images.map((image, index) =>
-                <ImageFrame key={index} image={image}/>
+                <ImageFrame key={index} image={image} />
             )}
         </div>
     )

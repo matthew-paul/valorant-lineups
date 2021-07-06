@@ -29,6 +29,19 @@ $height-aspect-ratio: 23vw;
     text-align: center;
 }
 
+.content-frame-credits-frame {
+    display: flex;
+    justify-content: center;
+    padding-right: 1%;
+}
+
+.content-frame-credits {
+    color: white;
+    margin-top: 2%;
+    padding-left: 1%;
+    text-align: center;
+}
+
 .content-frame {
     height: 100%;
     width: 100% - $lineup-site-map-width;
