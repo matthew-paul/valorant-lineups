@@ -10,7 +10,7 @@ export const ImageFrame = (props) => {
 
     return (
         <div className='image-frame' >
-            <PinchZoomPan doubleTapBehavior='zoom' position='center' initialScale={1} minScale={1} maxScale={8} zoomButtons={false}>
+            <PinchZoomPan doubleTapBehavior='zoom' position='center' initialScale={1} minScale={1} maxScale={10} zoomButtons={false}>
                 <img
                     className='lineup-image'
                     src={props.image} alt='lineup info'
