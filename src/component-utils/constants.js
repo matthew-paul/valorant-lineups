@@ -9,6 +9,9 @@ import SplitMap from '../resources/Maps/split_map.png'
 
 export const API_URL = 'https://cxvofre6jj.execute-api.us-east-1.amazonaws.com/lineups'
 
+export const lineupLocalStorageExpiration = 1000 * 60 * 10;   // How long localStorage will keep lineup info before refreshing in milliseconds
+
+
 export const AGENT_LIST = [
     { value: 1, label: "Astra" },
     { value: 2, label: "Breach" },

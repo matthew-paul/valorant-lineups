@@ -24,7 +24,7 @@ export class LineupSite extends Component {
   }
 
   state = {
-    savedMarkers: {},
+    savedLineups: {},
     visibleMarkers: [],
     mapId: 1,
     agentId: 0,
@@ -48,42 +48,75 @@ export class LineupSite extends Component {
     markerScale: 1,
   }
 
+  lineupRetrievalRetries = 0;
+
   componentDidMount() {
-    this.requestMapMarkers(this.state.mapId);
+
+    document.title="View Lineups"
+
+    // attempt to read lineup info from localstorage and check expiration date
+    const localStorageLineups = localStorage.getItem('savedLineups');
+    const localStorageLineupsExpiration = localStorage.getItem('savedLineupsExpiration');
+
+
+    // check if it is time to refresh lineups
+    if (localStorageLineupsExpiration === null || Date.now() - CONSTANTS.lineupLocalStorageExpiration >= localStorageLineupsExpiration) {
+      console.log(`refreshing lineups, expiration in ${CONSTANTS.lineupLocalStorageExpiration/60/1000} minutes`);
+      localStorage.clear();
+
+      // store lineups by map in this object, and write it to the state
+      let categorizedLineups = {};
+
+      this.getLineupsFromDatabase((lineups) => {
+
+        lineups.forEach(lineup => {
+          let mapId = lineup['mapId'];
+          if (mapId in categorizedLineups) {
+            categorizedLineups[mapId].push(lineup)
+          } else {
+            categorizedLineups[mapId] = [lineup]
+          }
+        });
+
+        this.setState({
+          savedLineups: categorizedLineups
+        })
+
+        localStorage.setItem('savedLineups', JSON.stringify(categorizedLineups))
+        localStorage.setItem('savedLineupsExpiration', Date.now() + CONSTANTS.lineupLocalStorageExpiration)
+
+      })
+    }
+    // otherwise just retrieve lineups from local storage
+    else if (localStorageLineups !== null) {
+      this.setState({
+        savedLineups: JSON.parse(localStorageLineups)
+      })
+    }
 
   }
 
-  requestMapMarkers(mapId, callback) {
+  getLineupsFromDatabase(callback) {
     let requestOptions = {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' }
     }
 
-    fetch(`${CONSTANTS.API_URL}?mapId=${mapId}`, requestOptions)
+    fetch(`${CONSTANTS.API_URL}`, requestOptions)
       .then(response => response.json())
-      .then(data => { this.recievedLineups(data, callback) })
+      .then(data => callback(data))
       .catch(err => {
         console.log('error retrieving lineups:', err)
       })
   }
 
-  recievedLineups = (data, callback) => {
-    // append lineups for this map to what we already saved
-    // so we don't make unecessary api calls when switching maps
-
-    this.setState({
-      savedMarkers: {
-        ...this.state.savedMarkers,
-        [this.state.mapId]: data
-      }
-    }, callback)
-  }
-
   onMapClick = (e) => {
+    /*
     let x = e.nativeEvent.offsetX - 12.5  // 1/2 icon size
     let y = e.nativeEvent.offsetY - 12.5
 
     console.log(x, y)
+    */
   }
 
   onMarkerClick = (marker) => {
@@ -144,17 +177,10 @@ export class LineupSite extends Component {
     })
 
     // update map image
-
     this.setState({
       mapId: selectedMap
     }, () => {
-      // check if we already have markers in state for this map
-      if (!(selectedMap in this.state.savedMarkers)) {
-        // request api for new markers and update
-        this.requestMapMarkers(selectedMap, this.updateMap)
-      } else {
-        this.updateMap();
-      }
+      this.updateMap();
     })
 
 
@@ -210,11 +236,20 @@ export class LineupSite extends Component {
     }
 
     // make sure map has markers saved in state
-    if (!(this.state.mapId in this.state.savedMarkers) || this.state.savedMarkers[this.state.mapId].length === 0)
-      return;
+    if (!(this.state.mapId in this.state.savedLineups) || this.state.savedLineups[this.state.mapId].length === 0) {
+      // retry up to 2 times to give api time to return lineups
+      if (this.lineupRetrievalRetries >= 2) {
+        // don't reset retries because api is only called when component is loaded, so savedLineups will not change after initial call
+        return;
+      } else {
+        this.lineupRetrievalRetries += 1;
+        setTimeout(this.updateMap, 1000); // retry updating map after 1 seconds
+        return;
+      }
+    }
 
     // get marker list and filter based on agent/ability
-    let filteredList = this.state.savedMarkers[this.state.mapId].filter(marker => {
+    let filteredList = this.state.savedLineups[this.state.mapId].filter(marker => {
       // Check agent and ability matches
       if (parseInt(marker.agent) !== this.state.agentId) return false;
       if (this.state.abilityId !== 0 && parseInt(marker.ability) !== this.state.abilityId) return false;

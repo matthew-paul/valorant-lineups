@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 const Home = () => {
 
-   
-
-    
+    useEffect(() => {
+        document.title = "Home"
+    }, [])
 
     return (
         <div className='home'>

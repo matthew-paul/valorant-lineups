@@ -12,6 +12,11 @@ import Select from 'react-select'
 
 export class DesignLineup extends Component {
 
+
+    componentDidMount() {
+        document.title = "Create Lineup"
+    }
+
     customStyles = {
         container: (styles) => ({
             ...styles,
