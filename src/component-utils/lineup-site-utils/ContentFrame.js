@@ -14,7 +14,7 @@ const ContentFrame = (props) => {
             {props.description !== '' && <h2 className='content-frame-description'>{props.description}</h2>}
             {props.credits !== '' && (
                 <div className='content-frame-credits-frame'>
-                    <h4 className='content-frame-credits'>Credits: </h4>
+                    <h4 className='content-frame-credits-title'>Credits: </h4>
                     <h4 className='content-frame-credits'>{props.credits}</h4>
                 </div>
             )}

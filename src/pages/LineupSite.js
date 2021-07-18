@@ -29,6 +29,7 @@ export class LineupSite extends Component {
     mapId: 1,
     agentId: 0,
     abilityId: 0,
+    selectedAbility: null, // used to manually reset ability selection to empty after chaning agent
     abilityList: [],
     activeMarkerId: null,
     tags: [],
@@ -37,14 +38,13 @@ export class LineupSite extends Component {
     description: '',
     name: '',
     credits: '',
-    mapArrowVisible: false,
+    mapArrowVisible: false, // red svg line from lineup position to start position
     mapArrowPos: {
       x: -1,
       y: -1,
       startX: -1,
       startY: -1,
     },
-    selectedAbility: null,
     markerScale: 1,
   }
 
@@ -56,12 +56,12 @@ export class LineupSite extends Component {
 
     // attempt to read lineup info from localstorage and check expiration date
     const localStorageLineups = localStorage.getItem('savedLineups');
-    const localStorageLineupsExpiration = localStorage.getItem('savedLineupsExpiration');
+    const localStorageLineupsExpirationDate = localStorage.getItem('savedLineupsExpiration');
 
 
     // check if it is time to refresh lineups
-    if (localStorageLineupsExpiration === null || Date.now() - CONSTANTS.lineupLocalStorageExpiration >= localStorageLineupsExpiration) {
-      console.log(`refreshing lineups, expiration in ${CONSTANTS.lineupLocalStorageExpiration/60/1000} minutes`);
+    if (localStorageLineups === null || localStorageLineupsExpirationDate === null || Date.now() >= localStorageLineupsExpirationDate) {
+      console.log(`refreshing lineups, expiration in ${CONSTANTS.localStorageExpirationTime/60/1000} minutes`);
       localStorage.clear();
 
       // store lineups by map in this object, and write it to the state
@@ -83,12 +83,12 @@ export class LineupSite extends Component {
         })
 
         localStorage.setItem('savedLineups', JSON.stringify(categorizedLineups))
-        localStorage.setItem('savedLineupsExpiration', Date.now() + CONSTANTS.lineupLocalStorageExpiration)
+        localStorage.setItem('savedLineupsExpiration', Date.now() + CONSTANTS.localStorageExpirationTime)
 
       })
     }
     // otherwise just retrieve lineups from local storage
-    else if (localStorageLineups !== null) {
+    else {
       this.setState({
         savedLineups: JSON.parse(localStorageLineups)
       })
@@ -122,6 +122,7 @@ export class LineupSite extends Component {
   onMarkerClick = (marker) => {
 
     this.setState({
+      // clear images so they will be blank until loaded
       images: []
     }, () => {
       this.setState({
@@ -179,9 +180,7 @@ export class LineupSite extends Component {
     // update map image
     this.setState({
       mapId: selectedMap
-    }, () => {
-      this.updateMap();
-    })
+    }, this.updateMap)
 
 
 
@@ -197,9 +196,7 @@ export class LineupSite extends Component {
       abilityId: 0,
       selectedAbility: null,
       abilityList: CONSTANTS.ABILITY_LIST[agent.value]
-    }, () => {
-      this.updateMap()
-    })
+    }, this.updateMap)
 
   }
 
@@ -210,18 +207,14 @@ export class LineupSite extends Component {
     this.setState({
       abilityId: ability.value,
       selectedAbility: ability
-    }, () => {
-      this.updateMap()
-    });
+    }, this.updateMap);
 
   }
 
   onTagChange = (newTags) => {
     this.setState({
       tags: newTags
-    }, () => {
-      this.updateMap();
-    })
+    }, this.updateMap)
 
   }
 

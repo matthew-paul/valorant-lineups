@@ -16,10 +16,10 @@ export const SidebarData = [
         icon: <IoIcons.IoMapOutline />,
         cName: 'nav-text'
     },
-    {
+    /*{
         title: 'Send Lineups',
         path: '/send',
         icon: <AiIcons.AiOutlineSend />,
         cName: 'nav-text'
-    }
+    }*/
 ]
