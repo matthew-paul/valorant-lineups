@@ -239,6 +239,7 @@ export class LineupSite extends Component {
       // retry up to 2 times to give api time to return lineups
       if (this.lineupRetrievalRetries >= 2) {
         // don't reset retries because api is only called when component is loaded, so savedLineups will not change after initial call
+        alert('No lineups retrieved. Please retry in a few seconds/clear cache.')
         return;
       } else {
         this.lineupRetrievalRetries += 1;
