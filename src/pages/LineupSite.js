@@ -62,7 +62,7 @@ export class LineupSite extends Component {
 
 
     // check if it is time to refresh lineups
-    if (localStorageLineups === null || localStorageLineupsExpirationDate === null || Date.now() >= localStorageLineupsExpirationDate) {
+    if (localStorageLineups === null || localStorageLineupsExpirationDate === null || localStorageLineupsExpirationDate.toString().toLowerCase() === 'never' || Date.now() >= localStorageLineupsExpirationDate) {
       console.log(`refreshing lineups, expiration in ${CONSTANTS.localStorageExpirationTime / 60 / 1000} minutes`);
       localStorage.clear();
 
@@ -235,7 +235,7 @@ export class LineupSite extends Component {
     }
 
     // make sure map has markers saved in state
-    if (!(this.state.mapId in this.state.savedLineups) || this.state.savedLineups[this.state.mapId].length === 0) {
+    if (Object.keys(this.state.savedLineups).length === 0) {
       // retry up to 2 times to give api time to return lineups
       if (this.lineupRetrievalRetries >= 2) {
         // don't reset retries because api is only called when component is loaded, so savedLineups will not change after initial call
