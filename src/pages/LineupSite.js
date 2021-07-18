@@ -26,12 +26,13 @@ export class LineupSite extends Component {
   state = {
     savedLineups: {},
     visibleMarkers: [],
+    hiddenMarkers: [], // user can manually hide markers instead of using filters
     mapId: 1,
     agentId: 0,
     abilityId: 0,
-    selectedAbility: null, // used to manually reset ability selection to empty after chaning agent
+    selectedAbility: null, // used to explicitly reset ability selection to empty after changing agent
     abilityList: [],
-    activeMarkerId: null,
+    activeMarkerId: null, // used in content frame
     tags: [],
     images: [],
     video: '',
@@ -39,6 +40,7 @@ export class LineupSite extends Component {
     name: '',
     credits: '',
     mapArrowVisible: false, // red svg line from lineup position to start position
+    selectedMarkerId: null, // used to keep arrow visible when leaving marker after clicking
     mapArrowPos: {
       x: -1,
       y: -1,
@@ -52,7 +54,7 @@ export class LineupSite extends Component {
 
   componentDidMount() {
 
-    document.title="View Lineups"
+    document.title = "View Lineups"
 
     // attempt to read lineup info from localstorage and check expiration date
     const localStorageLineups = localStorage.getItem('savedLineups');
@@ -61,7 +63,7 @@ export class LineupSite extends Component {
 
     // check if it is time to refresh lineups
     if (localStorageLineups === null || localStorageLineupsExpirationDate === null || Date.now() >= localStorageLineupsExpirationDate) {
-      console.log(`refreshing lineups, expiration in ${CONSTANTS.localStorageExpirationTime/60/1000} minutes`);
+      console.log(`refreshing lineups, expiration in ${CONSTANTS.localStorageExpirationTime / 60 / 1000} minutes`);
       localStorage.clear();
 
       // store lineups by map in this object, and write it to the state
@@ -127,6 +129,7 @@ export class LineupSite extends Component {
     }, () => {
       this.setState({
         activeMarkerId: marker.id,
+        selectedMarkerId: marker.id,
         images: marker.images,
         video: marker.video,
         name: marker.name,
@@ -158,9 +161,12 @@ export class LineupSite extends Component {
   }
 
   onMarkerOut = (marker) => {
-    if (this.state.activeMarkerId !== marker.id) {
+    // hide arrow when leaving non-selected marker
+    // this will allow the user to click the marker and scroll out to view the start location,
+    // then when the user hovers over another marker it will clear the red line
+    if (this.state.selectedMarkerId !== marker.id) {
       this.setState({
-        activeMarkerId: null,
+        selectedMarkerId: false,
         mapArrowVisible: false
       })
     }
@@ -246,6 +252,7 @@ export class LineupSite extends Component {
       // Check agent and ability matches
       if (parseInt(marker.agent) !== this.state.agentId) return false;
       if (this.state.abilityId !== 0 && parseInt(marker.ability) !== this.state.abilityId) return false;
+      if (this.state.hiddenMarkers.includes(marker.id)) return false;
       return true;
     })
 
@@ -282,12 +289,24 @@ export class LineupSite extends Component {
     )
   }
 
-  updateParentState = (scale) => {
+  updateScale = (scale) => {
     if (scale !== this.state.markerScale) {
       this.setState({
         markerScale: scale
       })
     }
+  }
+
+  updateLineupState = (newState) => {
+    this.setState({
+      newState
+    }, this.updateMap)
+  }
+
+  clearHiddenMarkers = () => {
+    this.setState({
+      hiddenMarkers: []
+    }, this.updateMap)
   }
 
   render() {
@@ -309,8 +328,9 @@ export class LineupSite extends Component {
               overrideStrings={{ 'selectSomeItems': 'Filters...' }}
               onChange={this.onTagChange} />
           </div>
+          <button id='clear-hidden-markers-button' onClick={this.clearHiddenMarkers}>Clear hidden markers</button>
           <MapInteractionCSS
-            updateParentState={this.updateParentState}
+            updateScale={this.updateScale}
             maxScale={15}>
             <div id='lineup-site-map' style={{ margin: '40px 0px 0px 40px', display: 'flex' }}>
               <Map mapId={this.state.mapId} onMapClick={this.onMapClick} />
@@ -328,7 +348,14 @@ export class LineupSite extends Component {
           </MapInteractionCSS>
         </div>
 
-        <ContentFrame {...this.state} />
+        <ContentFrame updateParentState={this.updateLineupState}
+          activeMarkerId={this.state.activeMarkerId}
+          hiddenMarkers={this.state.hiddenMarkers}
+          name={this.state.name}
+          description={this.state.description}
+          credits={this.state.credits}
+          video={this.state.video}
+          images={this.state.images} />
       </div>
     );
   }

@@ -1,4 +1,4 @@
-@import '../utils';
+@import "../utils";
 
 $height-aspect-ratio: 23vw;
 
@@ -15,36 +15,60 @@ $height-aspect-ratio: 23vw;
     //@include debug-border($debug-color);
 }
 
-.content-frame-title {
+#content-frame-title {
     padding: 10px;
     text-align: center;
     border-bottom-style: solid;
 }
-.content-frame-description {
+
+.checkbox-outer-container {
+    display: flex;
+    justify-content: center;
+}
+
+.checkbox-container {
+    text-align: center;
+    color: white;
+    display: block;
+    cursor: pointer;
+    width: 200px;
+    margin-top: 15px;
+    font-size: 22px;
+    user-select: none;
+}
+
+#content-frame-checkbox {
+    margin-right: 10px;
+    height: 25px;
+    width: 25px;
+    vertical-align: middle;
+}
+
+#content-frame-description {
     color: white;
     padding: 20px 10px;
     text-align: center;
 }
 
-.content-frame-credits-frame {
+#content-frame-credits-frame {
     display: flex;
     justify-content: center;
     padding-right: 1%;
 }
 
-.content-frame-credits {
+#content-frame-credits {
     color: white;
     padding-left: 1%;
     text-align: center;
     word-break: break-all;
 }
-.content-frame-credits-title {
+#content-frame-credits-title {
     color: white;
     padding-left: 1%;
     text-align: center;
 }
 
-.content-frame {
+#content-frame {
     height: 100%;
     width: 100% - $lineup-site-map-width;
     display: block;
@@ -63,7 +87,7 @@ $height-aspect-ratio: 23vw;
     @include debug-border(purple);
 }
 
-.video-frame {
+#video-frame {
     @include frame-settings(red);
 }
 

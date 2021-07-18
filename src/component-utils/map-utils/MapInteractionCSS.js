@@ -12,7 +12,7 @@ const MapInteractionCSS = (props) => {
         ({ translation, scale }) => {
           // Translate first and then scale.  Otherwise, the scale would affect the translation.
           const transform = `translate(${translation.x}px, ${translation.y}px) scale(${scale})`;
-          props.updateParentState(scale);
+          props.updateScale(scale);
           return (
             <div
               style={{
