@@ -167,7 +167,7 @@ export class LineupSite extends Component {
     // then when the user hovers over another marker it will clear the red line
     if (this.state.selectedMarkerId !== marker.id) {
       this.setState({
-        selectedMarkerId: false,
+        selectedMarkerId: null,
         mapArrowVisible: false
       })
     }
@@ -182,7 +182,14 @@ export class LineupSite extends Component {
       mapRotation: 0,
       mapArrowVisible: false,
       visibleMarkers: [],
-      tags: []
+      tags: [],
+      name: '',
+      description: '',
+      credits: '',
+      activeMarkerId: null,
+      selectedMarkerId: null,
+      images: [],
+      video: '',
     })
 
     // update map image, Map will automatically call updateMap after image has been loaded
