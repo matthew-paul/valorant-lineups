@@ -240,7 +240,7 @@ export class DesignLineup extends Component {
                                 maxScale={6}>
                                 <Map mapId={this.state.mapId} onMapClick={this.onMapClick} />
 
-                                <div className='marker-frame'>
+                                <div className='marker-frame-design-site'>
                                     {this.state.x !== -1 ?
                                         <Marker lineup={this.state} onClick={() => { this.setState({ x: -1, y: -1 }) }} /> : ''
                                     }
