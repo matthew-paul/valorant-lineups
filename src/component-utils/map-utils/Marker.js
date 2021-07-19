@@ -27,7 +27,6 @@ const Marker = (props) => {
         }
     }
 
-
     return (
         <img
             id={props.id}
@@ -35,7 +34,7 @@ const Marker = (props) => {
             src={getIcon(props.lineup.agent, props.lineup.ability)}
             alt='ability marker'
             style={{
-                transform: `scale(${Math.min(1, 1/props.scale)})`, // scale icons automatically with map zoom, keeping max scale at 1
+                transform: `rotate(${-props.rotation}deg) scale(${Math.min(1, 1 / props.scale)})`,// scale icons automatically with map zoom, keeping max scale at 1
                 left: `${props.lineup.x}px`,
                 top: `${props.lineup.y}px`
             }}
@@ -49,6 +48,7 @@ const Marker = (props) => {
 
 Marker.propTypes = {
     lineup: PropTypes.object,
+    rotation: PropTypes.number,
     onClick: PropTypes.func,
     onHover: PropTypes.func,
     onLeave: PropTypes.func,
@@ -58,6 +58,7 @@ Marker.propTypes = {
 
 Marker.defaultProps = {
     id: '',
+    rotation: 0,
     onClick: null,
     onHover: null,
     onLeave: null,

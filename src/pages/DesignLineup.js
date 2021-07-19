@@ -220,7 +220,7 @@ export class DesignLineup extends Component {
 
     }
 
-    updateParentState = () => {}
+    updateScale = () => {}
 
     render() {
 
@@ -236,7 +236,7 @@ export class DesignLineup extends Component {
                         </div>
                         <div className='design-map-frame' onContextMenu={this.onContextMenu} >
                             <MapInteractionCSS 
-                                updateParentState={this.updateParentState}
+                                updateScale={this.updateScale}
                                 maxScale={6}>
                                 <Map mapId={this.state.mapId} onMapClick={this.onMapClick} />
 

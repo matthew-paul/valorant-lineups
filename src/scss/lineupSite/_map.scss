@@ -11,6 +11,17 @@
     cursor: grabbing;
 }
 
+#lineup-site-map {
+    margin: 40px;
+    display: flex;
+}
+
+.marker-frame {
+    width: 1000px;
+    height: 1000px;
+    position: fixed;
+}
+
 .marker-icon {
     height: 25px;
     width: 25px;

@@ -31,7 +31,7 @@ const MapInteractionCSS = (props) => {
                 style={{
                   display: 'inline-block', // size to content
                   transform: transform,
-                  transformOrigin: '0 0 '
+                  transformOrigin: '0 0'
                 }}
               >
                 {props.children}

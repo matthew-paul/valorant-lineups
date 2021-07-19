@@ -28,6 +28,7 @@ export class LineupSite extends Component {
     visibleMarkers: [],
     hiddenMarkers: [], // user can manually hide markers instead of using filters
     mapId: 1,
+    mapRotation: 0,
     agentId: 0,
     abilityId: 0,
     selectedAbility: null, // used to explicitly reset ability selection to empty after changing agent
@@ -178,6 +179,7 @@ export class LineupSite extends Component {
 
     // remove markers
     this.setState({
+      mapRotation: 0,
       mapArrowVisible: false,
       visibleMarkers: [],
       tags: []
@@ -237,15 +239,20 @@ export class LineupSite extends Component {
     // make sure map has markers saved in state
     if (Object.keys(this.state.savedLineups).length === 0) {
       // retry up to 2 times to give api time to return lineups
-      if (this.lineupRetrievalRetries >= 2) {
+      if (this.lineupRetrievalRetries === 2) {
         // don't reset retries because api is only called when component is loaded, so savedLineups will not change after initial call
         alert('No lineups retrieved. Please retry in a few seconds/clear cache.')
+        this.lineupRetrievalRetries += 1
+        return;
+      } else if (this.lineupRetrievalRetries > 2) {
         return;
       } else {
         this.lineupRetrievalRetries += 1;
         setTimeout(this.updateMap, 1000); // retry updating map after 1 seconds
         return;
       }
+    } else if (!(this.state.mapId in this.state.savedLineups) || this.state.savedLineups[this.state.mapId].length === 0) {
+      return;
     }
 
     // get marker list and filter based on agent/ability
@@ -283,6 +290,7 @@ export class LineupSite extends Component {
         <Marker
           key={marker.id}
           lineup={marker}
+          rotation={this.state.mapRotation}
           onClick={() => this.onMarkerClick(marker)}
           onHover={() => this.onMarkerHover(marker)}
           onLeave={() => this.onMarkerOut(marker)}
@@ -310,6 +318,22 @@ export class LineupSite extends Component {
     }, this.updateMap)
   }
 
+  rotateMapLeft = () => {
+    let newRotation = this.state.mapRotation - 90
+    if (newRotation < 0) newRotation += 360
+    this.setState({
+      mapRotation: newRotation
+    })
+  }
+
+  rotateMapRight = () => {
+    let newRotation = this.state.mapRotation + 90
+    if (newRotation >= 360) newRotation -= 360
+    this.setState({
+      mapRotation: newRotation
+    })
+  }
+
   render() {
 
     return (
@@ -330,19 +354,23 @@ export class LineupSite extends Component {
               onChange={this.onTagChange} />
           </div>
           <button id='clear-hidden-markers-button' onClick={this.clearHiddenMarkers}>Clear hidden markers</button>
+          <div className='rotate-button-container'>
+            <button className='rotate-map-button' onClick={this.rotateMapLeft}>Rotate left</button>
+            <button className='rotate-map-button' onClick={this.rotateMapRight}>Rotate right</button>
+          </div>
           <MapInteractionCSS
             updateScale={this.updateScale}
             maxScale={15}>
-            <div id='lineup-site-map' style={{ margin: '40px 0px 0px 40px', display: 'flex' }}>
-              <Map mapId={this.state.mapId} onMapClick={this.onMapClick} />
+            <div id='lineup-site-map'>
+              <Map rotation={this.state.mapRotation} mapId={this.state.mapId} onMapClick={this.onMapClick} />
 
               {this.state.mapArrowVisible &&
-                <svg width="1000" height="1000" style={{ position: 'fixed' }}>
+                <svg width="1000" height="1000" style={{ transform: `rotate(${this.state.mapRotation}deg`, position: 'fixed' }}>
                   <line x1={this.state.mapArrowPos.x} y1={this.state.mapArrowPos.y} x2={this.state.mapArrowPos.startX} y2={this.state.mapArrowPos.startY} stroke="red" />
                 </svg>
               }
 
-              <div className='marker-frame' style={{ position: 'fixed' }}>
+              <div className='marker-frame' style={{ transform: `rotate(${this.state.mapRotation}deg)` }} >
                 {this.getMarkers()}
               </div>
             </div>
@@ -357,7 +385,7 @@ export class LineupSite extends Component {
           credits={this.state.credits}
           video={this.state.video}
           images={this.state.images} />
-      </div>
+      </div >
     );
   }
 

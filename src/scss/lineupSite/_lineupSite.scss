@@ -53,3 +53,17 @@ $select-height: 45px;
 #clear-hidden-markers-button:hover {
     background-color: rgb(219, 219, 219);
 }
+
+.rotate-button-container {
+    position: absolute;
+    z-index: 1;
+    bottom: 10px;
+    left: 10px;
+    width: 250px;
+}
+
+.rotate-map-button {
+    margin-right: 5px;
+    height: 50px;
+    width: 100px;
+}

@@ -20,6 +20,7 @@ export class Map extends Component {
         
         return (
             <img
+                style={{ transform: `rotate(${this.props.rotation}deg)`}}
                 alt={this.getMap(this.props.mapId).label + ' map'}
                 src={this.getMap(this.props.mapId).icon}
                 onClick={this.props.onMapClick != null ? this.props.onMapClick : null}
@@ -31,11 +32,13 @@ export class Map extends Component {
 
 Map.propTypes = {
     mapId: PropTypes.number.isRequired,
+    rotation: PropTypes.number,
     onMapClick: PropTypes.func,
     onMouseDown: PropTypes.func
 }
 
 Map.defaultProps = {
+    rotation: 0,
     onMapClick: null,
     onMouseDown: null,
 }
