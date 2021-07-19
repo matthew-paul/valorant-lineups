@@ -167,7 +167,7 @@ export class LineupSite extends Component {
     // then when the user hovers over another marker it will clear the red line
     if (this.state.selectedMarkerId !== marker.id) {
       this.setState({
-        selectedMarkerId: false,
+        selectedMarkerId: null,
         mapArrowVisible: false
       })
     }
@@ -182,7 +182,14 @@ export class LineupSite extends Component {
       mapRotation: 0,
       mapArrowVisible: false,
       visibleMarkers: [],
-      tags: []
+      tags: [],
+      name: '',
+      description: '',
+      credits: '',
+      activeMarkerId: null,
+      selectedMarkerId: null,
+      images: [],
+      video: '',
     })
 
     // update map image, Map will automatically call updateMap after image has been loaded
@@ -241,10 +248,6 @@ export class LineupSite extends Component {
       // retry up to 2 times to give api time to return lineups
       if (this.lineupRetrievalRetries === 2) {
         // don't reset retries because api is only called when component is loaded, so savedLineups will not change after initial call
-        alert('No lineups retrieved. Please retry in a few seconds/clear cache.')
-        this.lineupRetrievalRetries += 1
-        return;
-      } else if (this.lineupRetrievalRetries > 2) {
         return;
       } else {
         this.lineupRetrievalRetries += 1;
