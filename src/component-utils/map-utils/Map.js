@@ -25,6 +25,7 @@ export class Map extends Component {
                 src={this.getMap(this.props.mapId).icon}
                 onClick={this.props.onMapClick != null ? this.props.onMapClick : null}
                 onMouseDown={this.props.onMouseDown}
+                onLoad={this.props.updateMap} // add lineup markers after image has been loaded, otherwise markers will overlap on original image/look wierd
             />
         )
     }
@@ -33,12 +34,14 @@ export class Map extends Component {
 Map.propTypes = {
     mapId: PropTypes.number.isRequired,
     rotation: PropTypes.number,
+    updateMap: PropTypes.func,
     onMapClick: PropTypes.func,
     onMouseDown: PropTypes.func
 }
 
 Map.defaultProps = {
     rotation: 0,
+    updateMap: null,
     onMapClick: null,
     onMouseDown: null,
 }

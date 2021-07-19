@@ -185,10 +185,10 @@ export class LineupSite extends Component {
       tags: []
     })
 
-    // update map image
+    // update map image, Map will automatically call updateMap after image has been loaded
     this.setState({
       mapId: selectedMap
-    }, this.updateMap)
+    })
 
 
 
@@ -362,7 +362,7 @@ export class LineupSite extends Component {
             updateScale={this.updateScale}
             maxScale={15}>
             <div id='lineup-site-map'>
-              <Map rotation={this.state.mapRotation} mapId={this.state.mapId} onMapClick={this.onMapClick} />
+              <Map rotation={this.state.mapRotation} mapId={this.state.mapId} onMapClick={this.onMapClick} updateMap={this.updateMap} />
 
               {this.state.mapArrowVisible &&
                 <svg width="1000" height="1000" style={{ transform: `rotate(${this.state.mapRotation}deg`, position: 'fixed' }}>
