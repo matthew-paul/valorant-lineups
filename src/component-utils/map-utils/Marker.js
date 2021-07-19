@@ -34,7 +34,8 @@ const Marker = (props) => {
             src={getIcon(props.lineup.agent, props.lineup.ability)}
             alt='ability marker'
             style={{
-                transform: `rotate(${-props.rotation}deg) scale(${Math.min(1, 1 / props.scale)})`,// scale icons automatically with map zoom, keeping max scale at 1
+                transform: `rotate(${-props.rotation}deg) scale(${Math.min(1, 1 / props.scale)})`,
+                // counter rotate to keep icon facing same direction, scale icons automatically with map zoom, keeping max scale at 1
                 left: `${props.lineup.x}px`,
                 top: `${props.lineup.y}px`
             }}
