@@ -373,7 +373,7 @@ export class LineupSite extends Component {
                 </svg>
               }
 
-              <div className='marker-frame-lineup-site' style={{ transform: `rotate(${this.state.mapRotation}deg)` }} >
+              <div className='fixed-marker-frame' style={{ transform: `rotate(${this.state.mapRotation}deg)` }} >
                 {this.getMarkers()}
               </div>
             </div>

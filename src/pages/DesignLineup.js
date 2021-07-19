@@ -172,7 +172,7 @@ export class DesignLineup extends Component {
             .catch(err => {
                 console.log('error sending lineup:', err);
                 this.setState({
-                    infoMessage: { type: 'error', value: 'Error sending lineup to database: ' + err}
+                    infoMessage: { type: 'error', value: 'Error sending lineup to database: ' + err }
                 })
             })
     }
@@ -220,7 +220,7 @@ export class DesignLineup extends Component {
 
     }
 
-    updateScale = () => {}
+    updateScale = () => { }
 
     render() {
 
@@ -235,12 +235,12 @@ export class DesignLineup extends Component {
                             <button className='map-button' onClick={this.setStartPositionClicked}>Set Start Position</button>
                         </div>
                         <div className='design-map-frame' onContextMenu={this.onContextMenu} >
-                            <MapInteractionCSS 
+                            <MapInteractionCSS
                                 updateScale={this.updateScale}
                                 maxScale={6}>
                                 <Map mapId={this.state.mapId} onMapClick={this.onMapClick} />
 
-                                <div className='marker-frame-design-site'>
+                                <div>
                                     {this.state.x !== -1 ?
                                         <Marker lineup={this.state} onClick={() => { this.setState({ x: -1, y: -1 }) }} /> : ''
                                     }
