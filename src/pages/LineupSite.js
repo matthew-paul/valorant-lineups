@@ -176,6 +176,10 @@ export class LineupSite extends Component {
   onMapSwitch = (e) => {
 
     let selectedMap = e.value
+    
+    if (selectedMap === this.state.mapId) {
+      return;
+    }
 
     // remove markers
     this.setState({
@@ -196,7 +200,6 @@ export class LineupSite extends Component {
     this.setState({
       mapId: selectedMap
     })
-
 
 
   }
