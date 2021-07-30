@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "cross-env": "^7.0.3",
     "disable-scroll": "^0.6.0",
+    "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-dnd": "",
     "react-dnd-html5-backend": "",
@@ -21,7 +23,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "cross-env GENERATE_SOURCEMAP=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

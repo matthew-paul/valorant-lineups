@@ -29,19 +29,19 @@ const ContentFrame = (props) => {
             {props.name !== '' ? <h1 id='content-frame-title'>{props.name}</h1> :
                 <h1 id='content-frame-title'>Click a lineup icon to view info</h1>
             }
+            {props.description !== '' && <h2 id='content-frame-description'>{props.description}</h2>}
+            {props.credits !== '' && (
+                <div id='content-frame-credits-frame'>
+                    <h4 id='content-frame-credits-title'>Credits: </h4>
+                    <h4 id='content-frame-credits'>{props.credits}</h4>
+                </div>
+            )}
             {props.activeMarkerId !== null && (
                 <div className='checkbox-outer-container'>
                     <label className='checkbox-container'>
                         <input id='content-frame-checkbox' type='checkbox' checked={props.hiddenMarkers.includes(props.activeMarkerId)} onChange={updateHiddenProp} />
                         Hide this marker
                     </label>
-                </div>
-            )}
-            {props.description !== '' && <h2 id='content-frame-description'>{props.description}</h2>}
-            {props.credits !== '' && (
-                <div id='content-frame-credits-frame'>
-                    <h4 id='content-frame-credits-title'>Credits: </h4>
-                    <h4 id='content-frame-credits'>{props.credits}</h4>
                 </div>
             )}
             {props.video !== '' &&
