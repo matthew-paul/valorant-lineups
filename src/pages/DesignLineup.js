@@ -159,7 +159,7 @@ export class DesignLineup extends Component {
 
         let requestOptions = {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'x-api-key': 'mh1C4UFPUN5ljyxhHt7Ro7d5OT8uJNYq1VvRa1QS' },
+            headers: { 'Content-Type': 'application/json', 'x-api-key': this.state.apiKey },
             body: JSON.stringify(lineupData),
         }
         fetch('https://uh5it8zn19.execute-api.us-east-1.amazonaws.com/development', requestOptions)
