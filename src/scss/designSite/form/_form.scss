@@ -79,6 +79,8 @@ select.first-opt-hidden option:first-of-type {
 
 .multi-select {
     width: 100%;
+    user-select: none;
+    caret-color: transparent;
 }
 
 .dropdown-container {
