@@ -1,6 +1,7 @@
 import ReconBolt from "../resources/Agents/Sova/Recon_Bolt.png";
 import ShockBolt from "../resources/Agents/Sova/Shock_Bolt.png";
 import SnakeBite from "../resources/Agents/Viper/Snake_Bite.png";
+import Incendiary from "../resources/Agents/Brimstone/Incendiary.png";
 import AscentMap from "../resources/Maps/ascent_map.png";
 import BindMap from "../resources/Maps/bind_map.png";
 import BreezeMap from "../resources/Maps/breeze_map.png";
@@ -23,6 +24,7 @@ export const AGENT_LIST = [
   { value: 5, label: "Jett" },
   { value: 6, label: "Killjoy" },
   { value: 16, label: "Kay/O" },
+  { value: 17, label: "Neon" },
   { value: 7, label: "Omen" },
   { value: 8, label: "Phoenix" },
   { value: 9, label: "Raze" },
@@ -35,6 +37,7 @@ export const AGENT_LIST = [
 ];
 
 export const ABILITY_LIST = {
+  3: [{ value: 1, label: "Incediary", icon: Incendiary }],
   13: [
     { value: 1, label: "Recon Bolt", icon: ReconBolt },
     { value: 2, label: "Shock Dart", icon: ShockBolt },
@@ -46,10 +49,10 @@ export const MAP_LIST = [
   { value: 1, label: "Ascent", icon: AscentMap },
   { value: 2, label: "Bind", icon: BindMap },
   { value: 3, label: "Breeze", icon: BreezeMap },
+  { value: 7, label: "Fracture", icon: FractureMap },
   { value: 4, label: "Haven", icon: HavenMap },
   { value: 5, label: "Icebox", icon: IceboxMap },
   { value: 6, label: "Split", icon: SplitMap },
-  { value: 7, label: "Fracture", icon: FractureMap },
 ];
 
 export const TAG_LIST = [

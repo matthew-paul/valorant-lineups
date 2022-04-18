@@ -21,6 +21,12 @@ $select-height: 45px;
     @include debug-border(red);
 }
 
+// disable cursor highlighting in filter select
+.filters-frame > * {
+    caret-color: transparent;
+    user-select: none;
+}
+
 .lineup-filter-select {
     width: 25%;
     height: $select-height;
