@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React, { Component } from "react";
 import * as CONSTANTS from "../constants";
-import MultiSelect from "react-multi-select-component";
+import { MultiSelect } from "react-multi-select-component";
 import PropTypes from "prop-types";
 
 import { WithContext as ReactTags } from "react-tag-input";

@@ -4,7 +4,7 @@ import ContentFrame from "../component-utils/lineup-site-utils/ContentFrame";
 import MapInteractionCSS from "../component-utils/map-utils/MapInteractionCSS";
 import Map from "../component-utils/map-utils/Map";
 import Marker from "../component-utils/map-utils/Marker";
-import MultiSelect from "react-multi-select-component";
+import { MultiSelect } from "react-multi-select-component";
 import * as CONSTANTS from "../component-utils/constants";
 import Select from "react-select";
 
