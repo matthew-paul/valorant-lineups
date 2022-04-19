@@ -39,14 +39,6 @@ const ContentFrame = (props) => {
           <h4 id="content-frame-credits">{props.credits}</h4>
         </div>
       )}
-      {props.video !== "" && (
-        <div id="video-frame">
-          <YoutubeEmbed embedId={props.video} />
-        </div>
-      )}
-      {props.images.map((image, index) => (
-        <ImageFrame key={index} image={image} />
-      ))}
       {props.activeMarkerId !== null && (
         <div className="checkbox-outer-container">
           <label className="checkbox-container">
@@ -60,6 +52,14 @@ const ContentFrame = (props) => {
           </label>
         </div>
       )}
+      {props.video !== "" && (
+        <div id="video-frame">
+          <YoutubeEmbed embedId={props.video} />
+        </div>
+      )}
+      {props.images.map((image, index) => (
+        <ImageFrame key={index} image={image} />
+      ))}
     </div>
   );
 };
