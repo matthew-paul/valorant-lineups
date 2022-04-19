@@ -5,15 +5,15 @@ import * as IoIcons from "react-icons/io5";
 
 export const SidebarData = [
   {
-    title: "Home",
+    title: "View Lineups",
     path: "/",
-    icon: <AiIcons.AiFillHome />,
+    icon: <IoIcons.IoMapOutline />,
     cName: "nav-text",
   },
   {
-    title: "View Lineups",
-    path: "/abilities",
-    icon: <IoIcons.IoMapOutline />,
+    title: "Info",
+    path: "/about",
+    icon: <AiIcons.AiOutlineInfoCircle />,
     cName: "nav-text",
   },
   /*{
