@@ -13,8 +13,8 @@ import FractureMap from "../resources/Maps/fracture_map.png";
 export const API_URL =
   "https://cxvofre6jj.execute-api.us-east-1.amazonaws.com/lineups";
 
-export const localStorageExpirationTime = 1000 * 5 * 1 * 1; // How long localStorage will keep lineup info before refreshing in milliseconds
-//                                        ms     s    min  hr
+export const localStorageExpirationTime = 1000 * 60 * 60 * 24 * 2; // How long localStorage will keep lineup info before refreshing in milliseconds
+//                                        ms     s    min  hr   days
 
 export const AGENT_LIST = [
   { value: 1, label: "Astra" },

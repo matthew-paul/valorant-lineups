@@ -81,6 +81,7 @@ export class LineupSite extends Component {
       startX: -1,
       startY: -1,
     },
+    defaultMapValue: { scale: 0.85, translation: { x: 0, y: 10 } },
     markerScale: 1,
   };
 
@@ -455,7 +456,11 @@ export class LineupSite extends Component {
               Rotate right
             </button>
           </div>
-          <MapInteractionCSS updateScale={this.updateScale} maxScale={15}>
+          <MapInteractionCSS
+            defaultValue={this.state.defaultMapValue}
+            updateScale={this.updateScale}
+            maxScale={15}
+          >
             <div id="lineup-site-map">
               <Map
                 rotation={this.state.mapRotation}
