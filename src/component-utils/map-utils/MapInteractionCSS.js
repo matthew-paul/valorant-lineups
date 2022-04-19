@@ -1,5 +1,5 @@
-import React from 'react';
-import MapInteraction from 'react-map-interaction';
+import React from "react";
+import MapInteraction from "react-map-interaction";
 
 /*
   This component provides a map like interaction to any content that you place in it. It will let
@@ -8,38 +8,35 @@ import MapInteraction from 'react-map-interaction';
 const MapInteractionCSS = (props) => {
   return (
     <MapInteraction {...props}>
-      {
-        ({ translation, scale }) => {
-          // Translate first and then scale.  Otherwise, the scale would affect the translation.
-          const transform = `translate(${translation.x}px, ${translation.y}px) scale(${scale})`;
-          props.updateScale(scale);
-          return (
+      {({ translation, scale }) => {
+        // Translate first and then scale.  Otherwise, the scale would affect the translation.
+        const transform = `translate(${translation.x}px, ${translation.y}px) scale(${scale})`;
+        return (
+          <div
+            style={{
+              height: "100%",
+              width: "100%",
+              position: "relative", // for absolutely positioned children
+              overflow: "hidden",
+              touchAction: "none", // Not supported in Safari :(
+              msTouchAction: "none",
+              WebkitUserSelect: "none",
+              MozUserSelect: "none",
+              msUserSelect: "none",
+            }}
+          >
             <div
               style={{
-                height: '100%',
-                width: '100%',
-                position: 'relative', // for absolutely positioned children
-                overflow: 'hidden',
-                touchAction: 'none', // Not supported in Safari :(
-                msTouchAction: 'none',
-                WebkitUserSelect: 'none',
-                MozUserSelect: 'none',
-                msUserSelect: 'none'
+                display: "inline-block", // size to content
+                transform: transform,
+                transformOrigin: "0 0",
               }}
             >
-              <div
-                style={{
-                  display: 'inline-block', // size to content
-                  transform: transform,
-                  transformOrigin: '0 0'
-                }}
-              >
-                {props.children}
-              </div>
+              {props.children}
             </div>
-          );
-        }
-      }
+          </div>
+        );
+      }}
     </MapInteraction>
   );
 };

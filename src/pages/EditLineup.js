@@ -2,17 +2,40 @@
 import React, { Component } from "react";
 //import { AGENT_LIST, ABILITY_LIST, MAP_LIST, TAG_LIST } from './constants'
 
-import Form from "../component-utils/design-utils/Form.js";
+import Form from "../component-utils/edit-utils/Form.js";
 import MapInteractionCSS from "../component-utils/map-utils/MapInteractionCSS.js";
 import Map from "../component-utils/map-utils/Map.js";
 import Marker from "../component-utils/map-utils/Marker.js";
 import startIcon from "../resources/start-icon.png";
 import { MAP_LIST } from "../component-utils/constants.js";
 import Select from "react-select";
+import * as CONSTANTS from "../component-utils/constants";
 
-export class DesignLineup extends Component {
+export class EditLineup extends Component {
   componentDidMount() {
-    document.title = "Create Lineup";
+    let marker = JSON.parse(localStorage.getItem("editMarker"));
+
+    this.setState({
+      marker: marker, // used to store previous values
+      id: marker.id, // id does not change for edit/delete, always created from aws request
+      newName: marker.name,
+      newDescription: marker.description,
+      newMapId: marker.mapId,
+      newAgent: CONSTANTS.getAgentFromId(marker.agent),
+      newAbility: CONSTANTS.getAbilityFromId(marker.agent, marker.ability),
+      newTags: CONSTANTS.getTagsFromIds(marker.tags),
+      newImages: CONSTANTS.getImagesFromIds(marker.images),
+      newVideo: marker.video,
+      newCredits: marker.credits,
+      newX: marker.x,
+      newY: marker.y,
+      newStartX: marker.startX,
+      newStartY: marker.startY,
+    });
+
+    console.log(marker);
+
+    document.title = "Edit Lineup";
   }
 
   customStyles = {
@@ -34,27 +57,31 @@ export class DesignLineup extends Component {
     this.settingLineupPosition = false;
     this.settingStartPosition = false;
     this.defaultState = {
-      name: "",
-      description: "",
-      agent: 0, // actual agent list starts at 1
-      ability: 0, // actual ability list starts at 1
-      mapId: 1,
-      tags: [],
-      images: [],
-      video: "",
-      credits: "",
-      x: -1,
-      y: -1,
-      startX: -1,
-      startY: -1,
+      marker: {},
+      id: "",
+      newName: "",
+      newDescription: "",
+      newAgent: 0, // actual agent list starts at 1
+      newAbility: 0, // actual ability list starts at 1
+      newMapId: 1,
+      newTags: [],
+      newImages: [],
+      newVideo: "",
+      newCredits: "",
+      newX: -1,
+      newY: -1,
+      newStartX: -1,
+      newStartY: -1,
       infoMessage: { type: "info", value: "" },
       apiKey: "",
+      defaultMapValue: { scale: 0.85, translation: { x: 0, y: 0 } },
+      requestType: "edit",
     };
     this.state = this.defaultState;
   }
 
-  updateState = (values) => {
-    this.setState(values);
+  updateState = (values, callback) => {
+    this.setState(values, callback);
   };
 
   onMapClick = (e) => {
@@ -67,15 +94,15 @@ export class DesignLineup extends Component {
 
     if (this.settingLineupPosition) {
       this.setState({
-        x: x,
-        y: y,
+        newX: x,
+        newY: y,
       });
     }
 
     if (this.settingStartPosition) {
       this.setState({
-        startX: x,
-        startY: y,
+        newStartX: x,
+        newStartY: y,
       });
     }
 
@@ -85,42 +112,42 @@ export class DesignLineup extends Component {
 
   validLineupState = () => {
     // Get tag list
-    if (this.state.name === "") {
+    if (this.state.newName === "") {
       this.setState({
         infoMessage: { type: "error", value: "Enter a lineup title" },
       });
       return false;
     }
 
-    if (this.state.agent === 0) {
+    if (this.state.newAgent === 0) {
       this.setState({
         infoMessage: { type: "error", value: "Select an agent" },
       });
       return false;
     }
 
-    if (this.state.ability === 0) {
+    if (this.state.newAbility === 0) {
       this.setState({
         infoMessage: { type: "error", value: "Select an ability" },
       });
       return false;
     }
 
-    if (this.state.images.length === 0) {
+    if (this.state.newImages.length === 0) {
       this.setState({
         infoMessage: { type: "error", value: "Enter an image link" },
       });
       return false;
     }
 
-    if (this.state.video === "") {
+    if (this.state.newVideo === "") {
       this.setState({
         infoMessage: { type: "error", value: "Enter a youtube video id" },
       });
       return false;
     }
 
-    if (this.state.x === -1) {
+    if (this.state.newX === -1) {
       this.setState({
         infoMessage: { type: "error", value: "Select a lineup position" },
       });
@@ -130,37 +157,49 @@ export class DesignLineup extends Component {
     return true;
   };
 
-  sendLineupToDB = () => {
+  sendUpdateToDB = () => {
     // only use tag numbers to save data
-    let tagList = this.state.tags.map((pair) => pair.value);
-    let imageList = this.state.images.map((pair) => pair.text);
+    let tagList = this.state.newTags.map((pair) => pair.value);
+    let imageList = this.state.newImages.map((pair) => pair.text);
+    let lineupData;
 
-    // id will be created on server side
-    let lineupData = {
-      name: this.state.name,
-      description: this.state.description,
-      agent: this.state.agent,
-      ability: this.state.ability,
-      mapId: this.state.mapId,
-      tags: tagList,
-      images: imageList,
-      video: this.state.video,
-      credits: this.state.credits,
-      x: this.state.x,
-      y: this.state.y,
-      startX: this.state.startX,
-      startY: this.state.startY,
-    };
+    if (this.state.requestType === "delete") {
+      // id will be created on server side
+      lineupData = {
+        id: this.state.id,
+        mapId: this.state.marker.mapId,
+      };
+    } else {
+      lineupData = {
+        id: this.state.id, // id does not change for edit/delete, always created from aws request
+        name: this.state.newName,
+        description: this.state.newDescription,
+        agent: this.state.newAgent.value,
+        ability: this.state.newAbility.value,
+        mapId: this.state.newMapId,
+        tags: tagList,
+        images: imageList,
+        video: this.state.newVideo,
+        credits: this.state.newCredits,
+        x: this.state.newX,
+        y: this.state.newY,
+        startX: this.state.newStartX,
+        startY: this.state.newStartY,
+      };
+    }
 
     let requestOptions = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "x-api-key": this.state.apiKey,
-        "request-type": "add",
+        "request-type": this.state.requestType,
       },
       body: JSON.stringify(lineupData),
     };
+
+    console.log(requestOptions);
+
     fetch(
       "https://uh5it8zn19.execute-api.us-east-1.amazonaws.com/development",
       requestOptions
@@ -168,7 +207,11 @@ export class DesignLineup extends Component {
       .then((response) => response.text())
       .then((data) => {
         this.setState({
-          infoMessage: { type: "success", value: "Sent lineup to database" },
+          infoMessage: {
+            type: "success",
+            value: data,
+          },
+          deleteInsteadOfEdit: false,
         });
       })
       .catch((err) => {
@@ -182,7 +225,7 @@ export class DesignLineup extends Component {
       });
   };
 
-  onSubmit = (e) => {
+  onSubmit = (e, requestType) => {
     // prevent page auto refresh
     e.preventDefault();
 
@@ -196,7 +239,14 @@ export class DesignLineup extends Component {
     }
 
     // send state to dynamodb
-    this.sendLineupToDB();
+    this.setState(
+      {
+        requestType: requestType,
+      },
+      () => {
+        this.sendUpdateToDB();
+      }
+    );
   };
 
   onContextMenu = (event) => {
@@ -219,7 +269,7 @@ export class DesignLineup extends Component {
 
   onMapChange = (map) => {
     this.setState({
-      mapId: map.value,
+      newMapId: map.value,
     });
   };
 
@@ -256,31 +306,40 @@ export class DesignLineup extends Component {
               className="design-map-frame"
               onContextMenu={this.onContextMenu}
             >
-              <MapInteractionCSS updateScale={this.updateScale} maxScale={6}>
-                <Map mapId={this.state.mapId} onMapClick={this.onMapClick} />
+              <MapInteractionCSS
+                updateScale={this.updateScale}
+                maxScale={6}
+                defaultValue={this.state.defaultMapValue}
+              >
+                <Map mapId={this.state.newMapId} onMapClick={this.onMapClick} />
 
                 <div>
-                  {this.state.x !== -1 ? (
+                  {this.state.newX !== -1 ? (
                     <Marker
-                      lineup={this.state}
+                      lineup={{
+                        agent: this.state.newAgent.value,
+                        ability: this.state.newAbility.value,
+                        x: this.state.newX,
+                        y: this.state.newY,
+                      }}
                       onClick={() => {
-                        this.setState({ x: -1, y: -1 });
+                        this.setState({ newX: -1, newY: -1 });
                       }}
                     />
                   ) : (
                     ""
                   )}
-                  {this.state.startX !== -1 ? (
+                  {this.state.newStartX !== -1 ? (
                     <img
                       className="marker-icon"
                       src={startIcon}
                       alt="recon bolt"
                       style={{
-                        left: `${this.state.startX}px`,
-                        top: `${this.state.startY}px`,
+                        left: `${this.state.newStartX}px`,
+                        top: `${this.state.newStartY}px`,
                       }}
                       onClick={() => {
-                        this.setState({ startX: -1, startY: -1 });
+                        this.setState({ newStartX: -1, newStartY: -1 });
                       }}
                     />
                   ) : (
@@ -294,6 +353,7 @@ export class DesignLineup extends Component {
             updateParent={this.updateState}
             onSubmit={this.onSubmit}
             infoMessage={this.state.infoMessage}
+            state={this.state}
           />
         </div>
       </div>
@@ -301,4 +361,4 @@ export class DesignLineup extends Component {
   }
 }
 
-export default DesignLineup;
+export default EditLineup;

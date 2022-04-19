@@ -13,7 +13,7 @@ import FractureMap from "../resources/Maps/fracture_map.png";
 export const API_URL =
   "https://cxvofre6jj.execute-api.us-east-1.amazonaws.com/lineups";
 
-export const localStorageExpirationTime = 1000 * 60 * 60 * 24; // How long localStorage will keep lineup info before refreshing in milliseconds
+export const localStorageExpirationTime = 1000 * 5 * 1 * 1; // How long localStorage will keep lineup info before refreshing in milliseconds
 //                                        ms     s    min  hr
 
 export const AGENT_LIST = [
@@ -73,3 +73,19 @@ export const TAG_LIST = [
   { value: 14, label: "Double Shock Dart" },
   { value: 15, label: "Single Shock Dart" },
 ];
+
+export const getAgentFromId = (id) => {
+  return AGENT_LIST.find((item) => item.value === id);
+};
+
+export const getAbilityFromId = (agentId, abilityId) => {
+  return ABILITY_LIST[agentId].find((item) => item.value === abilityId);
+};
+
+export const getTagsFromIds = (tags) => {
+  return TAG_LIST.filter((tag) => tags.includes(tag.value));
+};
+
+export const getImagesFromIds = (images) => {
+  return images.map((image, index) => ({ id: index, text: image }));
+};

@@ -1,5 +1,6 @@
 @import "lineupSite/lineupSite";
 @import "designSite/designSite";
+@import "editSite/editSite";
 @import "utils"; 
 @import 'navbar/navbar';
 @import 'home/home';
@@ -29,6 +30,11 @@ body {
 
 code { 
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+// disable cursor in buttons
+button {
+    caret-color: transparent;
 }
 
 h1 {

@@ -13,8 +13,8 @@ export class Form extends Component {
       ...styles,
       width: "100%",
       height: "45px",
-      padding: "0px 10px",
-      marginBottom: "10px",
+      padding: "0px 5px",
+      marginBottom: "5px",
     }),
     control: (styles) => ({
       ...styles,

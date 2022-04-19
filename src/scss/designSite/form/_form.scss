@@ -29,7 +29,8 @@
     border-radius: 4px;
     height: 100vh;
     width: 50%;
-    display: block;
+    display: flex;
+    flex-direction: column;
     overflow: auto;
     @include debug-border(red);
 }
@@ -38,7 +39,8 @@
     font-family: sans-serif;
     font-size: 18px;
     font-weight: 100;
-    margin: 0px 0px 10px 0px;   
+    padding-left: 5px;
+    margin: 10px 0px 5px 0px;   
 }
 
 .error {
@@ -59,18 +61,24 @@ input.description,
 select.description,
 textarea.description {
     @include textbox-format($input-label-height * 2);
+    height: 100px;
     //padding-bottom: $input-label-height;
     padding-top: 10px;
 }
 
 
 .row {
-    margin: 10px;
+    margin-bottom: 5px;
+    padding: 0px 5px;
 }
 .row:after {
     content: "";
     display: table;
     clear: both;
+}
+
+.row > .description {
+    margin-bottom: -3px;
 }
 
 select.first-opt-hidden option:first-of-type {
@@ -91,4 +99,34 @@ select.first-opt-hidden option:first-of-type {
     width: 20%;
     height: 40px;
     margin: 0 40%;
+    margin-top: 1px;
+}
+.submit-button:active {
+    background-color: rgb(219, 219, 219);
+}
+
+.delete-button {
+    width: 20%;
+    height: 40px;
+    margin: 0 40%;
+    margin-top: 20px;
+    background-color: red;
+    color: white;
+}
+
+.confirm-container {
+    display: flex;
+    flex-direction: row;
+    @include debug-border(red);
+    align-items: center;
+    justify-content: center;
+}
+
+.confirm-button {
+    width: 150px;
+    height: 40px;
+    margin: 5px;
+}
+.confirm-button:active {
+    background-color: rgb(219, 219, 219);
 }

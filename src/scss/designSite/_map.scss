@@ -4,6 +4,7 @@
     height: 100%;
     width: 100%;
     margin-bottom: -1000px;
+    transform: scale(1);
     cursor: grab;
     @include debug-border(white)
 }
@@ -32,3 +33,7 @@
     margin: auto;
     font-size: 20px;
 }
+
+.map-button:active {
+    background-color: rgb(201, 201, 201);
+  }

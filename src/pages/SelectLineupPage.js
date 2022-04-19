@@ -1,6 +1,5 @@
 // @ts-nocheck
 import React, { Component } from "react";
-import ContentFrame from "../component-utils/lineup-site-utils/ContentFrame";
 import MapInteractionCSS from "../component-utils/map-utils/MapInteractionCSS";
 import Map from "../component-utils/map-utils/Map";
 import Marker from "../component-utils/map-utils/Marker";
@@ -8,41 +7,7 @@ import { MultiSelect } from "react-multi-select-component";
 import * as CONSTANTS from "../component-utils/constants";
 import Select from "react-select";
 
-var localStorageSpace = function () {
-  var data = "";
-
-  console.log("Current local storage: ");
-
-  for (var key in window.localStorage) {
-    if (window.localStorage.hasOwnProperty(key)) {
-      data += window.localStorage[key];
-      console.log(
-        key +
-          " = " +
-          ((window.localStorage[key].length * 16) / (8 * 1024)).toFixed(2) +
-          " KB"
-      );
-    }
-  }
-
-  console.log(
-    data
-      ? "\n" +
-          "Total space used: " +
-          ((data.length * 16) / (8 * 1024)).toFixed(2) +
-          " KB"
-      : "Empty (0 KB)"
-  );
-  console.log(
-    data
-      ? "Approx. space remaining: " +
-          (5120 - ((data.length * 16) / (8 * 1024)).toFixed(2)) +
-          " KB"
-      : "5 MB"
-  );
-};
-
-export class LineupSite extends Component {
+export class SelectLineupPage extends Component {
   customStyles = {
     container: (styles) => ({
       ...styles,
@@ -61,6 +26,7 @@ export class LineupSite extends Component {
     visibleMarkers: [],
     hiddenMarkers: [], // user can manually hide markers instead of using filters
     mapId: 1,
+    marker: null,
     mapRotation: 0,
     agentId: 0,
     abilityId: 0,
@@ -82,14 +48,13 @@ export class LineupSite extends Component {
       startY: -1,
     },
     markerScale: 1,
+    infoMessage: { type: "error", value: "" },
   };
 
   lineupRetrievalRetries = 0;
 
   componentDidMount() {
     document.title = "View Lineups";
-
-    localStorageSpace();
 
     // attempt to read lineup info from localstorage and check expiration date
     const localStorageLineups = localStorage.getItem("savedLineups");
@@ -170,24 +135,8 @@ export class LineupSite extends Component {
   };
 
   onMarkerClick = (marker) => {
-    this.setState(
-      {
-        // clear images so they will be blank until loaded
-        images: [],
-      },
-      () => {
-        this.setState({
-          activeMarkerId: marker.id,
-          selectedMarkerId: marker.id,
-          images: marker.images,
-          video: marker.video,
-          name: marker.name,
-          description: marker.description,
-          credits: marker.credits,
-          mapArrowVisible: true,
-        });
-      }
-    );
+    localStorage.setItem("editMarker", JSON.stringify(marker));
+    window.open("/edit", "_blank");
   };
 
   onMarkerHover = (marker) => {
@@ -237,6 +186,7 @@ export class LineupSite extends Component {
       description: "",
       credits: "",
       activeMarkerId: null,
+      marker: null,
       selectedMarkerId: null,
       images: [],
       video: "",
@@ -382,6 +332,9 @@ export class LineupSite extends Component {
     this.setState(
       {
         hiddenMarkers: [],
+        activeMarkerId: null,
+        marker: null,
+        selectedMarkerId: null,
       },
       this.updateMap
     );
@@ -401,6 +354,26 @@ export class LineupSite extends Component {
     this.setState({
       mapRotation: newRotation,
     });
+  };
+
+  onSubmit = (e) => {
+    e.preventDefault();
+    this.setState({
+      infoMessage: { type: "error", value: "hello" },
+    });
+  };
+
+  updateState = (values) => {
+    this.setState(values);
+  };
+
+  setLineupPositionClicked = (e) => {
+    e.preventDefault();
+    console.log("set lineup clicked");
+  };
+
+  setStartPositionClicked = (e) => {
+    e.preventDefault();
   };
 
   render() {
@@ -493,19 +466,20 @@ export class LineupSite extends Component {
           </MapInteractionCSS>
         </div>
 
-        <ContentFrame
-          updateParentState={this.updateLineupState}
-          activeMarkerId={this.state.activeMarkerId}
-          hiddenMarkers={this.state.hiddenMarkers}
-          name={this.state.name}
-          description={this.state.description}
-          credits={this.state.credits}
-          video={this.state.video}
-          images={this.state.images}
-        />
+        {/*<Form
+          updateParent={this.updateState}
+          onSubmit={this.onSubmit}
+          state={{
+            activeMarkerId: this.state.activeMarkerId,
+            infoMessage: this.state.infoMessage,
+            marker: this.state.marker,
+          }}
+          setLineupPositionClicked={this.setLineupPositionClicked}
+          setStartPositionClicked={this.setStartPositionClicked}
+        />*/}
       </div>
     );
   }
 }
 
-export default LineupSite;
+export default SelectLineupPage;

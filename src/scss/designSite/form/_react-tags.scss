@@ -20,10 +20,10 @@
 /* Styles for react-tag selected tags */
 
 .ReactTags__selected span.ReactTags__tag {
-    border: 1px solid #ddd;
-    background: #def1ff;
-    color: rgb(196, 0, 0);
-    font-size: 14px;
+    border: 1px solid rgb(255, 255, 255);
+    background: #8bcfff;
+    color: rgb(0, 0, 0);
+    font-size: 18px;
     display: inline-block;
     padding: 5px;
     margin: 5px 10px 0px 0px;
@@ -39,4 +39,5 @@
     margin-left: 5px;
     padding-left: 4px;
     padding-right: 4px;
+    cursor: pointer;
 }
