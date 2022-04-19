@@ -442,12 +442,16 @@ export class LineupSite extends Component {
               onChange={this.onTagChange}
             />
           </div>
-          <button
-            id="clear-hidden-markers-button"
-            onClick={this.clearHiddenMarkers}
-          >
-            Clear hidden markers
-          </button>
+          {this.state.hiddenMarkers.length > 0 ? (
+            <button
+              id="clear-hidden-markers-button"
+              onClick={this.clearHiddenMarkers}
+            >
+              Clear hidden markers
+            </button>
+          ) : (
+            ""
+          )}
           <div className="rotate-button-container">
             <button className="rotate-map-button" onClick={this.rotateMapLeft}>
               Rotate left

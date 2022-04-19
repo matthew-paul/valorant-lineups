@@ -11,6 +11,7 @@ const MapInteractionCSS = (props) => {
       {({ translation, scale }) => {
         // Translate first and then scale.  Otherwise, the scale would affect the translation.
         const transform = `translate(${translation.x}px, ${translation.y}px) scale(${scale})`;
+        props.updateScale(scale ** 0.8); // scale gets slightly larger as user zooms in
         return (
           <div
             style={{

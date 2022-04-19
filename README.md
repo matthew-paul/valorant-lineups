@@ -3,13 +3,12 @@
 ### Website
 
 [valorant-lineups.com](https://valorant-lineups.com)
- 
 
-valorant-lineups is a website to display lineup tutorials for agents in VALORANT using react, aws dynamodb, lambda, and api gateway. 
+valorant-lineups is a website to display lineup tutorials for agents in VALORANT using react.
 
 ## Project Status
 
-This project is currently in development. Users can still view lineups from [the abilities tab](https://valorant-lineups.com/abilities), but I am working on adding more.
+The project is mostly complete, I am still working on the UI. Users can view a few lineups from [the abilities tab](https://valorant-lineups.com/abilities), but I am working on adding more.
 
 ## Project Screen Shot(s)
 
@@ -19,7 +18,7 @@ This project is currently in development. Users can still view lineups from [the
 
 ## Installation and Setup Instructions
 
-Clone down this repository. You will need [node](https://nodejs.org/en/), [npm](https://nodejs.org/en/), and [yarn](https://classic.yarnpkg.com/lang/en/docs/install/#windows-stable) installed globally on your machine.  
+Clone down this repository. You will need [node](https://nodejs.org/en/), [npm](https://nodejs.org/en/), and [yarn](https://classic.yarnpkg.com/lang/en/docs/install/#windows-stable) installed globally on your machine.
 
 Installation:
 
@@ -27,11 +26,11 @@ Installation:
 
 To Start Server:
 
-`yarn start`  
+`yarn start`
 
 To Visit App:
 
-`localhost:3000/`  
+`localhost:3000/`
 
 ## Reflection
 
@@ -41,6 +40,6 @@ I wanted to build a website that could provide an easy way to access lineups dur
 
 This project was a great way to gain experience using react and AWS.
 
-Some obstacles I encountered included storing the lineups in an efficient way using dynamoDB so the user could retrieve them quickly, creating an AWS lambda program to process API requests and minimize unnecessary calls, and making the map scale and rotate in relation to the marker overlays 
+Some obstacles I encountered included storing the lineups in an efficient way using dynamoDB so the user could retrieve them quickly, creating an AWS lambda program to process API requests and minimize unnecessary calls, and making the map scale and rotate in relation to the marker overlays. Adding images that are zoomable while not scrolling the page at the same time was also a challenge.
 
 At the end of the day, the technologies implemented in this project are React, React-Router, DynamoDB, AWS lambda, AWS Api Gateway, Vercel, and a signficant amount of JSX and CSS/SASS.
