@@ -12,7 +12,7 @@ The project is mostly complete, I am still working on the UI. Users can view a f
 
 ## Project Screen Shot(s)
 
-[ PRETEND SCREEN SHOT IS HERE ]
+![website screenshot](https://i.imgur.com/Rb4uGld.png)
 
 [ PRETEND OTHER SCREEN SHOT IS HERE ]
 
