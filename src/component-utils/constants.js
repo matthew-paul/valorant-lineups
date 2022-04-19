@@ -17,23 +17,23 @@ export const localStorageExpirationTime = 1000 * 60 * 60 * 24 * 2; // How long l
 //                                        ms     s    min  hr   days
 
 export const AGENT_LIST = [
-  { value: 1, label: "Astra" },
-  { value: 2, label: "Breach" },
+  //  { value: 1, label: "Astra" },
+  //  { value: 2, label: "Breach" },
   { value: 3, label: "Brimstone" },
-  { value: 4, label: "Cypher" },
-  { value: 5, label: "Jett" },
-  { value: 6, label: "Killjoy" },
-  { value: 16, label: "Kay/O" },
-  { value: 17, label: "Neon" },
-  { value: 7, label: "Omen" },
-  { value: 8, label: "Phoenix" },
-  { value: 9, label: "Raze" },
-  { value: 10, label: "Reyna" },
-  { value: 11, label: "Sage" },
-  { value: 12, label: "Skye" },
+  //  { value: 4, label: "Cypher" },
+  //  { value: 5, label: "Jett" },
+  //  { value: 6, label: "Killjoy" },
+  //  { value: 16, label: "Kay/O" },
+  //  { value: 17, label: "Neon" },
+  //  { value: 7, label: "Omen" },
+  //  { value: 8, label: "Phoenix" },
+  //  { value: 9, label: "Raze" },
+  //  { value: 10, label: "Reyna" },
+  //  { value: 11, label: "Sage" },
+  //  { value: 12, label: "Skye" },
   { value: 13, label: "Sova" },
   { value: 14, label: "Viper" },
-  { value: 15, label: "Yoru" },
+  //  { value: 15, label: "Yoru" },
 ];
 
 export const ABILITY_LIST = {
