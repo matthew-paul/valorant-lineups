@@ -24,7 +24,6 @@ export class SelectLineupPage extends Component {
   state = {
     savedLineups: {},
     visibleMarkers: [],
-    hiddenMarkers: [], // user can manually hide markers instead of using filters
     mapId: 1,
     marker: null,
     mapRotation: 0,
@@ -272,7 +271,6 @@ export class SelectLineupPage extends Component {
           parseInt(marker.ability) !== this.state.abilityId
         )
           return false;
-        if (this.state.hiddenMarkers.includes(marker.id)) return false;
         return true;
       }
     );
@@ -323,18 +321,6 @@ export class SelectLineupPage extends Component {
     this.setState(
       {
         newState,
-      },
-      this.updateMap
-    );
-  };
-
-  clearHiddenMarkers = () => {
-    this.setState(
-      {
-        hiddenMarkers: [],
-        activeMarkerId: null,
-        marker: null,
-        selectedMarkerId: null,
       },
       this.updateMap
     );
@@ -414,12 +400,6 @@ export class SelectLineupPage extends Component {
               onChange={this.onTagChange}
             />
           </div>
-          <button
-            id="clear-hidden-markers-button"
-            onClick={this.clearHiddenMarkers}
-          >
-            Clear hidden markers
-          </button>
           <div className="rotate-button-container">
             <button className="rotate-map-button" onClick={this.rotateMapLeft}>
               Rotate left

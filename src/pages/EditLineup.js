@@ -308,7 +308,7 @@ export class EditLineup extends Component {
             >
               <MapInteractionCSS
                 updateScale={this.updateScale}
-                maxScale={6}
+                maxScale={10}
                 defaultValue={this.state.defaultMapValue}
               >
                 <Map mapId={this.state.newMapId} onMapClick={this.onMapClick} />

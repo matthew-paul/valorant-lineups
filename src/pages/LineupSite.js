@@ -463,7 +463,7 @@ export class LineupSite extends Component {
           <MapInteractionCSS
             defaultValue={this.state.defaultMapValue}
             updateScale={this.updateScale}
-            maxScale={15}
+            maxScale={16}
           >
             <div id="lineup-site-map">
               <Map
