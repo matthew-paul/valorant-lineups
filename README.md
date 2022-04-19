@@ -20,7 +20,7 @@ Clone down this repository. You will need [node](https://nodejs.org/en/), [npm](
 
 Installation:
 
-`yarn`
+`yarn install`
 
 To Start Server:
 
