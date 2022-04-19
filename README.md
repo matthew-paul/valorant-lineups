@@ -8,7 +8,7 @@ valorant-lineups is a website to display lineup tutorials for agents in VALORANT
 
 ## Project Status
 
-The project is mostly complete, I am still working on the UI. Users can view a few lineups from [the abilities tab](https://valorant-lineups.com/abilities), but I am working on adding more.
+The project is mostly complete, I am still working on the UI. Users can view a few lineups from the lineups tab, but I am working on adding more.
 
 ## Project Screen Shots
 
