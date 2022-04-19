@@ -5,7 +5,7 @@ import * as IoIcons from "react-icons/io5";
 
 export const SidebarData = [
   {
-    title: "View Lineups",
+    title: "Lineups",
     path: "/",
     icon: <IoIcons.IoMapOutline />,
     cName: "nav-text",
