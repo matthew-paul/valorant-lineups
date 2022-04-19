@@ -40,7 +40,7 @@ export class Form extends Component {
   constructor(props) {
     super(props);
 
-    // add agents from file
+    // handler for image tag list
     this.handleImageDelete = this.handleImageDelete.bind(this);
     this.handleImageAdd = this.handleImageAdd.bind(this);
   }
@@ -56,6 +56,7 @@ export class Form extends Component {
     });
   };
 
+  // components that use this for onChange must have name=[same name as state variable]
   updateState = (e) => {
     this.updateChildAndParent({
       [e.target.name]: e.target.value,
