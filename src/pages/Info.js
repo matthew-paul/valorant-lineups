@@ -6,8 +6,8 @@ const Info = () => {
   }, []);
 
   return (
-    <div className="info">
-      <h1>Info</h1>
+    <div className="info-container">
+      <h1 className="info-header">Info</h1>
       <div className="info-content">
         <text>
           'Valorant Lineups' was created under Riot Games' "Legal Jibber Jabber"
