@@ -45,20 +45,20 @@ export class Form extends Component {
     this.handleImageAdd = this.handleImageAdd.bind(this);
   }
 
-  updateChildAndParent = (values) => {
+  updateSelfAndParent = (values) => {
     this.setState(values);
     this.props.updateParent(values);
   };
 
   onTagChange = (tagList) => {
-    this.updateChildAndParent({
+    this.updateSelfAndParent({
       tags: tagList,
     });
   };
 
   // components that use this for onChange must have name=[same name as state variable]
   updateState = (e) => {
-    this.updateChildAndParent({
+    this.updateSelfAndParent({
       [e.target.name]: e.target.value,
     });
   };
@@ -78,24 +78,23 @@ export class Form extends Component {
   };
 
   onAbilityChange = (ability) => {
-    // update agent, then get and update abilities for that agent
     this.setState({
       selectedAbility: ability,
     });
-    this.updateChildAndParent({
+    this.updateSelfAndParent({
       ability: ability.value,
     });
   };
 
   handleImageDelete = (i) => {
     const { images } = this.state;
-    this.updateChildAndParent({
+    this.updateSelfAndParent({
       images: images.filter((tag, index) => index !== i),
     });
   };
 
   handleImageAdd = (image) => {
-    this.updateChildAndParent({
+    this.updateSelfAndParent({
       images: [...this.state.images, image],
     });
   };

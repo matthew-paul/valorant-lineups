@@ -187,7 +187,7 @@ export class DesignLineup extends Component {
     e.preventDefault();
 
     this.setState({
-      infoMessage: { type: "info", value: "" },
+      infoMessage: { type: "info", value: "Sending..." },
     });
 
     // validate input
@@ -261,8 +261,10 @@ export class DesignLineup extends Component {
 
                 <div>
                   {this.state.x !== -1 ? (
+                    // Show marker if x and y have already been set
                     <Marker
                       lineup={this.state}
+                      // remove marker when it is clicked
                       onClick={() => {
                         this.setState({ x: -1, y: -1 });
                       }}
@@ -274,7 +276,7 @@ export class DesignLineup extends Component {
                     <img
                       className="marker-icon"
                       src={startIcon}
-                      alt="recon bolt"
+                      alt="start position"
                       style={{
                         left: `${this.state.startX}px`,
                         top: `${this.state.startY}px`,
