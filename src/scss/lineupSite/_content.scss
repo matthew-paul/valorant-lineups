@@ -46,14 +46,14 @@ $height-aspect-ratio: 23vw;
 
 #content-frame-description {
     color: white;
-    padding: 20px 10px;
+    padding: 20px 10px 10px 10px;
     text-align: center;
 }
 
 #content-frame-credits-frame {
     display: flex;
     justify-content: center;
-    padding-right: 1%;
+    margin-top: 10px;
 }
 
 #content-frame-credits {
