@@ -7,6 +7,7 @@ import Marker from "../component-utils/map-utils/Marker";
 import { MultiSelect } from "react-multi-select-component";
 import * as CONSTANTS from "../component-utils/constants";
 import Select from "react-select";
+import * as GrIcons from "react-icons/gr";
 
 var localStorageSpace = function () {
   var data = "";
@@ -463,10 +464,10 @@ export class LineupSite extends Component {
           )}
           <div className="rotate-button-container">
             <button className="rotate-map-button" onClick={this.rotateMapLeft}>
-              Rotate left
+              <GrIcons.GrRotateLeft />
             </button>
             <button className="rotate-map-button" onClick={this.rotateMapRight}>
-              Rotate right
+              <GrIcons.GrRotateRight />
             </button>
           </div>
           <MapInteractionCSS

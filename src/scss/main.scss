@@ -35,6 +35,7 @@ code {
 // disable cursor in buttons
 button {
     caret-color: transparent;
+    user-select: none;
 }
 
 h1 {

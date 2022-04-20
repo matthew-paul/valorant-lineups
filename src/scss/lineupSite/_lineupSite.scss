@@ -70,6 +70,10 @@ $select-height: 45px;
 
 .rotate-map-button {
     margin-right: 5px;
-    height: 50px;
-    width: 100px;
+    height: 40px;
+    width: 40px;
+}
+
+.rotate-map-button:active {
+    background-color: #e7e7e7;
 }
