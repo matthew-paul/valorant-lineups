@@ -21,6 +21,8 @@ const ContentFrame = (props) => {
     props.updateParentState({
       hiddenMarkers: props.hiddenMarkers,
     });
+
+    localStorage.setItem("hiddenMarkers", JSON.stringify(props.hiddenMarkers));
   };
 
   return (

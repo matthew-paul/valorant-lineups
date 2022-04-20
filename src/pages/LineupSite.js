@@ -145,6 +145,14 @@ export class LineupSite extends Component {
         savedLineups: JSON.parse(localStorageLineups),
       });
     }
+
+    // update hidden markers if user has added them before
+    const localStorageHiddenMarkers = localStorage.getItem("hiddenMarkers");
+    if (localStorageHiddenMarkers != null) {
+      this.setState({
+        hiddenMarkers: JSON.parse(localStorageHiddenMarkers),
+      });
+    }
   }
 
   getLineupsFromDatabase(callback) {
@@ -386,6 +394,7 @@ export class LineupSite extends Component {
       },
       this.updateMap
     );
+    localStorage.removeItem("hiddenMarkers");
   };
 
   rotateMapLeft = () => {
