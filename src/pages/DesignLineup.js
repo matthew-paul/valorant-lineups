@@ -135,6 +135,10 @@ export class DesignLineup extends Component {
     let tagList = this.state.tags.map((pair) => pair.value);
     let imageList = this.state.images.map((pair) => pair.text);
 
+    let re = /\w+$/g;
+    let videoString = this.state.video;
+    videoString = videoString.substring(videoString.search(re));
+
     // id will be created on server side
     let lineupData = {
       name: this.state.name,
@@ -144,7 +148,7 @@ export class DesignLineup extends Component {
       mapId: this.state.mapId,
       tags: tagList,
       images: imageList,
-      video: this.state.video,
+      video: videoString,
       credits: this.state.credits,
       x: this.state.x,
       y: this.state.y,
