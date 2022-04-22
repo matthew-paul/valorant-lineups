@@ -590,7 +590,7 @@ export class LineupSite extends Component {
               id="clear-hidden-markers-button"
               onClick={this.clearHiddenMarkers}
             >
-              Clear hidden markers
+              Clear hidden lineups
             </button>
           ) : (
             ""
