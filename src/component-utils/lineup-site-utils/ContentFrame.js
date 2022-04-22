@@ -50,7 +50,7 @@ const ContentFrame = (props) => {
               checked={props.hiddenMarkers.includes(props.activeMarkerId)}
               onChange={updateHiddenProp}
             />
-            Hide this marker
+            Hide this lineup
           </label>
         </div>
       )}
