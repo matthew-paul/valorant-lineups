@@ -94,8 +94,12 @@ export class Form extends Component {
   };
 
   handleImageAdd = (image) => {
+    let images = image.text
+      .split(",")
+      .map((image) => ({ id: image, text: image }));
+    console.log(images);
     this.updateSelfAndParent({
-      images: [...this.state.images, image],
+      images: [...this.state.images, ...images],
     });
   };
 
