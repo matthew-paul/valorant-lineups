@@ -161,6 +161,7 @@ export class DesignLineup extends Component {
       },
       body: JSON.stringify(lineupData),
     };
+
     fetch(
       "https://uh5it8zn19.execute-api.us-east-1.amazonaws.com/development",
       requestOptions

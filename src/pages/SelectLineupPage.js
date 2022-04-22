@@ -6,8 +6,103 @@ import Marker from "../component-utils/map-utils/Marker";
 import { MultiSelect } from "react-multi-select-component";
 import * as CONSTANTS from "../component-utils/constants";
 import Select from "react-select";
+import * as GrIcons from "react-icons/gr";
+import StartMarker from "../component-utils/map-utils/StartMarker";
 
-export class SelectLineupPage extends Component {
+var localStorageSpace = function () {
+  var data = "";
+
+  console.log("Current local storage: ");
+
+  for (var key in window.localStorage) {
+    if (window.localStorage.hasOwnProperty(key)) {
+      data += window.localStorage[key];
+      console.log(
+        key +
+          " = " +
+          ((window.localStorage[key].length * 16) / (8 * 1024)).toFixed(2) +
+          " KB"
+      );
+    }
+  }
+
+  console.log(
+    data
+      ? "\n" +
+          "Total space used: " +
+          ((data.length * 16) / (8 * 1024)).toFixed(2) +
+          " KB"
+      : "Empty (0 KB)"
+  );
+  console.log(
+    data
+      ? "Approx. space remaining: " +
+          (5120 - ((data.length * 16) / (8 * 1024)).toFixed(2)) +
+          " KB"
+      : "5 MB"
+  );
+};
+
+const RADIUS = 15;
+
+const getDistance = (point1, point2) => {
+  return (
+    ((point1["x"] - point2["x"]) ** 2 + (point1["y"] - point2["y"]) ** 2) ** 0.5
+  );
+};
+
+const getCenter = (point1, point2) => {
+  return {
+    x: (point1["x"] + point2["x"]) / 2,
+    y: (point1["y"] + point2["y"]) / 2,
+  };
+};
+
+const getClustersFromMarkers = (filteredList) => {
+  let clusters = filteredList.map((point) => ({
+    center: { x: point["x"], y: point["y"] },
+    points: [
+      { id: point["id"], startX: point["startX"], startY: point["startY"] },
+    ],
+    ability: point["ability"],
+    agent: point["agent"],
+  }));
+
+  let clustersLength = clusters.length;
+  let i = 0;
+  while (i < clustersLength - 1) {
+    let j = i + 1;
+    while (
+      j < clustersLength &&
+      clusters[j]["center"]["x"] - clusters[i]["center"]["x"] < RADIUS
+    ) {
+      if (clusters[j]["ability"] !== clusters[i]["ability"]) {
+        j++;
+        continue;
+      }
+
+      let distance = getDistance(clusters[i]["center"], clusters[j]["center"]);
+
+      if (distance < RADIUS) {
+        clusters[i]["points"].push(...clusters[j]["points"]);
+        clusters[i]["center"] = getCenter(
+          clusters[i]["center"],
+          clusters[j]["center"]
+        );
+        clusters.splice(j--, 1);
+
+        clustersLength--;
+      }
+
+      j++;
+    }
+    i++;
+  }
+
+  return clusters;
+};
+
+export class LineupSite extends Component {
   customStyles = {
     container: (styles) => ({
       ...styles,
@@ -24,8 +119,8 @@ export class SelectLineupPage extends Component {
   state = {
     savedLineups: {},
     visibleMarkers: [],
+    hiddenMarkers: [], // user can manually hide markers instead of using filters
     mapId: 1,
-    marker: null,
     mapRotation: 0,
     agentId: 0,
     abilityId: 0,
@@ -38,22 +133,21 @@ export class SelectLineupPage extends Component {
     description: "",
     name: "",
     credits: "",
-    mapArrowVisible: false, // red svg line from lineup position to start position
-    selectedMarkerId: null, // used to keep arrow visible when leaving marker after clicking
-    mapArrowPos: {
-      x: -1,
-      y: -1,
-      startX: -1,
-      startY: -1,
-    },
+    defaultMapValue: { scale: 0.85, translation: { x: 0, y: 10 } },
     markerScale: 1,
-    infoMessage: { type: "error", value: "" },
+    clusters: [],
+    mapArrows: [],
+    selectedCluster: null,
+    lineupMarkers: [],
+    selectedLineup: null,
   };
 
   lineupRetrievalRetries = 0;
 
   componentDidMount() {
     document.title = "View Lineups";
+
+    localStorageSpace();
 
     // attempt to read lineup info from localstorage and check expiration date
     const localStorageLineups = localStorage.getItem("savedLineups");
@@ -108,6 +202,14 @@ export class SelectLineupPage extends Component {
         savedLineups: JSON.parse(localStorageLineups),
       });
     }
+
+    // update hidden markers if user has added them before
+    const localStorageHiddenMarkers = localStorage.getItem("hiddenMarkers");
+    if (localStorageHiddenMarkers != null) {
+      this.setState({
+        hiddenMarkers: JSON.parse(localStorageHiddenMarkers),
+      });
+    }
   }
 
   getLineupsFromDatabase(callback) {
@@ -133,39 +235,91 @@ export class SelectLineupPage extends Component {
     */
   };
 
-  onMarkerClick = (marker) => {
-    localStorage.setItem("editMarker", JSON.stringify(marker));
-    window.open("/edit", "_blank");
+  getMarkerFromId = (id) => {
+    return this.state.visibleMarkers.filter((marker) => marker.id === id)[0];
   };
 
-  onMarkerHover = (marker) => {
+  onClusterHover = (cluster) => {
     // if start position not given
-    if (marker.startX === -1) return;
 
     let adjustment = 13; // adjustment to center line on 25 x 25 marker icon
 
+    let selectedClusterArrows =
+      this.state.selectedCluster !== null
+        ? this.state.selectedCluster["points"].map((point) => ({
+            x: this.state.selectedCluster["center"]["x"] + adjustment,
+            y: this.state.selectedCluster["center"]["y"] + adjustment,
+            startX: point["startX"] + adjustment,
+            startY: point["startY"] + adjustment,
+          }))
+        : [];
+
+    let mapArrows = cluster["points"].map((point) => ({
+      x: cluster["center"]["x"] + adjustment,
+      y: cluster["center"]["y"] + adjustment,
+      startX: point["startX"] + adjustment,
+      startY: point["startY"] + adjustment,
+    }));
     // add coordinates for line
     this.setState({
-      mapArrowPos: {
-        x: marker.x + adjustment,
-        y: marker.y + adjustment,
-        startX: marker.startX + adjustment,
-        startY: marker.startY + adjustment,
-      },
-      mapArrowVisible: true,
+      mapArrows:
+        this.state.selectedCluster !== null
+          ? [...selectedClusterArrows, ...mapArrows]
+          : mapArrows,
     });
   };
 
-  onMarkerOut = (marker) => {
+  onClusterOut = (cluster) => {
     // hide arrow when leaving non-selected marker
     // this will allow the user to click the marker and scroll out to view the start location,
     // then when the user hovers over another marker it will clear the red line
-    if (this.state.selectedMarkerId !== marker.id) {
+    if (this.state.selectedCluster === null) {
       this.setState({
-        selectedMarkerId: null,
-        mapArrowVisible: false,
+        mapArrows: [],
+      });
+    } else {
+      let mapArrows = this.state.selectedCluster["points"].map((point) => ({
+        x: this.state.selectedCluster["center"]["x"] + 13,
+        y: this.state.selectedCluster["center"]["y"] + 13,
+        startX: point["startX"] + 13,
+        startY: point["startY"] + 13,
+      }));
+      this.setState({
+        mapArrows: mapArrows,
       });
     }
+  };
+
+  onClusterClick = (cluster) => {
+    let mapArrows = cluster["points"].map((point) => ({
+      x: cluster["center"]["x"] + 13,
+      y: cluster["center"]["y"] + 13,
+      startX: point["startX"] + 13,
+      startY: point["startY"] + 13,
+    }));
+
+    this.setState({
+      selectedCluster: cluster,
+      mapArrows: mapArrows,
+    });
+
+    if (cluster["points"].length === 1) {
+      let marker = this.getMarkerFromId(cluster["points"][0]["id"]);
+      this.setState(
+        {
+          // clear images so they will be blank until loaded
+          images: [],
+        },
+        () => {
+          this.editMarker(marker);
+        }
+      );
+    }
+  };
+
+  editMarker = (marker) => {
+    localStorage.setItem("editMarker", JSON.stringify(marker));
+    window.open("/edit", "_blank");
   };
 
   onMapSwitch = (e) => {
@@ -177,16 +331,16 @@ export class SelectLineupPage extends Component {
 
     // remove markers
     this.setState({
-      mapRotation: 0,
-      mapArrowVisible: false,
+      clusters: [],
+      mapArrows: [],
+      selectedCluster: null,
+      selectedLineup: null,
       visibleMarkers: [],
       tags: [],
       name: "",
       description: "",
       credits: "",
       activeMarkerId: null,
-      marker: null,
-      selectedMarkerId: null,
       images: [],
       video: "",
     });
@@ -203,10 +357,11 @@ export class SelectLineupPage extends Component {
     // clear map and update abilities
     this.setState(
       {
-        visibleMarkers: [],
+        clusters: [],
         agentId: agent.value,
         abilityId: 0,
-        selectedAbility: null,
+        selectedCluster: null,
+        mapArrows: [],
         abilityList: CONSTANTS.ABILITY_LIST[agent.value],
       },
       this.updateMap
@@ -238,7 +393,7 @@ export class SelectLineupPage extends Component {
     // make sure map and agent is selected
     if (this.state.agentId === 0 || this.state.mapId === 0) {
       this.setState({
-        visibleMarkers: [],
+        clusters: [],
       });
       return;
     }
@@ -271,6 +426,7 @@ export class SelectLineupPage extends Component {
           parseInt(marker.ability) !== this.state.abilityId
         )
           return false;
+        if (this.state.hiddenMarkers.includes(marker.id)) return false;
         return true;
       }
     );
@@ -285,9 +441,16 @@ export class SelectLineupPage extends Component {
       });
     }
 
+    // TODO: cluster markers based on distance
+    filteredList = filteredList.sort((a, b) => {
+      return a.x - b.x;
+    });
+
     this.setState({
-      mapArrowVisible: false,
+      mapArrows: [],
+      selectedCluster: null,
       visibleMarkers: filteredList,
+      clusters: getClustersFromMarkers(filteredList),
     });
   };
 
@@ -295,18 +458,41 @@ export class SelectLineupPage extends Component {
     e.preventDefault();
   };
 
-  getMarkers = () => {
-    return this.state.visibleMarkers.map((marker) => (
+  getClusters = () => {
+    return this.state.clusters.map((cluster) => (
       <Marker
-        key={marker.id}
-        lineup={marker}
+        key={cluster["points"][0]["id"]}
+        lineup={{
+          agent: cluster["agent"],
+          ability: cluster["ability"],
+          x: cluster["center"]["x"],
+          y: cluster["center"]["y"],
+        }}
+        onHover={() => this.onClusterHover(cluster)}
+        onLeave={() => this.onClusterOut(cluster)}
+        onClick={() => this.onClusterClick(cluster)}
         rotation={this.state.mapRotation}
-        onClick={() => this.onMarkerClick(marker)}
-        onHover={() => this.onMarkerHover(marker)}
-        onLeave={() => this.onMarkerOut(marker)}
         scale={this.state.markerScale}
       />
     ));
+  };
+
+  getLineupMarkers = (cluster) => {
+    if (cluster === null) return <></>;
+
+    if (cluster["points"].length === 1) return <></>;
+    else {
+      return cluster["points"].map((point, index) => (
+        <StartMarker
+          key={index}
+          x={point.startX}
+          y={point.startY}
+          scale={this.state.markerScale}
+          rotation={this.state.mapRotation}
+          onClick={() => this.editMarker(this.getMarkerFromId(point["id"]))}
+        />
+      ));
+    }
   };
 
   updateScale = (scale) => {
@@ -326,6 +512,15 @@ export class SelectLineupPage extends Component {
     );
   };
 
+  clearHiddenMarkers = () => {
+    this.setState(
+      {
+        hiddenMarkers: [],
+      },
+      this.updateMap
+    );
+  };
+
   rotateMapLeft = () => {
     let newRotation = this.state.mapRotation - 90;
     if (newRotation < 0) newRotation += 360;
@@ -340,26 +535,6 @@ export class SelectLineupPage extends Component {
     this.setState({
       mapRotation: newRotation,
     });
-  };
-
-  onSubmit = (e) => {
-    e.preventDefault();
-    this.setState({
-      infoMessage: { type: "error", value: "hello" },
-    });
-  };
-
-  updateState = (values) => {
-    this.setState(values);
-  };
-
-  setLineupPositionClicked = (e) => {
-    e.preventDefault();
-    console.log("set lineup clicked");
-  };
-
-  setStartPositionClicked = (e) => {
-    e.preventDefault();
   };
 
   render() {
@@ -400,15 +575,29 @@ export class SelectLineupPage extends Component {
               onChange={this.onTagChange}
             />
           </div>
+          {this.state.hiddenMarkers.length > 0 ? (
+            <button
+              id="clear-hidden-markers-button"
+              onClick={this.clearHiddenMarkers}
+            >
+              Clear hidden markers
+            </button>
+          ) : (
+            ""
+          )}
           <div className="rotate-button-container">
             <button className="rotate-map-button" onClick={this.rotateMapLeft}>
-              Rotate left
+              <GrIcons.GrRotateLeft />
             </button>
             <button className="rotate-map-button" onClick={this.rotateMapRight}>
-              Rotate right
+              <GrIcons.GrRotateRight />
             </button>
           </div>
-          <MapInteractionCSS updateScale={this.updateScale} maxScale={15}>
+          <MapInteractionCSS
+            defaultValue={this.state.defaultMapValue}
+            updateScale={this.updateScale}
+            maxScale={16}
+          >
             <div id="lineup-site-map">
               <Map
                 rotation={this.state.mapRotation}
@@ -417,8 +606,9 @@ export class SelectLineupPage extends Component {
                 updateMap={this.updateMap}
               />
 
-              {this.state.mapArrowVisible && (
+              {this.state.mapArrows.map((arrow, index) => (
                 <svg
+                  id={index.toString() + arrow.x}
                   width="1000"
                   height="1000"
                   style={{
@@ -427,39 +617,28 @@ export class SelectLineupPage extends Component {
                   }}
                 >
                   <line
-                    x1={this.state.mapArrowPos.x}
-                    y1={this.state.mapArrowPos.y}
-                    x2={this.state.mapArrowPos.startX}
-                    y2={this.state.mapArrowPos.startY}
+                    x1={arrow.x}
+                    y1={arrow.y}
+                    x2={arrow.startX}
+                    y2={arrow.startY}
                     stroke="red"
                   />
                 </svg>
-              )}
+              ))}
 
               <div
                 className="fixed-marker-frame"
                 style={{ transform: `rotate(${this.state.mapRotation}deg)` }}
               >
-                {this.getMarkers()}
+                {this.getClusters()}
+                {this.getLineupMarkers(this.state.selectedCluster)}
               </div>
             </div>
           </MapInteractionCSS>
         </div>
-
-        {/*<Form
-          updateParent={this.updateState}
-          onSubmit={this.onSubmit}
-          state={{
-            activeMarkerId: this.state.activeMarkerId,
-            infoMessage: this.state.infoMessage,
-            marker: this.state.marker,
-          }}
-          setLineupPositionClicked={this.setLineupPositionClicked}
-          setStartPositionClicked={this.setStartPositionClicked}
-        />*/}
       </div>
     );
   }
 }
 
-export default SelectLineupPage;
+export default LineupSite;

@@ -11,7 +11,7 @@ import SplitMap from "../resources/Maps/split_map.png";
 import FractureMap from "../resources/Maps/fracture_map.png";
 
 export const API_URL =
-  "https://cxvofre6jj.execute-api.us-east-1.amazonaws.com/lineups";
+  "https://uh5it8zn19.execute-api.us-east-1.amazonaws.com/development";
 
 export const localStorageExpirationTime = 1000 * 60 * 60 * 24 * 2; // How long localStorage will keep lineup info before refreshing in milliseconds
 //                                        ms     s    min  hr   days

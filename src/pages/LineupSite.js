@@ -8,6 +8,7 @@ import { MultiSelect } from "react-multi-select-component";
 import * as CONSTANTS from "../component-utils/constants";
 import Select from "react-select";
 import * as GrIcons from "react-icons/gr";
+import StartMarker from "../component-utils/map-utils/StartMarker";
 
 var localStorageSpace = function () {
   var data = "";
@@ -43,6 +44,65 @@ var localStorageSpace = function () {
   );
 };
 
+const RADIUS = 15;
+
+const getDistance = (point1, point2) => {
+  return (
+    ((point1["x"] - point2["x"]) ** 2 + (point1["y"] - point2["y"]) ** 2) ** 0.5
+  );
+};
+
+const getCenter = (point1, point2) => {
+  return {
+    x: (point1["x"] + point2["x"]) / 2,
+    y: (point1["y"] + point2["y"]) / 2,
+  };
+};
+
+const getClustersFromMarkers = (filteredList) => {
+  let clusters = filteredList.map((point) => ({
+    center: { x: point["x"], y: point["y"] },
+    points: [
+      { id: point["id"], startX: point["startX"], startY: point["startY"] },
+    ],
+    ability: point["ability"],
+    agent: point["agent"],
+  }));
+
+  let clustersLength = clusters.length;
+  let i = 0;
+  while (i < clustersLength - 1) {
+    let j = i + 1;
+    while (
+      j < clustersLength &&
+      clusters[j]["center"]["x"] - clusters[i]["center"]["x"] < RADIUS
+    ) {
+      if (clusters[j]["ability"] !== clusters[i]["ability"]) {
+        j++;
+        continue;
+      }
+
+      let distance = getDistance(clusters[i]["center"], clusters[j]["center"]);
+
+      if (distance < RADIUS) {
+        clusters[i]["points"].push(...clusters[j]["points"]);
+        clusters[i]["center"] = getCenter(
+          clusters[i]["center"],
+          clusters[j]["center"]
+        );
+        clusters.splice(j--, 1);
+
+        clustersLength--;
+      }
+
+      j++;
+    }
+    i++;
+  }
+
+  return clusters;
+};
+
 export class LineupSite extends Component {
   customStyles = {
     container: (styles) => ({
@@ -74,16 +134,13 @@ export class LineupSite extends Component {
     description: "",
     name: "",
     credits: "",
-    mapArrowVisible: false, // red svg line from lineup position to start position
-    selectedMarkerId: null, // used to keep arrow visible when leaving marker after clicking
-    mapArrowPos: {
-      x: -1,
-      y: -1,
-      startX: -1,
-      startY: -1,
-    },
     defaultMapValue: { scale: 0.85, translation: { x: 0, y: 10 } },
     markerScale: 1,
+    clusters: [],
+    mapArrows: [],
+    selectedCluster: null,
+    lineupMarkers: [],
+    selectedLineup: null,
   };
 
   lineupRetrievalRetries = 0;
@@ -179,55 +236,97 @@ export class LineupSite extends Component {
     */
   };
 
-  onMarkerClick = (marker) => {
-    this.setState(
-      {
-        // clear images so they will be blank until loaded
-        images: [],
-      },
-      () => {
-        this.setState({
-          activeMarkerId: marker.id,
-          selectedMarkerId: marker.id,
-          images: marker.images,
-          video: marker.video,
-          name: marker.name,
-          description: marker.description,
-          credits: marker.credits,
-          mapArrowVisible: true,
-        });
-      }
-    );
+  getMarkerFromId = (id) => {
+    return this.state.visibleMarkers.filter((marker) => marker.id === id)[0];
   };
 
-  onMarkerHover = (marker) => {
+  onClusterHover = (cluster) => {
     // if start position not given
-    if (marker.startX === -1) return;
 
     let adjustment = 13; // adjustment to center line on 25 x 25 marker icon
 
+    let selectedClusterArrows =
+      this.state.selectedCluster !== null
+        ? this.state.selectedCluster["points"].map((point) => ({
+            x: this.state.selectedCluster["center"]["x"] + adjustment,
+            y: this.state.selectedCluster["center"]["y"] + adjustment,
+            startX: point["startX"] + adjustment,
+            startY: point["startY"] + adjustment,
+          }))
+        : [];
+
+    let mapArrows = cluster["points"].map((point) => ({
+      x: cluster["center"]["x"] + adjustment,
+      y: cluster["center"]["y"] + adjustment,
+      startX: point["startX"] + adjustment,
+      startY: point["startY"] + adjustment,
+    }));
     // add coordinates for line
     this.setState({
-      mapArrowPos: {
-        x: marker.x + adjustment,
-        y: marker.y + adjustment,
-        startX: marker.startX + adjustment,
-        startY: marker.startY + adjustment,
-      },
-      mapArrowVisible: true,
+      mapArrows:
+        this.state.selectedCluster !== null
+          ? [...selectedClusterArrows, ...mapArrows]
+          : mapArrows,
     });
   };
 
-  onMarkerOut = (marker) => {
+  onClusterOut = (cluster) => {
     // hide arrow when leaving non-selected marker
     // this will allow the user to click the marker and scroll out to view the start location,
     // then when the user hovers over another marker it will clear the red line
-    if (this.state.selectedMarkerId !== marker.id) {
+    if (this.state.selectedCluster === null) {
       this.setState({
-        selectedMarkerId: null,
-        mapArrowVisible: false,
+        mapArrows: [],
+      });
+    } else {
+      let mapArrows = this.state.selectedCluster["points"].map((point) => ({
+        x: this.state.selectedCluster["center"]["x"] + 13,
+        y: this.state.selectedCluster["center"]["y"] + 13,
+        startX: point["startX"] + 13,
+        startY: point["startY"] + 13,
+      }));
+      this.setState({
+        mapArrows: mapArrows,
       });
     }
+  };
+
+  onClusterClick = (cluster) => {
+    let mapArrows = cluster["points"].map((point) => ({
+      x: cluster["center"]["x"] + 13,
+      y: cluster["center"]["y"] + 13,
+      startX: point["startX"] + 13,
+      startY: point["startY"] + 13,
+    }));
+
+    this.setState({
+      selectedCluster: cluster,
+      mapArrows: mapArrows,
+    });
+
+    if (cluster["points"].length === 1) {
+      let marker = this.getMarkerFromId(cluster["points"][0]["id"]);
+      this.setState(
+        {
+          // clear images so they will be blank until loaded
+          images: [],
+        },
+        () => {
+          this.updateActiveMarker(marker);
+        }
+      );
+    }
+  };
+
+  updateActiveMarker = (marker) => {
+    this.setState({
+      activeMarkerId: marker.id,
+      images: marker.images,
+      video: marker.video,
+      name: marker.name,
+      description: marker.description,
+      credits: marker.credits,
+    });
   };
 
   onMapSwitch = (e) => {
@@ -239,15 +338,16 @@ export class LineupSite extends Component {
 
     // remove markers
     this.setState({
-      mapRotation: 0,
-      mapArrowVisible: false,
+      clusters: [],
+      mapArrows: [],
+      selectedCluster: null,
+      selectedLineup: null,
       visibleMarkers: [],
       tags: [],
       name: "",
       description: "",
       credits: "",
       activeMarkerId: null,
-      selectedMarkerId: null,
       images: [],
       video: "",
     });
@@ -264,10 +364,11 @@ export class LineupSite extends Component {
     // clear map and update abilities
     this.setState(
       {
-        visibleMarkers: [],
+        clusters: [],
         agentId: agent.value,
         abilityId: 0,
-        selectedAbility: null,
+        selectedCluster: null,
+        mapArrows: [],
         abilityList: CONSTANTS.ABILITY_LIST[agent.value],
       },
       this.updateMap
@@ -299,7 +400,7 @@ export class LineupSite extends Component {
     // make sure map and agent is selected
     if (this.state.agentId === 0 || this.state.mapId === 0) {
       this.setState({
-        visibleMarkers: [],
+        clusters: [],
       });
       return;
     }
@@ -347,9 +448,16 @@ export class LineupSite extends Component {
       });
     }
 
+    // TODO: cluster markers based on distance
+    filteredList = filteredList.sort((a, b) => {
+      return a.x - b.x;
+    });
+
     this.setState({
-      mapArrowVisible: false,
+      mapArrows: [],
+      selectedCluster: null,
       visibleMarkers: filteredList,
+      clusters: getClustersFromMarkers(filteredList),
     });
   };
 
@@ -357,18 +465,43 @@ export class LineupSite extends Component {
     e.preventDefault();
   };
 
-  getMarkers = () => {
-    return this.state.visibleMarkers.map((marker) => (
+  getClusters = () => {
+    return this.state.clusters.map((cluster) => (
       <Marker
-        key={marker.id}
-        lineup={marker}
+        key={cluster["points"][0]["id"]}
+        lineup={{
+          agent: cluster["agent"],
+          ability: cluster["ability"],
+          x: cluster["center"]["x"],
+          y: cluster["center"]["y"],
+        }}
+        onHover={() => this.onClusterHover(cluster)}
+        onLeave={() => this.onClusterOut(cluster)}
+        onClick={() => this.onClusterClick(cluster)}
         rotation={this.state.mapRotation}
-        onClick={() => this.onMarkerClick(marker)}
-        onHover={() => this.onMarkerHover(marker)}
-        onLeave={() => this.onMarkerOut(marker)}
         scale={this.state.markerScale}
       />
     ));
+  };
+
+  getLineupMarkers = (cluster) => {
+    if (cluster === null) return <></>;
+
+    if (cluster["points"].length === 1) return <></>;
+    else {
+      return cluster["points"].map((point, index) => (
+        <StartMarker
+          key={index}
+          x={point.startX}
+          y={point.startY}
+          scale={this.state.markerScale}
+          rotation={this.state.mapRotation}
+          onClick={() =>
+            this.updateActiveMarker(this.getMarkerFromId(point["id"]))
+          }
+        />
+      ));
+    }
   };
 
   updateScale = (scale) => {
@@ -483,8 +616,9 @@ export class LineupSite extends Component {
                 updateMap={this.updateMap}
               />
 
-              {this.state.mapArrowVisible && (
+              {this.state.mapArrows.map((arrow, index) => (
                 <svg
+                  id={index.toString() + arrow.x}
                   width="1000"
                   height="1000"
                   style={{
@@ -493,20 +627,21 @@ export class LineupSite extends Component {
                   }}
                 >
                   <line
-                    x1={this.state.mapArrowPos.x}
-                    y1={this.state.mapArrowPos.y}
-                    x2={this.state.mapArrowPos.startX}
-                    y2={this.state.mapArrowPos.startY}
+                    x1={arrow.x}
+                    y1={arrow.y}
+                    x2={arrow.startX}
+                    y2={arrow.startY}
                     stroke="red"
                   />
                 </svg>
-              )}
+              ))}
 
               <div
                 className="fixed-marker-frame"
                 style={{ transform: `rotate(${this.state.mapRotation}deg)` }}
               >
-                {this.getMarkers()}
+                {this.getClusters()}
+                {this.getLineupMarkers(this.state.selectedCluster)}
               </div>
             </div>
           </MapInteractionCSS>
