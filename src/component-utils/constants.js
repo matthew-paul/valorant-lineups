@@ -1,6 +1,7 @@
 import ReconBolt from "../resources/Agents/Sova/Recon_Bolt.png";
 import ShockBolt from "../resources/Agents/Sova/Shock_Bolt.png";
 import SnakeBite from "../resources/Agents/Viper/Snake_Bite.png";
+import PoisonCloud from "../resources/Agents/Viper/Poison_Cloud.png";
 import Incendiary from "../resources/Agents/Brimstone/Incendiary.png";
 import AscentMap from "../resources/Maps/ascent_map.png";
 import BindMap from "../resources/Maps/bind_map.png";
@@ -42,7 +43,10 @@ export const ABILITY_LIST = {
     { value: 1, label: "Recon Bolt", icon: ReconBolt },
     { value: 2, label: "Shock Dart", icon: ShockBolt },
   ],
-  14: [{ value: 1, label: "Snake Bite", icon: SnakeBite }],
+  14: [
+    { value: 1, label: "Snake Bite", icon: SnakeBite },
+    { value: 2, label: "Poison Cloud", icon: PoisonCloud },
+  ],
 };
 
 export const MAP_LIST = [
