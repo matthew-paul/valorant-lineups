@@ -135,9 +135,8 @@ export class DesignLineup extends Component {
     let tagList = this.state.tags.map((pair) => pair.value);
     let imageList = this.state.images.map((pair) => pair.text);
 
-    let re = /\w+$/g;
-    let videoString = this.state.video;
-    videoString = videoString.substring(videoString.search(re));
+    let re = /^https:\/\/youtu\.be\/(.*)$/g;
+    let videoString = re.exec(this.state.video)[1];
 
     // id will be created on server side
     let lineupData = {
