@@ -21,6 +21,19 @@ $height-aspect-ratio: 23vw;
     border-bottom-style: solid;
 }
 
+#feedback-icon {
+    position: absolute;
+    top: 10px;
+    right: 30px;
+    font-size: 45px;
+    color: white;
+    background-color: transparent;
+    border: 0;
+}
+#feedback-icon:hover {
+    cursor: pointer;
+}
+
 .checkbox-outer-container {
     display: flex;
     justify-content: center;

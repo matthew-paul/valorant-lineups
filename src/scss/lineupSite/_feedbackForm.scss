@@ -1,0 +1,82 @@
+@import '../utils';
+
+
+.popup-content {
+  width: 30% !important;
+  min-width: 500px;
+  border-radius: 10px;
+}
+
+.feedback-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  align-items: center;
+  background-color: black;
+  border-radius: 7px;
+}
+
+.feedback-header {
+  color: white;
+  text-align: center;
+  padding-bottom: 10px;
+  width: 100%;
+  margin-top: 10px;
+  border-style: solid;
+  border-width: 0px 0px 2px 0px;
+  border-color: white;
+}
+
+.feedback-name {
+  text-align: center;
+  justify-content: center;
+  width: 250px;
+  height: 40px;
+  margin-top: 10px;
+  font-size: 18px;
+  border-radius: 5px;
+}
+
+.feedback-description {
+  text-align: center;
+  justify-content: center;
+  width: 400px;
+  height: 200px;
+  padding: 5px;
+  margin-top: 10px;
+  font-size: 18px;
+  border-radius: 5px;
+}
+
+.feedback-reply-to {
+  text-align: center;
+  justify-content: center;
+  width: 400px;
+  height: 40px;
+  padding-bottom: 3px;
+  margin-top: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+.feedback-submit-button {
+  width: 150px;
+  height: 40px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 17px;
+  background-color: #0e93ff;
+  color: rgb(255, 255, 255);
+  border-radius: 30px;
+  border-width: 0px;
+}
+
+.feedback-submit-button:active {
+  box-shadow: 0 3px rgb(0, 82, 121);
+  transform: translateY(1px);
+}
+
+.sending-message {
+  color: white;
+  margin-bottom: 10px;
+}
