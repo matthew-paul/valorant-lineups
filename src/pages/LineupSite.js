@@ -7,7 +7,7 @@ import Marker from "../component-utils/map-utils/Marker";
 import { MultiSelect } from "react-multi-select-component";
 import * as CONSTANTS from "../component-utils/constants";
 import Select from "react-select";
-import * as GrIcons from "react-icons/gr";
+import { GrRotateLeft, GrRotateRight } from "react-icons/gr";
 import StartMarker from "../component-utils/map-utils/StartMarker";
 
 var localStorageSpace = function () {
@@ -612,10 +612,10 @@ export class LineupSite extends Component {
           )}
           <div className="rotate-button-container">
             <button className="rotate-map-button" onClick={this.rotateMapLeft}>
-              <GrIcons.GrRotateLeft />
+              <GrRotateLeft />
             </button>
             <button className="rotate-map-button" onClick={this.rotateMapRight}>
-              <GrIcons.GrRotateRight />
+              <GrRotateRight />
             </button>
           </div>
           <div className="map-info-text-container">
@@ -636,7 +636,7 @@ export class LineupSite extends Component {
 
               {this.state.mapArrows.map((arrow, index) => (
                 <svg
-                  id={index.toString() + arrow.x}
+                  id={index}
                   width="1000"
                   height="1000"
                   style={{
