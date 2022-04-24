@@ -61,7 +61,14 @@ const ContentFrame = (props) => {
       {props.credits !== "" && (
         <div id="content-frame-credits-frame">
           <h4 id="content-frame-credits-title">Credits: </h4>
-          <h4 id="content-frame-credits">{props.credits}</h4>
+          <a
+            id="content-frame-credits"
+            href={props.credits}
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            {props.credits}
+          </a>
         </div>
       )}
       {props.activeMarkerId !== null && (
