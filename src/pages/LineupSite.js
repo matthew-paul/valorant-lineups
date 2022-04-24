@@ -118,6 +118,7 @@ export class LineupSite extends Component {
   };
 
   state = {
+    loadingText: "loading lineups...",
     savedLineups: {},
     visibleMarkers: [],
     hiddenMarkers: [], // user can manually hide markers instead of using filters
@@ -195,13 +196,20 @@ export class LineupSite extends Component {
           "savedLineupsExpiration",
           Date.now() + CONSTANTS.localStorageExpirationTime
         );
+
+        this.setState({ loadingText: "" });
       });
     }
     // otherwise just retrieve lineups from local storage
     else {
-      this.setState({
-        savedLineups: JSON.parse(localStorageLineups),
-      });
+      this.setState(
+        {
+          savedLineups: JSON.parse(localStorageLineups),
+        },
+        () => {
+          this.setState({ loadingText: "" });
+        }
+      );
     }
 
     // update hidden markers if user has added them before
@@ -397,10 +405,12 @@ export class LineupSite extends Component {
   };
 
   updateMap = () => {
+    this.setState({ loadingText: "loading lineups..." });
     // make sure map and agent is selected
     if (this.state.agentId === 0 || this.state.mapId === 0) {
       this.setState({
         clusters: [],
+        loadingText: "",
       });
       return;
     }
@@ -453,12 +463,17 @@ export class LineupSite extends Component {
       return a.x - b.x;
     });
 
-    this.setState({
-      mapArrows: [],
-      selectedCluster: null,
-      visibleMarkers: filteredList,
-      clusters: getClustersFromMarkers(filteredList),
-    });
+    this.setState(
+      {
+        mapArrows: [],
+        selectedCluster: null,
+        visibleMarkers: filteredList,
+        clusters: getClustersFromMarkers(filteredList),
+      },
+      () => {
+        this.setState({ loadingText: "" });
+      }
+    );
   };
 
   onFilterClick = (e) => {
@@ -602,6 +617,9 @@ export class LineupSite extends Component {
             <button className="rotate-map-button" onClick={this.rotateMapRight}>
               <GrIcons.GrRotateRight />
             </button>
+          </div>
+          <div className="map-info-text-container">
+            <div className="map-info-text">{this.state.loadingText}</div>
           </div>
           <MapInteractionCSS
             defaultValue={this.state.defaultMapValue}

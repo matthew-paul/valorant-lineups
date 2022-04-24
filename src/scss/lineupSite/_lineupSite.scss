@@ -65,7 +65,19 @@ $select-height: 45px;
     z-index: 1;
     bottom: 10px;
     left: 10px;
+    width: 100px;
+}
+
+.map-info-text-container {
+    position: absolute;
+    z-index: 1;
+    bottom: 10px;
+    left: 100px;
     width: 250px;
+}
+
+.map-info-text {
+    color: white
 }
 
 .rotate-map-button {
