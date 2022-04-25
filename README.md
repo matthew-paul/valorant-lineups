@@ -40,4 +40,4 @@ This project was a great way to gain experience using react and AWS.
 
 Some obstacles I encountered included storing the lineups in an efficient way using dynamoDB so the user could retrieve them quickly, creating an AWS lambda program to process API requests and minimize unnecessary calls, and making the map scale and rotate in relation to the marker overlays. A large challenge was developing a clustering algorithm for the markers, so multiple lineups in the same spot would not overlap each other.
 
-At the end of the day, the technologies implemented in this project are React, React-Router, AWS (DynamoDB, Lambda, API Gateway, WAF, Cloudfront, S3), Vercel, and a signficant amount of JSX and CSS/SASS.
+At the end of the day, the technologies implemented in this project are React, React-Router, AWS (DynamoDB, Lambda, API Gateway, WAF, Cloudfront, S3), Vercel, and a signficant amount of JSX and CSS/SCSS.
