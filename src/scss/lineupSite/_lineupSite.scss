@@ -15,7 +15,7 @@ $select-height: 45px;
     margin-top: 10px;
     padding-right: 10px;
     padding-left: 55px;
-    z-index: 2;
+    z-index: 2; // so it stays above "clear hidden markers" button
     background: transparent;
     position: absolute;
     display: flex;
@@ -29,7 +29,6 @@ $select-height: 45px;
 }
 
 .lineup-filter-select {
-    width: 25%;
     height: $select-height;
     padding-left: 10px;
     font-size: 15px;
@@ -37,6 +36,7 @@ $select-height: 45px;
 }
 
 .rmsc.lineup-filter-multi-select {
+    min-width: 70px;
     width: 25%;
 }
 

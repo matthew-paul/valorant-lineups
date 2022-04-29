@@ -73,7 +73,9 @@ const EmailForm = (props) => {
 
   return (
     <div className="feedback-container">
-      <h2 className="feedback-header">Send feedback for this lineup</h2>
+      <h2 className="feedback-header">
+        Send feedback {props.lineupId !== null && "for this lineup"}
+      </h2>
       <input
         className="feedback-name"
         name="name"
@@ -125,12 +127,12 @@ const EmailForm = (props) => {
 };
 
 EmailForm.propTypes = {
-  lineupId: PropTypes.string.isRequired,
+  lineupId: PropTypes.string,
   setModalOpen: PropTypes.func.isRequired,
 };
 
 EmailForm.defaultProps = {
-  lineupId: "",
+  lineupId: null,
 };
 
 export default EmailForm;

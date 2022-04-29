@@ -15,16 +15,28 @@ $height-aspect-ratio: 23vw;
     //@include debug-border($debug-color);
 }
 
+#content-frame {
+    height: 100%;
+    width: 100% - $lineup-site-map-width;
+    z-index: 3; // stay above filter button when window is too small
+    background-color: black;
+    display: block;
+    overflow-y: auto;
+    @include debug-border(green);
+    border-left-style: solid;
+}
+
 #content-frame-title {
     padding: 10px;
     text-align: center;
     border-bottom-style: solid;
+    z-index: 5;
 }
 
 #feedback-icon {
     position: absolute;
-    top: 10px;
-    right: 30px;
+    bottom: 5px;
+    right: 25px;
     font-size: 45px;
     color: white;
     background-color: transparent;
@@ -69,25 +81,19 @@ $height-aspect-ratio: 23vw;
     margin-top: 10px;
 }
 
+
+#content-frame-credits-title {
+    color: white;
+    text-align: center;
+    padding-left: 5%;
+}
+
 #content-frame-credits {
     color: white;
     padding-left: 5px;
+    padding-right: 5%;
     text-align: center;
     word-break: break-all;
-}
-#content-frame-credits-title {
-    color: white;
-    padding-left: 5px;
-    text-align: center;
-}
-
-#content-frame {
-    height: 100%;
-    width: 100% - $lineup-site-map-width;
-    display: block;
-    overflow-y: auto;
-    @include debug-border(green);
-    border-left-style: solid;
 }
 
 .image-frame {

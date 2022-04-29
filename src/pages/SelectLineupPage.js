@@ -139,7 +139,6 @@ export class LineupSite extends Component {
     mapArrows: [],
     selectedCluster: null,
     lineupMarkers: [],
-    selectedLineup: null,
   };
 
   lineupRetrievalRetries = 0;
@@ -334,7 +333,6 @@ export class LineupSite extends Component {
       clusters: [],
       mapArrows: [],
       selectedCluster: null,
-      selectedLineup: null,
       visibleMarkers: [],
       tags: [],
       name: "",
