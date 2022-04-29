@@ -14,7 +14,9 @@ function App() {
       <Router>
         <Navbar />
         <Routes>
-          <Route path="/" element={<LineupSite />} />
+          <Route path="/" element={<LineupSite />}>
+            <Route path="/:lineupId" element={<LineupSite />} />
+          </Route>
           <Route path="/about" element={<Info />} />
           <Route path="/send" element={<DesignLineup />} />
           <Route path="/select" element={<SelectLineupPage />} />

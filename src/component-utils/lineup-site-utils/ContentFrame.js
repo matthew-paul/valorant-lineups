@@ -33,25 +33,23 @@ const ContentFrame = (props) => {
 
   return (
     <div id="content-frame" className="content-frame">
+      <Popup
+        open={modalOpen}
+        position="right center"
+        closeOnDocumentClick
+        onClose={() => setModalOpen(false)}
+      >
+        <EmailForm
+          setModalOpen={setModalOpen}
+          lineupId={props.activeMarkerId}
+        />
+      </Popup>
+      <MdOutlineFeedback
+        id="feedback-icon"
+        onClick={() => setModalOpen(true)}
+      />
       {props.name !== "" ? (
-        <div>
-          <h1 id="content-frame-title">{props.name}</h1>
-          <Popup
-            open={modalOpen}
-            position="right center"
-            closeOnDocumentClick
-            onClose={() => setModalOpen(false)}
-          >
-            <EmailForm
-              setModalOpen={setModalOpen}
-              lineupId={props.activeMarkerId}
-            />
-          </Popup>
-          <MdOutlineFeedback
-            id="feedback-icon"
-            onClick={() => setModalOpen(true)}
-          />
-        </div>
+        <h1 id="content-frame-title">{props.name}</h1>
       ) : (
         <h1 id="content-frame-title">Click a lineup icon to view info</h1>
       )}
