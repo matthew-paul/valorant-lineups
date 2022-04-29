@@ -12,7 +12,7 @@ The project is mostly complete, I am now mostly working on UI changes and adding
 
 ## Project Screen Shots
 
-![website screenshot]()
+![website screenshot](images/website-screenshot.gif)
 
 ## Installation and Setup Instructions
 
