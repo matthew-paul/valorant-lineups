@@ -12,7 +12,7 @@ The project is mostly complete, I am now mostly working on UI changes and adding
 
 ## Project Screen Shots
 
-![website screenshot](https://i.imgur.com/Rb4uGld.png)
+![website screenshot]()
 
 ## Installation and Setup Instructions
 
