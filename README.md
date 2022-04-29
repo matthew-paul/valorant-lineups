@@ -12,7 +12,7 @@ The project is mostly complete, I am still working on the UI. Users can view a f
 
 ## Project Screen Shots
 
-![website screenshot](https://i.imgur.com/Rb4uGld.png)
+![website screenshot](images/website-screenshot.gif)
 
 ## Installation and Setup Instructions
 
