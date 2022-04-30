@@ -15,7 +15,7 @@ const ContentFrame = (props) => {
 
   const [modalOpen, setModalOpen] = useState(false);
   const notify = () =>
-    toast.success("Copied to clipboard!", { toastId: uniqueToastId });
+    toast.success("Copied link to clipboard!", { toastId: uniqueToastId });
 
   const updateHiddenProp = (e) => {
     if (e.target.checked) {
