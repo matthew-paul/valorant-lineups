@@ -26,17 +26,38 @@ $height-aspect-ratio: 23vw;
     border-left-style: solid;
 }
 
+#content-frame-title-container {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    border-bottom-style: solid;
+    border-bottom-color: white;
+    border-bottom-width: 2px;
+}
+
 #content-frame-title {
     padding: 10px;
     text-align: center;
-    border-bottom-style: solid;
     z-index: 5;
 }
 
-#feedback-icon {
+#copy-link-icon {
     position: absolute;
+    right: 10px;
+    top: 10px;
+    font-size: 40px;
+    color: white;
+    background-color: transparent;
+}
+#copy-link-icon {
+    cursor: pointer;
+}
+
+#feedback-icon {
+    position: fixed;
     bottom: 5px;
-    right: 25px;
+    right: 1.5rem;
     font-size: 45px;
     color: white;
     background-color: transparent;

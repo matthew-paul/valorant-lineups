@@ -1,14 +1,21 @@
 import React, { useState } from "react";
-import ImageFrame from "./ImageFrame";
-import YoutubeEmbed from "./YoutubeEmbed";
 import PropTypes from "prop-types";
-import { MdOutlineFeedback } from "react-icons/md";
+import { MdOutlineFeedback, MdOutlineContentCopy } from "react-icons/md";
 import Popup from "reactjs-popup";
 import "reactjs-popup/dist/index.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import ImageFrame from "./ImageFrame";
+import YoutubeEmbed from "./YoutubeEmbed";
 import EmailForm from "./EmailForm";
 
 const ContentFrame = (props) => {
+  const uniqueToastId = "toast-id"; // prevent duplicate toasts
+
   const [modalOpen, setModalOpen] = useState(false);
+  const notify = () =>
+    toast.success("Copied to clipboard!", { toastId: uniqueToastId });
 
   const updateHiddenProp = (e) => {
     if (e.target.checked) {
@@ -31,8 +38,30 @@ const ContentFrame = (props) => {
     localStorage.setItem("hiddenMarkers", JSON.stringify(props.hiddenMarkers));
   };
 
+  const copyLineupLink = () => {
+    if (props.activeMarkerId !== null) {
+      navigator.clipboard.writeText(
+        `https://valorant-lineups.com/${props.activeMarkerId}`
+      );
+      notify();
+    }
+  };
+
   return (
     <div id="content-frame" className="content-frame">
+      <ToastContainer
+        limit={1}
+        theme="dark"
+        position="bottom-right"
+        autoClose={1000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover={false}
+      />
       <Popup
         open={modalOpen}
         position="right center"
@@ -49,7 +78,10 @@ const ContentFrame = (props) => {
         onClick={() => setModalOpen(true)}
       />
       {props.name !== "" ? (
-        <h1 id="content-frame-title">{props.name}</h1>
+        <div id="content-frame-title-container">
+          <h1 id="content-frame-title">{props.name}</h1>
+          <MdOutlineContentCopy id="copy-link-icon" onClick={copyLineupLink} />
+        </div>
       ) : (
         <h1 id="content-frame-title">Click a lineup icon to view info</h1>
       )}
