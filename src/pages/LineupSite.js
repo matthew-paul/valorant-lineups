@@ -440,6 +440,7 @@ export class LineupSite extends Component {
   onTagChange = (newTags) => {
     this.setState(
       {
+        mapArrows: [],
         tags: newTags,
       },
       this.updateMap
