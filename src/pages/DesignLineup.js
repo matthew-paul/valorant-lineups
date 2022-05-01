@@ -192,6 +192,16 @@ export class DesignLineup extends Component {
 
     this.setState({
       infoMessage: { type: "info", value: "Sending..." },
+      name: "",
+      description: "",
+      tags: [],
+      images: [],
+      video: "",
+      credits: "",
+      x: -1,
+      y: -1,
+      startX: -1,
+      startY: -1,
     });
 
     // validate input
