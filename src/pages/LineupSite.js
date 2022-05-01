@@ -250,6 +250,61 @@ export class LineupSite extends Component {
         }
       }
     );
+    window.onpopstate = () => {
+      if (this.props.params !== null) {
+        let filteredLineups = allLineups.filter(
+          (lineup) => lineup.id === this.props.params.lineupId
+        );
+        if (filteredLineups.length === 1) {
+          // lineup in url
+          let lineup = filteredLineups[0];
+          console.log(lineup);
+          this.setState(
+            {
+              activeMarkerId: lineup.id,
+              name: lineup.name,
+              description: lineup.description,
+              credits: lineup.credits,
+              video: lineup.video,
+              images: lineup.images,
+              mapId: lineup.mapId,
+              agentId: lineup.agent,
+              selectedAgent: CONSTANTS.getAgentFromId(lineup.agent),
+              mapArrows: [
+                {
+                  x: lineup.x + 13,
+                  y: lineup.y + 13,
+                  startX: lineup.startX + 13,
+                  startY: lineup.startY + 13,
+                },
+              ],
+            },
+            this.updateMap
+          );
+        } else {
+          // lineup not in url, reset marker stuff
+          console.log("back clicked");
+          this.setState(
+            {
+              agentId: 0,
+              abilityId: 0,
+              selectedAgent: null,
+              selectedAbility: null, // used to explicitly reset ability selection to empty after changing agent
+              abilityList: [],
+              activeMarkerId: null, // used in content frame
+              tags: [],
+              images: [],
+              video: "",
+              description: "",
+              name: "",
+              credits: "",
+              mapArrows: [],
+            },
+            this.updateMap
+          );
+        }
+      }
+    };
 
     // update hidden markers if user has added them before
     const localStorageHiddenMarkers = localStorage.getItem("hiddenMarkers");
