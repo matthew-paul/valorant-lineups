@@ -628,6 +628,7 @@ export class LineupSite extends Component {
     this.setState(
       {
         newState,
+        mapArrows: [],
       },
       this.updateMap
     );
@@ -637,6 +638,7 @@ export class LineupSite extends Component {
     this.setState(
       {
         hiddenMarkers: [],
+        mapArrows: [],
       },
       this.updateMap
     );
