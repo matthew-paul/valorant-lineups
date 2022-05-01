@@ -109,8 +109,20 @@ export class Form extends Component {
       // allow submit from last input
       if (event.target.name === "apiKey") {
         this.props.onSubmit(event);
+        this.resetForm();
       }
     }
+  };
+
+  resetForm = () => {
+    this.setState({
+      name: "",
+      description: "",
+      tags: [],
+      images: [],
+      video: "",
+      credits: "",
+    });
   };
 
   render() {
@@ -232,7 +244,10 @@ export class Form extends Component {
         <div className="row">
           <button
             className="submit-button"
-            onClick={(e) => this.props.onSubmit(e)}
+            onClick={(e) => {
+              this.props.onSubmit(e);
+              this.resetForm();
+            }}
           >
             Enter
           </button>
