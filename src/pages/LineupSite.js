@@ -128,13 +128,14 @@ export class LineupSite extends Component {
     hiddenMarkers: [], // user can manually hide markers instead of using filters
     mapId: 1,
     mapRotation: 0,
-    agentId: 13,
-    abilityId: 0,
+    agentId: 13, // selected agent id
+    abilityId: 0, // selected ability id
     selectedAgent: { value: 13, label: "Sova" },
     selectedAbility: null, // used to explicitly reset ability selection to empty after changing agent
-    abilityList: [],
+    selectedTags: [], // filters
+    abilityList: [], // list of abilities for agent
     activeMarkerId: null, // used in content frame
-    tags: [],
+    lineupTags: [], // tags for lineup
     images: [],
     video: "",
     description: "",
@@ -228,6 +229,7 @@ export class LineupSite extends Component {
               {
                 activeMarkerId: lineup.id,
                 name: lineup.name,
+                lineupTags: lineup.tags,
                 description: lineup.description,
                 credits: lineup.credits,
                 video: lineup.video,
@@ -263,6 +265,7 @@ export class LineupSite extends Component {
             {
               activeMarkerId: lineup.id,
               name: lineup.name,
+              lineupTags: lineup.tags,
               description: lineup.description,
               credits: lineup.credits,
               video: lineup.video,
@@ -286,17 +289,18 @@ export class LineupSite extends Component {
           console.log("back clicked");
           this.setState(
             {
-              agentId: 0,
+              agentId: 13,
               abilityId: 0,
-              selectedAgent: null,
+              selectedAgent: { value: 13, label: "Sova" },
               selectedAbility: null, // used to explicitly reset ability selection to empty after changing agent
               abilityList: [],
               activeMarkerId: null, // used in content frame
-              tags: [],
+              selectedTags: [],
+              name: "",
+              lineupTags: [],
+              description: "",
               images: [],
               video: "",
-              description: "",
-              name: "",
               credits: "",
               mapArrows: [],
             },
@@ -425,10 +429,11 @@ export class LineupSite extends Component {
 
     this.setState({
       activeMarkerId: marker.id,
+      name: marker.name,
+      lineupTags: marker.tags,
+      description: marker.description,
       images: marker.images,
       video: marker.video,
-      name: marker.name,
-      description: marker.description,
       credits: marker.credits,
     });
   };
@@ -446,8 +451,9 @@ export class LineupSite extends Component {
       mapArrows: [],
       selectedCluster: null,
       visibleMarkers: [],
-      tags: [],
+      selectedTags: [],
       name: "",
+      lineupTags: [],
       description: "",
       credits: "",
       activeMarkerId: null,
@@ -496,7 +502,7 @@ export class LineupSite extends Component {
     this.setState(
       {
         mapArrows: [],
-        tags: newTags,
+        selectedTags: newTags,
       },
       this.updateMap
     );
@@ -547,7 +553,7 @@ export class LineupSite extends Component {
     );
 
     // filter based on tags
-    let selectedTagsList = this.state.tags.map((pair) => pair.value);
+    let selectedTagsList = this.state.selectedTags.map((pair) => pair.value);
     if (selectedTagsList.length !== 0) {
       filteredList = filteredList.filter((marker) => {
         return selectedTagsList.every((selectedTag) =>
@@ -692,7 +698,7 @@ export class LineupSite extends Component {
             <MultiSelect
               className="lineup-filter-multi-select"
               options={CONSTANTS.TAG_LIST}
-              value={this.state.tags}
+              value={this.state.selectedTags}
               labelledBy="Select"
               hasSelectAll={false}
               disableSearch={false}
@@ -770,6 +776,7 @@ export class LineupSite extends Component {
           activeMarkerId={this.state.activeMarkerId}
           hiddenMarkers={this.state.hiddenMarkers}
           name={this.state.name}
+          tags={this.state.lineupTags}
           description={this.state.description}
           credits={this.state.credits}
           video={this.state.video}
