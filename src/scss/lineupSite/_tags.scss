@@ -1,0 +1,43 @@
+@import "../utils";
+
+@mixin tag-item($color: white, $border-color: $color) {
+  color: $color;
+  border-color: $border-color;
+}
+
+.lineup-tags-container {
+  color: white;
+  padding-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.tag {
+  min-width: fit-content;
+  border-style: solid;
+  border-width: 2px;
+  border-color: white; // default tag border color
+  padding: 5px;
+  margin: 5px 3px 5px 3px;
+  
+}
+
+.tag.Attacking {
+  @include tag-item(rgb(255, 9, 9), rgb(255, 0, 0));
+}
+
+.tag.Defending {
+  @include tag-item(rgb(0, 153, 255), rgb(0, 119, 255));
+}
+
+.tag.Easy {
+  @include tag-item(rgb(72, 255, 66));
+}
+
+.tag.Medium {
+  @include tag-item(rgb(255, 251, 0))
+}
+
+.tag.Hard {
+  @include tag-item(rgb(255, 17, 0));
+}

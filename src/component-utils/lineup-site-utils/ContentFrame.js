@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ImageFrame from "./ImageFrame";
 import YoutubeEmbed from "./YoutubeEmbed";
 import EmailForm from "./EmailForm";
+import TagList from "./TagList";
 
 const ContentFrame = (props) => {
   const uniqueToastId = "toast-id"; // prevent duplicate toasts
@@ -85,6 +86,7 @@ const ContentFrame = (props) => {
       ) : (
         <h1 id="content-frame-title">Click a lineup icon to view info</h1>
       )}
+      <TagList tags={props.tags} />
       {props.description !== "" && (
         <h2 id="content-frame-description">{props.description}</h2>
       )}
@@ -127,13 +129,21 @@ const ContentFrame = (props) => {
 };
 
 ContentFrame.propTypes = {
+  activeMarkerId: PropTypes.string,
   name: PropTypes.string,
+  tags: PropTypes.array,
+  description: PropTypes.string,
+  credits: PropTypes.string,
   images: PropTypes.array,
   video: PropTypes.string,
 };
 
 ContentFrame.defaultProps = {
+  activeMarkerId: null,
   name: "",
+  tags: [],
+  description: "",
+  credits: "",
   images: [],
   video: "",
 };
