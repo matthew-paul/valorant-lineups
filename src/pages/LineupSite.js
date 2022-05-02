@@ -4,7 +4,15 @@ import { MultiSelect } from "react-multi-select-component";
 import Select from "react-select";
 import { GrRotateLeft, GrRotateRight } from "react-icons/gr";
 
-import * as CONSTANTS from "../component-utils/constants";
+import {
+  getAgentFromId,
+  localStorageExpirationTime,
+  API_URL,
+  MAP_LIST,
+  TAG_LIST,
+  ABILITY_LIST,
+  AGENT_LIST,
+} from "../component-utils/constants";
 import ContentFrame from "../component-utils/lineup-site-utils/ContentFrame";
 import MapInteractionCSS from "../component-utils/map-utils/MapInteractionCSS";
 import Map from "../component-utils/map-utils/Map";
@@ -175,7 +183,7 @@ export class LineupSite extends Component {
     ) {
       console.log(
         `refreshing lineups, expiration in ${
-          CONSTANTS.localStorageExpirationTime / 60 / 1000
+          localStorageExpirationTime / 60 / 1000
         } minutes`
       );
       localStorage.clear();
@@ -197,7 +205,7 @@ export class LineupSite extends Component {
         );
         localStorage.setItem(
           "savedLineupsExpiration",
-          Date.now() + CONSTANTS.localStorageExpirationTime
+          Date.now() + localStorageExpirationTime
         );
 
         this.setState({ loadingText: "" });
@@ -236,7 +244,7 @@ export class LineupSite extends Component {
                 images: lineup.images,
                 mapId: lineup.mapId,
                 agentId: lineup.agent,
-                selectedAgent: CONSTANTS.getAgentFromId(lineup.agent),
+                selectedAgent: getAgentFromId(lineup.agent),
                 mapArrows: [
                   {
                     x: lineup.x + 13,
@@ -272,7 +280,7 @@ export class LineupSite extends Component {
               images: lineup.images,
               mapId: lineup.mapId,
               agentId: lineup.agent,
-              selectedAgent: CONSTANTS.getAgentFromId(lineup.agent),
+              selectedAgent: getAgentFromId(lineup.agent),
               mapArrows: [
                 {
                   x: lineup.x + 13,
@@ -325,7 +333,7 @@ export class LineupSite extends Component {
       headers: { "Content-Type": "application/json" },
     };
 
-    fetch(`${CONSTANTS.API_URL}`, requestOptions)
+    fetch(`${API_URL}`, requestOptions)
       .then((response) => response.json())
       .then((data) => callback(data))
       .catch((err) => {
@@ -480,7 +488,7 @@ export class LineupSite extends Component {
         abilityId: 0,
         selectedCluster: null,
         mapArrows: [],
-        abilityList: CONSTANTS.ABILITY_LIST[agent.value],
+        abilityList: ABILITY_LIST[agent.value],
       },
       this.updateMap
     );
@@ -674,8 +682,8 @@ export class LineupSite extends Component {
           <div className="filters-frame">
             <Select
               label="Map select"
-              defaultValue={CONSTANTS.MAP_LIST[0]}
-              options={CONSTANTS.MAP_LIST}
+              defaultValue={MAP_LIST[0]}
+              options={MAP_LIST}
               styles={this.customStyles}
               onChange={this.onMapSwitch}
             />
@@ -683,7 +691,7 @@ export class LineupSite extends Component {
               value={this.state.selectedAgent}
               label="Agent select"
               placeholder="Agent..."
-              options={CONSTANTS.AGENT_LIST}
+              options={AGENT_LIST}
               styles={this.customStyles}
               onChange={this.onAgentChange}
             />
@@ -697,7 +705,7 @@ export class LineupSite extends Component {
             />
             <MultiSelect
               className="lineup-filter-multi-select"
-              options={CONSTANTS.TAG_LIST}
+              options={TAG_LIST}
               value={this.state.selectedTags}
               labelledBy="Select"
               hasSelectAll={false}

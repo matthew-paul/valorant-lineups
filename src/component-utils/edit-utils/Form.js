@@ -1,8 +1,8 @@
 // @ts-nocheck
 import React, { Component } from "react";
-import * as CONSTANTS from "../constants";
 import { MultiSelect } from "react-multi-select-component";
 import PropTypes from "prop-types";
+import { ABILITY_LIST, AGENT_LIST, TAG_LIST } from "../constants";
 
 import { WithContext as ReactTags } from "react-tag-input";
 import Select from "react-select";
@@ -55,7 +55,7 @@ export class Form extends Component {
           newDescription: this.props.state.newDescription,
           newAgent: this.props.state.newAgent,
           newAbility: this.props.state.newAbility,
-          abilityList: CONSTANTS.ABILITY_LIST[this.props.state.newAgent.value],
+          abilityList: ABILITY_LIST[this.props.state.newAgent.value],
           newTags: this.props.state.newTags,
           newImages: this.props.state.newImages,
           newVideo: this.props.state.newVideo,
@@ -91,7 +91,7 @@ export class Form extends Component {
     this.setState({
       newAgent: agent,
       newAbility: 0,
-      abilityList: CONSTANTS.ABILITY_LIST[agent.value],
+      abilityList: ABILITY_LIST[agent.value],
     });
     this.props.updateParent({
       newAgent: agent,
@@ -175,7 +175,7 @@ export class Form extends Component {
             label="Agent select"
             placeholder="Agent..."
             value={this.state.newAgent}
-            options={CONSTANTS.AGENT_LIST}
+            options={AGENT_LIST}
             styles={this.customStyles}
             onChange={this.onAgentChange}
           />
@@ -192,7 +192,7 @@ export class Form extends Component {
           <div className="row">
             <MultiSelect
               className="multi-select"
-              options={CONSTANTS.TAG_LIST}
+              options={TAG_LIST}
               value={this.state.newTags}
               onChange={this.onTagChange}
               labelledBy="Select"

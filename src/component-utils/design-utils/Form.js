@@ -1,8 +1,8 @@
 // @ts-nocheck
 import React, { Component } from "react";
-import * as CONSTANTS from "../constants";
 import { MultiSelect } from "react-multi-select-component";
 import PropTypes from "prop-types";
+import { ABILITY_LIST, AGENT_LIST, TAG_LIST } from "../constants";
 
 import { WithContext as ReactTags } from "react-tag-input";
 import Select from "react-select";
@@ -68,7 +68,7 @@ export class Form extends Component {
     this.setState({
       agent: agent.value,
       ability: 0,
-      abilityList: CONSTANTS.ABILITY_LIST[agent.value],
+      abilityList: ABILITY_LIST[agent.value],
       selectedAbility: null,
     });
     this.props.updateParent({
@@ -166,7 +166,7 @@ export class Form extends Component {
         <Select
           label="Agent select"
           placeholder="Agent..."
-          options={CONSTANTS.AGENT_LIST}
+          options={AGENT_LIST}
           styles={this.customStyles}
           onChange={this.onAgentChange}
         />
@@ -183,7 +183,7 @@ export class Form extends Component {
         <div className="row">
           <MultiSelect
             className="multi-select"
-            options={CONSTANTS.TAG_LIST}
+            options={TAG_LIST}
             value={this.state.tags}
             onChange={this.onTagChange}
             labelledBy="Select"

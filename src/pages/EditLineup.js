@@ -7,9 +7,14 @@ import MapInteractionCSS from "../component-utils/map-utils/MapInteractionCSS.js
 import Map from "../component-utils/map-utils/Map.js";
 import Marker from "../component-utils/map-utils/Marker.js";
 import startIcon from "../resources/start-icon.png";
-import { MAP_LIST } from "../component-utils/constants.js";
+import {
+  MAP_LIST,
+  getAgentFromId,
+  getAbilityFromId,
+  getTagsFromIds,
+  getImagesFromIds,
+} from "../component-utils/constants.js";
 import Select from "react-select";
-import * as CONSTANTS from "../component-utils/constants";
 
 export class EditLineup extends Component {
   componentDidMount() {
@@ -21,10 +26,10 @@ export class EditLineup extends Component {
       newName: marker.name,
       newDescription: marker.description,
       newMapId: marker.mapId,
-      newAgent: CONSTANTS.getAgentFromId(marker.agent),
-      newAbility: CONSTANTS.getAbilityFromId(marker.agent, marker.ability),
-      newTags: CONSTANTS.getTagsFromIds(marker.tags),
-      newImages: CONSTANTS.getImagesFromIds(marker.images),
+      newAgent: getAgentFromId(marker.agent),
+      newAbility: getAbilityFromId(marker.agent, marker.ability),
+      newTags: getTagsFromIds(marker.tags),
+      newImages: getImagesFromIds(marker.images),
       newVideo: marker.video,
       newCredits: marker.credits,
       newX: marker.x,

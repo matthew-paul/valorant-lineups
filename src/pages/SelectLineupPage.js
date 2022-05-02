@@ -1,13 +1,21 @@
 // @ts-nocheck
-import React, { Component } from "react";
 import MapInteractionCSS from "../component-utils/map-utils/MapInteractionCSS";
 import Map from "../component-utils/map-utils/Map";
 import Marker from "../component-utils/map-utils/Marker";
-import { MultiSelect } from "react-multi-select-component";
-import * as CONSTANTS from "../component-utils/constants";
-import Select from "react-select";
-import * as GrIcons from "react-icons/gr";
 import StartMarker from "../component-utils/map-utils/StartMarker";
+import {
+  localStorageExpirationTime,
+  API_URL,
+  AGENT_LIST,
+  ABILITY_LIST,
+  MAP_LIST,
+  TAG_LIST,
+} from "../component-utils/constants";
+
+import React, { Component } from "react";
+import { GrRotateLeft, GrRotateRight } from "react-icons/gr";
+import { MultiSelect } from "react-multi-select-component";
+import Select from "react-select";
 
 var localStorageSpace = function () {
   var data = "";
@@ -163,7 +171,7 @@ export class LineupSite extends Component {
     ) {
       console.log(
         `refreshing lineups, expiration in ${
-          CONSTANTS.localStorageExpirationTime / 60 / 1000
+          localStorageExpirationTime / 60 / 1000
         } minutes`
       );
       localStorage.clear();
@@ -191,7 +199,7 @@ export class LineupSite extends Component {
         );
         localStorage.setItem(
           "savedLineupsExpiration",
-          Date.now() + CONSTANTS.localStorageExpirationTime
+          Date.now() + localStorageExpirationTime
         );
       });
     }
@@ -217,7 +225,7 @@ export class LineupSite extends Component {
       headers: { "Content-Type": "application/json" },
     };
 
-    fetch(`${CONSTANTS.API_URL}`, requestOptions)
+    fetch(`${API_URL}`, requestOptions)
       .then((response) => response.json())
       .then((data) => callback(data))
       .catch((err) => {
@@ -360,7 +368,7 @@ export class LineupSite extends Component {
         abilityId: 0,
         selectedCluster: null,
         mapArrows: [],
-        abilityList: CONSTANTS.ABILITY_LIST[agent.value],
+        abilityList: ABILITY_LIST[agent.value],
       },
       this.updateMap
     );
@@ -542,15 +550,15 @@ export class LineupSite extends Component {
           <div className="filters-frame">
             <Select
               label="Map select"
-              defaultValue={CONSTANTS.MAP_LIST[0]}
-              options={CONSTANTS.MAP_LIST}
+              defaultValue={MAP_LIST[0]}
+              options={MAP_LIST}
               styles={this.customStyles}
               onChange={this.onMapSwitch}
             />
             <Select
               label="Agent select"
               placeholder="Agent..."
-              options={CONSTANTS.AGENT_LIST}
+              options={AGENT_LIST}
               styles={this.customStyles}
               onChange={this.onAgentChange}
             />
@@ -564,7 +572,7 @@ export class LineupSite extends Component {
             />
             <MultiSelect
               className="lineup-filter-multi-select"
-              options={CONSTANTS.TAG_LIST}
+              options={TAG_LIST}
               value={this.state.tags}
               labelledBy="Select"
               hasSelectAll={false}
@@ -585,10 +593,10 @@ export class LineupSite extends Component {
           )}
           <div className="rotate-button-container">
             <button className="rotate-map-button" onClick={this.rotateMapLeft}>
-              <GrIcons.GrRotateLeft />
+              <GrRotateLeft />
             </button>
             <button className="rotate-map-button" onClick={this.rotateMapRight}>
-              <GrIcons.GrRotateRight />
+              <GrRotateRight />
             </button>
           </div>
           <MapInteractionCSS
