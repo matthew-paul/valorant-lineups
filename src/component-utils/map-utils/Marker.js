@@ -5,12 +5,12 @@ import PropTypes from "prop-types";
 import { AGENT_LIST, ABILITY_LIST } from "../constants";
 
 const Marker = (props) => {
-  const getIcon = (agentId, abilityId) => {
+  const getIcon = (lineupAgent, lineupAbility) => {
     try {
       for (const agent of AGENT_LIST) {
-        if (agentId === agent.value) {
-          for (const ability of ABILITY_LIST[agentId]) {
-            if (abilityId === ability.value) {
+        if (lineupAgent.value === agent.value) {
+          for (const ability of ABILITY_LIST[lineupAgent.value]) {
+            if (lineupAbility.value === ability.value) {
               return ability.icon;
             }
           }
@@ -21,7 +21,9 @@ const Marker = (props) => {
       return xIcon;
     } catch (err) {
       console.log(
-        `error getting icon for agent ${agentId} ability ${abilityId}`
+        `error getting icon for agent ${JSON.stringify(
+          lineupAgent
+        )} - ability ${JSON.stringify(lineupAbility)}`
       );
       return xIcon;
     }

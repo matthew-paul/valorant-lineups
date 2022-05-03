@@ -1,19 +1,19 @@
 import React from "react";
 
-import * as AiIcons from "react-icons/ai";
-import * as IoIcons from "react-icons/io5";
+import { AiOutlineInfoCircle } from "react-icons/ai";
+import { IoMapOutline } from "react-icons/io5";
 
 export const SidebarData = [
   {
     title: "Lineups",
     path: "/",
-    icon: <IoIcons.IoMapOutline />,
+    icon: <IoMapOutline />,
     cName: "nav-text",
   },
   {
     title: "Info",
     path: "/about",
-    icon: <AiIcons.AiOutlineInfoCircle />,
+    icon: <AiOutlineInfoCircle />,
     cName: "nav-text",
   },
   /*{

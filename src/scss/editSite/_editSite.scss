@@ -1,12 +1,7 @@
 @import '../utils';
 
-.edit-frame {
-  display: flex;
-  flex: 1;
-  flex-direction: row;
-  justify-content: center;
-  @include debug-border(green);
-  border-left-style: solid;
+.edit-form-container {
+  width: 50%;
 }
 
 .edit-lineup-button-container {

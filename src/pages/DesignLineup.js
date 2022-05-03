@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 //import { AGENT_LIST, ABILITY_LIST, MAP_LIST, TAG_LIST } from './constants'
 
-import Form from "../component-utils/design-utils/Form.js";
+import DesignForm from "../component-utils/design-utils/DesignForm.js";
 import MapInteractionCSS from "../component-utils/map-utils/MapInteractionCSS.js";
 import Map from "../component-utils/map-utils/Map.js";
 import Marker from "../component-utils/map-utils/Marker.js";
@@ -28,33 +28,33 @@ export class DesignLineup extends Component {
     }),
   };
 
+  state = {
+    name: "",
+    description: "",
+    agent: 0, // actual agent list starts at 1
+    ability: 0, // actual ability list starts at 1
+    mapId: 1,
+    tags: [],
+    images: [],
+    video: "",
+    credits: "",
+    x: -1,
+    y: -1,
+    startX: -1,
+    startY: -1,
+    infoMessage: { type: "info", value: "" },
+    apiKey: "",
+  };
+
   constructor(props) {
     super(props);
 
     this.settingLineupPosition = false;
     this.settingStartPosition = false;
-    this.defaultState = {
-      name: "",
-      description: "",
-      agent: 0, // actual agent list starts at 1
-      ability: 0, // actual ability list starts at 1
-      mapId: 1,
-      tags: [],
-      images: [],
-      video: "",
-      credits: "",
-      x: -1,
-      y: -1,
-      startX: -1,
-      startY: -1,
-      infoMessage: { type: "info", value: "" },
-      apiKey: "",
-    };
-    this.state = this.defaultState;
   }
 
-  updateState = (values) => {
-    this.setState(values);
+  updateState = (values, callback) => {
+    this.setState(values, callback);
   };
 
   onMapClick = (e) => {
@@ -92,14 +92,14 @@ export class DesignLineup extends Component {
       return false;
     }
 
-    if (this.state.agent === 0) {
+    if (this.state.agent === null) {
       this.setState({
         infoMessage: { type: "error", value: "Select an agent" },
       });
       return false;
     }
 
-    if (this.state.ability === 0) {
+    if (this.state.ability === null) {
       this.setState({
         infoMessage: { type: "error", value: "Select an ability" },
       });
@@ -136,7 +136,17 @@ export class DesignLineup extends Component {
     let imageList = this.state.images.map((pair) => pair.text);
 
     let re = /^https:\/\/youtu\.be\/(.*)$/g;
-    let videoString = re.exec(this.state.video)[1];
+
+    let videoString;
+    try {
+      videoString = re.exec(this.state.video)[1];
+    } catch (err) {
+      this.setState({
+        infoMessage: { type: "error", value: "invalid video: " + err.message },
+      });
+      console.log("error reading video: " + err.message);
+      return;
+    }
 
     // id will be created on server side
     let lineupData = {
@@ -306,10 +316,10 @@ export class DesignLineup extends Component {
               </MapInteractionCSS>
             </div>
           </div>
-          <Form
-            updateParent={this.updateState}
+          <DesignForm
+            updateState={this.updateState}
             onSubmit={this.onSubmit}
-            infoMessage={this.state.infoMessage}
+            state={this.state}
           />
         </div>
       </div>

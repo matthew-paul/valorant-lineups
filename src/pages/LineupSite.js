@@ -4,7 +4,16 @@ import { MultiSelect } from "react-multi-select-component";
 import Select from "react-select";
 import { GrRotateLeft, GrRotateRight } from "react-icons/gr";
 
-import * as CONSTANTS from "../component-utils/constants";
+import {
+  getAgentFromId,
+  getAbilityFromId,
+  localStorageExpirationTime,
+  API_URL,
+  MAP_LIST,
+  TAG_LIST,
+  ABILITY_LIST,
+  AGENT_LIST,
+} from "../component-utils/constants";
 import ContentFrame from "../component-utils/lineup-site-utils/ContentFrame";
 import MapInteractionCSS from "../component-utils/map-utils/MapInteractionCSS";
 import Map from "../component-utils/map-utils/Map";
@@ -20,12 +29,6 @@ var localStorageSpace = function () {
   for (var key in window.localStorage) {
     if (window.localStorage.hasOwnProperty(key)) {
       data += window.localStorage[key];
-      console.log(
-        key +
-          " = " +
-          ((window.localStorage[key].length * 16) / (8 * 1024)).toFixed(2) +
-          " KB"
-      );
     }
   }
 
@@ -46,6 +49,7 @@ var localStorageSpace = function () {
   );
 };
 
+// cluster algorithm
 const RADIUS = 15;
 
 const getDistance = (point1, point2) => {
@@ -62,6 +66,7 @@ const getCenter = (point1, point2) => {
 };
 
 const getClustersFromMarkers = (filteredList) => {
+  // create centers for all points
   let clusters = filteredList.map((point) => ({
     center: { x: point["x"], y: point["y"] },
     points: [
@@ -71,6 +76,7 @@ const getClustersFromMarkers = (filteredList) => {
     agent: point["agent"],
   }));
 
+  // iterate through all clusters, sorted by X values, and if distance is within radius, group points together in cluster
   let clustersLength = clusters.length;
   let i = 0;
   while (i < clustersLength - 1) {
@@ -79,6 +85,7 @@ const getClustersFromMarkers = (filteredList) => {
       j < clustersLength &&
       clusters[j]["center"]["x"] - clusters[i]["center"]["x"] < RADIUS
     ) {
+      // don't group different abilities together
       if (clusters[j]["ability"] !== clusters[i]["ability"]) {
         j++;
         continue;
@@ -86,6 +93,7 @@ const getClustersFromMarkers = (filteredList) => {
 
       let distance = getDistance(clusters[i]["center"], clusters[j]["center"]);
 
+      // recompute center after adding point to cluster
       if (distance < RADIUS) {
         clusters[i]["points"].push(...clusters[j]["points"]);
         clusters[i]["center"] = getCenter(
@@ -124,32 +132,27 @@ export class LineupSite extends Component {
   state = {
     loadingText: "loading lineups...",
     savedLineups: {},
-    visibleMarkers: [],
+    enabledMarkers: [],
     hiddenMarkers: [], // user can manually hide markers instead of using filters
-    mapId: 1,
-    mapRotation: 0,
-    agentId: 13, // selected agent id
-    abilityId: 0, // selected ability id
-    selectedAgent: { value: 13, label: "Sova" },
-    selectedAbility: null, // used to explicitly reset ability selection to empty after changing agent
-    selectedTags: [], // filters
-    abilityList: [], // list of abilities for agent
-    activeMarkerId: null, // used in content frame
+    mapId: 1, // selected map, default ascent
+    mapRotation: 0, // 0, 90, 180, 270 degrees
+    agent: { value: 13, label: "Sova" }, // selected agent, default sova
+    ability: null, // selected ability, default none = all abilities
+    filters: [], // filters
+    activeMarkerId: null, // used in content frame, id of lineup that is clicked
     lineupTags: [], // tags for lineup
-    images: [],
-    video: "",
-    description: "",
     name: "",
+    description: "",
     credits: "",
+    video: "",
+    images: [],
     defaultMapValue: { scale: 0.85, translation: { x: 0, y: 10 } },
-    markerScale: 1,
-    clusters: [],
-    mapArrows: [],
-    selectedCluster: null,
-    lineupMarkers: [],
+    markerScale: 1, // adjust scale based on map zoom level
+    clusters: [], // each marker is a cluster of multiple points, if there is only one lineup for a cluster it uses that automatically when clicked
+    mapArrows: [], // lines leading from starting point to lineup position
+    selectedCluster: null, // shows multiple lines if there are multiple lineups per marker
+    lineupMarkers: [], // starting points shown when a cluster with multiple markers is clicked
   };
-
-  lineupRetrievalRetries = 0;
 
   componentDidMount() {
     document.title = "View Lineups";
@@ -175,10 +178,10 @@ export class LineupSite extends Component {
     ) {
       console.log(
         `refreshing lineups, expiration in ${
-          CONSTANTS.localStorageExpirationTime / 60 / 1000
+          localStorageExpirationTime / 60 / 1000
         } minutes`
       );
-      localStorage.clear();
+      localStorage.removeItem("savedLineups");
 
       this.getLineupsFromDatabase((lineups) => {
         allLineups = lineups;
@@ -197,7 +200,7 @@ export class LineupSite extends Component {
         );
         localStorage.setItem(
           "savedLineupsExpiration",
-          Date.now() + CONSTANTS.localStorageExpirationTime
+          Date.now() + localStorageExpirationTime
         );
 
         this.setState({ loadingText: "" });
@@ -218,6 +221,7 @@ export class LineupSite extends Component {
       },
       () => {
         this.setState({ loadingText: "" });
+        // parse lineup id in url if it is given
         if (this.props.params !== null) {
           let filteredLineups = allLineups.filter(
             (lineup) => lineup.id === this.props.params.lineupId
@@ -235,8 +239,8 @@ export class LineupSite extends Component {
                 video: lineup.video,
                 images: lineup.images,
                 mapId: lineup.mapId,
-                agentId: lineup.agent,
-                selectedAgent: CONSTANTS.getAgentFromId(lineup.agent),
+                agent: getAgentFromId(lineup.agent),
+                ability: null,
                 mapArrows: [
                   {
                     x: lineup.x + 13,
@@ -252,6 +256,8 @@ export class LineupSite extends Component {
         }
       }
     );
+
+    // process clicking back button correcly, resetting map if there is no id in url
     window.onpopstate = () => {
       if (this.props.params !== null) {
         let filteredLineups = allLineups.filter(
@@ -265,14 +271,14 @@ export class LineupSite extends Component {
             {
               activeMarkerId: lineup.id,
               name: lineup.name,
-              lineupTags: lineup.tags,
               description: lineup.description,
+              lineupTags: lineup.tags,
               credits: lineup.credits,
               video: lineup.video,
               images: lineup.images,
               mapId: lineup.mapId,
-              agentId: lineup.agent,
-              selectedAgent: CONSTANTS.getAgentFromId(lineup.agent),
+              agent: getAgentFromId(lineup.agent),
+              ability: null,
               mapArrows: [
                 {
                   x: lineup.x + 13,
@@ -289,19 +295,16 @@ export class LineupSite extends Component {
           console.log("back clicked");
           this.setState(
             {
-              agentId: 13,
-              abilityId: 0,
-              selectedAgent: { value: 13, label: "Sova" },
-              selectedAbility: null, // used to explicitly reset ability selection to empty after changing agent
-              abilityList: [],
+              agent: { value: 13, label: "Sova" },
+              ability: null,
+              filters: [],
               activeMarkerId: null, // used in content frame
-              selectedTags: [],
               name: "",
-              lineupTags: [],
               description: "",
-              images: [],
-              video: "",
+              lineupTags: [],
               credits: "",
+              video: "",
+              images: [],
               mapArrows: [],
             },
             this.updateMap
@@ -325,7 +328,7 @@ export class LineupSite extends Component {
       headers: { "Content-Type": "application/json" },
     };
 
-    fetch(`${CONSTANTS.API_URL}`, requestOptions)
+    fetch(`${API_URL}`, requestOptions)
       .then((response) => response.json())
       .then((data) => callback(data))
       .catch((err) => {
@@ -343,7 +346,7 @@ export class LineupSite extends Component {
   };
 
   getMarkerFromId = (id) => {
-    return this.state.visibleMarkers.filter((marker) => marker.id === id)[0];
+    return this.state.enabledMarkers.filter((marker) => marker.id === id)[0];
   };
 
   onClusterHover = (cluster) => {
@@ -438,8 +441,9 @@ export class LineupSite extends Component {
     });
   };
 
-  onMapSwitch = (e) => {
-    let selectedMap = e.value;
+  onMapSwitch = (map) => {
+    // example: { value: 1, label: "Ascent", icon: AscentMap }
+    let selectedMap = map.value;
 
     if (selectedMap === this.state.mapId) {
       return;
@@ -450,8 +454,8 @@ export class LineupSite extends Component {
       clusters: [],
       mapArrows: [],
       selectedCluster: null,
-      visibleMarkers: [],
-      selectedTags: [],
+      enabledMarkers: [],
+      filters: [],
       name: "",
       lineupTags: [],
       description: "",
@@ -474,13 +478,10 @@ export class LineupSite extends Component {
     this.setState(
       {
         clusters: [],
-        agentId: agent.value,
-        selectedAgent: agent,
-        selectedAbility: null,
-        abilityId: 0,
+        agent: agent,
+        ability: null,
         selectedCluster: null,
         mapArrows: [],
-        abilityList: CONSTANTS.ABILITY_LIST[agent.value],
       },
       this.updateMap
     );
@@ -491,8 +492,7 @@ export class LineupSite extends Component {
 
     this.setState(
       {
-        abilityId: ability.value,
-        selectedAbility: ability,
+        ability: ability,
       },
       this.updateMap
     );
@@ -502,7 +502,7 @@ export class LineupSite extends Component {
     this.setState(
       {
         mapArrows: [],
-        selectedTags: newTags,
+        filters: newTags,
       },
       this.updateMap
     );
@@ -511,7 +511,7 @@ export class LineupSite extends Component {
   updateMap = () => {
     this.setState({ loadingText: "loading..." });
     // make sure map and agent is selected
-    if (this.state.agentId === 0 || this.state.mapId === 0) {
+    if (this.state.agent === null || this.state.mapId === 0) {
       this.setState({
         clusters: [],
         loadingText: "",
@@ -519,32 +519,20 @@ export class LineupSite extends Component {
       return;
     }
 
-    // make sure map has markers saved in state
-    if (Object.keys(this.state.savedLineups).length === 0) {
-      // retry up to 2 times to give api time to return lineups
-      if (this.lineupRetrievalRetries === 2) {
-        // don't reset retries because api is only called when component is loaded, so savedLineups will not change after initial call
-        return;
-      } else {
-        this.lineupRetrievalRetries += 1;
-        setTimeout(this.updateMap, 1000); // retry updating map after 1 seconds
-        return;
-      }
-    } else if (
-      !(this.state.mapId in this.state.savedLineups) ||
-      this.state.savedLineups[this.state.mapId].length === 0
-    ) {
+    if (this.state.savedLineups[this.state.mapId] === undefined) {
       return;
     }
+
+    console.log(this.state.savedLineups[this.state.mapId]);
 
     // get marker list and filter based on agent/ability
     let filteredList = this.state.savedLineups[this.state.mapId].filter(
       (marker) => {
         // Check agent and ability matches
-        if (parseInt(marker.agent) !== this.state.agentId) return false;
+        if (parseInt(marker.agent) !== this.state.agent.value) return false;
         if (
-          this.state.abilityId !== 0 &&
-          parseInt(marker.ability) !== this.state.abilityId
+          this.state.ability !== null &&
+          parseInt(marker.ability) !== this.state.ability.value
         )
           return false;
         if (this.state.hiddenMarkers.includes(marker.id)) return false;
@@ -553,28 +541,26 @@ export class LineupSite extends Component {
     );
 
     // filter based on tags
-    let selectedTagsList = this.state.selectedTags.map((pair) => pair.value);
-    if (selectedTagsList.length !== 0) {
+    let filtersList = this.state.filters.map((pair) => pair.value);
+    if (filtersList.length !== 0) {
       filteredList = filteredList.filter((marker) => {
-        return selectedTagsList.every((selectedTag) =>
+        return filtersList.every((selectedTag) =>
           marker.tags.includes(selectedTag)
         );
       });
     }
 
-    // TODO: cluster markers based on distance
+    // sort markers by X value for clustering
     filteredList = filteredList.sort((a, b) => {
       return a.x - b.x;
     });
-
-    this.setState({ loadingText: "loading..." });
 
     let clusters = getClustersFromMarkers(filteredList);
 
     this.setState({
       selectedCluster: null,
-      visibleMarkers: filteredList,
-      clusters: clusters,
+      enabledMarkers: filteredList, // markers that are not hidden
+      clusters: clusters, // markers that are shown on map
       loadingText: "",
     });
   };
@@ -588,8 +574,8 @@ export class LineupSite extends Component {
       <Marker
         key={cluster["points"][0]["id"]}
         lineup={{
-          agent: cluster["agent"],
-          ability: cluster["ability"],
+          agent: getAgentFromId(cluster["agent"]),
+          ability: getAbilityFromId(cluster["agent"], cluster["ability"]),
           x: cluster["center"]["x"],
           y: cluster["center"]["y"],
         }}
@@ -674,31 +660,35 @@ export class LineupSite extends Component {
           <div className="filters-frame">
             <Select
               label="Map select"
-              defaultValue={CONSTANTS.MAP_LIST[0]}
-              options={CONSTANTS.MAP_LIST}
+              defaultValue={MAP_LIST[0]}
+              options={MAP_LIST}
               styles={this.customStyles}
               onChange={this.onMapSwitch}
             />
             <Select
-              value={this.state.selectedAgent}
+              value={this.state.agent}
               label="Agent select"
               placeholder="Agent..."
-              options={CONSTANTS.AGENT_LIST}
+              options={AGENT_LIST}
               styles={this.customStyles}
               onChange={this.onAgentChange}
             />
             <Select
-              value={this.state.selectedAbility}
+              value={this.state.ability}
               label="Ability select"
               placeholder="Ability..."
-              options={this.state.abilityList}
+              options={
+                this.state.agent.value !== null
+                  ? ABILITY_LIST[this.state.agent.value]
+                  : []
+              }
               styles={this.customStyles}
               onChange={this.onAbilityChange}
             />
             <MultiSelect
               className="lineup-filter-multi-select"
-              options={CONSTANTS.TAG_LIST}
-              value={this.state.selectedTags}
+              options={TAG_LIST}
+              value={this.state.filters}
               labelledBy="Select"
               hasSelectAll={false}
               disableSearch={false}

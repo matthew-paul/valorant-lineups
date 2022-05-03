@@ -1,5 +1,5 @@
 import React from "react";
-import * as CONSTANTS from "../constants";
+import { getTagsFromIds } from "../constants";
 
 const TagList = ({ tags }) => {
   // Move easy/medium/hard, attacking/defending to front of tag list
@@ -33,8 +33,8 @@ const TagList = ({ tags }) => {
 
   return (
     <div className="lineup-tags-container">
-      {sortItems(CONSTANTS.getTagsFromIds(tags)).map((tag) => (
-        <TagItem label={tag.label} />
+      {sortItems(getTagsFromIds(tags)).map((tag, index) => (
+        <TagItem key={index} label={tag.label} />
       ))}
     </div>
   );
