@@ -130,7 +130,7 @@ export class LineupSite extends Component {
 
   // default values
   state = {
-    loadingText: "loading lineups...",
+    loading: true,
     savedLineups: {},
     enabledMarkers: [],
     hiddenMarkers: [], // user can manually hide markers instead of using filters
@@ -203,61 +203,55 @@ export class LineupSite extends Component {
           Date.now() + localStorageExpirationTime
         );
 
-        this.setState({ loadingText: "" });
+        this.setState({ savedLineups: categorizedLineups }, this.updateMap);
       });
     }
     // otherwise just retrieve lineups from local storage
     else {
       categorizedLineups = JSON.parse(localStorageLineups);
+      this.setState({ savedLineups: categorizedLineups }, this.updateMap);
       let key;
       for (key in categorizedLineups) {
         allLineups.push(...categorizedLineups[key]);
       }
     }
 
-    this.setState(
-      {
-        savedLineups: categorizedLineups,
-      },
-      () => {
-        this.setState({ loadingText: "" });
-        // parse lineup id in url if it is given
-        if (this.props.params !== null) {
-          let filteredLineups = allLineups.filter(
-            (lineup) => lineup.id === this.props.params.lineupId
-          );
-          if (filteredLineups.length === 1) {
-            let lineup = filteredLineups[0];
-            console.log(lineup);
-            this.setState(
+    if ("lineupId" in this.props.params) {
+      let filteredLineups = allLineups.filter(
+        (lineup) => lineup.id === this.props.params.lineupId
+      );
+      if (filteredLineups.length === 1) {
+        let lineup = filteredLineups[0];
+        this.setState(
+          {
+            activeMarkerId: lineup.id,
+            name: lineup.name,
+            lineupTags: lineup.tags,
+            description: lineup.description,
+            credits: lineup.credits,
+            video: lineup.video,
+            images: lineup.images,
+            mapId: lineup.mapId,
+            agent: getAgentFromId(lineup.agent),
+            ability: null,
+            mapArrows: [
               {
-                activeMarkerId: lineup.id,
-                name: lineup.name,
-                lineupTags: lineup.tags,
-                description: lineup.description,
-                credits: lineup.credits,
-                video: lineup.video,
-                images: lineup.images,
-                mapId: lineup.mapId,
-                agent: getAgentFromId(lineup.agent),
-                ability: null,
-                mapArrows: [
-                  {
-                    x: lineup.x + 13,
-                    y: lineup.y + 13,
-                    startX: lineup.startX + 13,
-                    startY: lineup.startY + 13,
-                  },
-                ],
+                x: lineup.x + 13,
+                y: lineup.y + 13,
+                startX: lineup.startX + 13,
+                startY: lineup.startY + 13,
               },
-              this.updateMap
-            );
-          }
-        }
+            ],
+          },
+          this.updateMap
+        );
       }
-    );
+    } else {
+      this.updateMap();
+    }
 
     // process clicking back button correcly, resetting map if there is no id in url
+
     window.onpopstate = () => {
       if (this.props.params !== null) {
         let filteredLineups = allLineups.filter(
@@ -266,7 +260,6 @@ export class LineupSite extends Component {
         if (filteredLineups.length === 1) {
           // lineup in url
           let lineup = filteredLineups[0];
-          console.log(lineup);
           this.setState(
             {
               activeMarkerId: lineup.id,
@@ -292,7 +285,6 @@ export class LineupSite extends Component {
           );
         } else {
           // lineup not in url, reset marker stuff
-          console.log("back clicked");
           this.setState(
             {
               agent: { value: 13, label: "Sova" },
@@ -509,21 +501,20 @@ export class LineupSite extends Component {
   };
 
   updateMap = () => {
-    this.setState({ loadingText: "loading..." });
+    this.setState({ loading: true });
     // make sure map and agent is selected
     if (this.state.agent === null || this.state.mapId === 0) {
       this.setState({
         clusters: [],
-        loadingText: "",
+        loading: false,
       });
       return;
     }
 
     if (this.state.savedLineups[this.state.mapId] === undefined) {
+      console.log("no lineups for map", this.state.mapId);
       return;
     }
-
-    console.log(this.state.savedLineups[this.state.mapId]);
 
     // get marker list and filter based on agent/ability
     let filteredList = this.state.savedLineups[this.state.mapId].filter(
@@ -561,7 +552,7 @@ export class LineupSite extends Component {
       selectedCluster: null,
       enabledMarkers: filteredList, // markers that are not hidden
       clusters: clusters, // markers that are shown on map
-      loadingText: "",
+      loading: false,
     });
   };
 
@@ -714,9 +705,11 @@ export class LineupSite extends Component {
               <GrRotateRight />
             </button>
           </div>
-          <div className="map-info-text-container">
-            <div className="map-info-text">{this.state.loadingText}</div>
-          </div>
+          {this.state.loading && (
+            <div className="map-info-text-container">
+              <div className="map-info-text">loading...</div>
+            </div>
+          )}
           <MapInteractionCSS
             defaultValue={this.state.defaultMapValue}
             updateScale={this.updateScale}
