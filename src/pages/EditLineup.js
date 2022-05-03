@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 //import { AGENT_LIST, ABILITY_LIST, MAP_LIST, TAG_LIST } from './constants'
 
-import Form from "../component-utils/edit-utils/Form.js";
+import EditForm from "../component-utils/edit-utils/EditForm.js";
 import MapInteractionCSS from "../component-utils/map-utils/MapInteractionCSS.js";
 import Map from "../component-utils/map-utils/Map.js";
 import Marker from "../component-utils/map-utils/Marker.js";
@@ -23,22 +23,20 @@ export class EditLineup extends Component {
     this.setState({
       marker: marker, // used to store previous values
       id: marker.id, // id does not change for edit/delete, always created from aws request
-      newName: marker.name,
-      newDescription: marker.description,
-      newMapId: marker.mapId,
-      newAgent: getAgentFromId(marker.agent),
-      newAbility: getAbilityFromId(marker.agent, marker.ability),
-      newTags: getTagsFromIds(marker.tags),
-      newImages: getImagesFromIds(marker.images),
-      newVideo: marker.video,
-      newCredits: marker.credits,
-      newX: marker.x,
-      newY: marker.y,
-      newStartX: marker.startX,
-      newStartY: marker.startY,
+      name: marker.name,
+      description: marker.description,
+      mapId: marker.mapId,
+      agent: getAgentFromId(marker.agent),
+      ability: getAbilityFromId(marker.agent, marker.ability),
+      tags: getTagsFromIds(marker.tags),
+      images: getImagesFromIds(marker.images),
+      video: marker.video,
+      credits: marker.credits,
+      x: marker.x,
+      y: marker.y,
+      startX: marker.startX,
+      startY: marker.startY,
     });
-
-    console.log(marker);
 
     document.title = "Edit Lineup";
   }
@@ -64,19 +62,19 @@ export class EditLineup extends Component {
     this.defaultState = {
       marker: {},
       id: "",
-      newName: "",
-      newDescription: "",
-      newAgent: 0, // actual agent list starts at 1
-      newAbility: 0, // actual ability list starts at 1
-      newMapId: 1,
-      newTags: [],
-      newImages: [],
-      newVideo: "",
-      newCredits: "",
-      newX: -1,
-      newY: -1,
-      newStartX: -1,
-      newStartY: -1,
+      name: "",
+      description: "",
+      agent: null, // actual agent list starts at 1
+      ability: null, // actual ability list starts at 1
+      mapId: 1,
+      tags: [],
+      images: [],
+      video: "",
+      credits: "",
+      x: -1,
+      y: -1,
+      startX: -1,
+      startY: -1,
       infoMessage: { type: "info", value: "" },
       apiKey: "",
       defaultMapValue: { scale: 0.85, translation: { x: 0, y: 0 } },
@@ -99,15 +97,15 @@ export class EditLineup extends Component {
 
     if (this.settingLineupPosition) {
       this.setState({
-        newX: x,
-        newY: y,
+        x: x,
+        y: y,
       });
     }
 
     if (this.settingStartPosition) {
       this.setState({
-        newStartX: x,
-        newStartY: y,
+        startX: x,
+        startY: y,
       });
     }
 
@@ -117,42 +115,42 @@ export class EditLineup extends Component {
 
   validLineupState = () => {
     // Get tag list
-    if (this.state.newName === "") {
+    if (this.state.name === "") {
       this.setState({
         infoMessage: { type: "error", value: "Enter a lineup title" },
       });
       return false;
     }
 
-    if (this.state.newAgent === 0) {
+    if (this.state.agent === null) {
       this.setState({
         infoMessage: { type: "error", value: "Select an agent" },
       });
       return false;
     }
 
-    if (this.state.newAbility === 0) {
+    if (this.state.ability === null) {
       this.setState({
         infoMessage: { type: "error", value: "Select an ability" },
       });
       return false;
     }
 
-    if (this.state.newImages.length === 0) {
+    if (this.state.images.length === 0) {
       this.setState({
         infoMessage: { type: "error", value: "Enter an image link" },
       });
       return false;
     }
 
-    if (this.state.newVideo === "") {
+    if (this.state.video === "") {
       this.setState({
         infoMessage: { type: "error", value: "Enter a youtube video id" },
       });
       return false;
     }
 
-    if (this.state.newX === -1) {
+    if (this.state.x === -1) {
       this.setState({
         infoMessage: { type: "error", value: "Select a lineup position" },
       });
@@ -164,8 +162,8 @@ export class EditLineup extends Component {
 
   sendUpdateToDB = () => {
     // only use tag numbers to save data
-    let tagList = this.state.newTags.map((pair) => pair.value);
-    let imageList = this.state.newImages.map((pair) => pair.text);
+    let tagList = this.state.tags.map((pair) => pair.value);
+    let imageList = this.state.images.map((pair) => pair.text);
     let lineupData;
 
     if (this.state.requestType === "delete") {
@@ -177,19 +175,19 @@ export class EditLineup extends Component {
     } else {
       lineupData = {
         id: this.state.id, // id does not change for edit/delete, always created from aws request
-        name: this.state.newName,
-        description: this.state.newDescription,
-        agent: this.state.newAgent.value,
-        ability: this.state.newAbility.value,
-        mapId: this.state.newMapId,
+        name: this.state.name,
+        description: this.state.description,
+        agent: this.state.agent.value,
+        ability: this.state.ability.value,
+        mapId: this.state.mapId,
         tags: tagList,
         images: imageList,
-        video: this.state.newVideo,
-        credits: this.state.newCredits,
-        x: this.state.newX,
-        y: this.state.newY,
-        startX: this.state.newStartX,
-        startY: this.state.newStartY,
+        video: this.state.video,
+        credits: this.state.credits,
+        x: this.state.x,
+        y: this.state.y,
+        startX: this.state.startX,
+        startY: this.state.startY,
       };
     }
 
@@ -235,7 +233,7 @@ export class EditLineup extends Component {
     e.preventDefault();
 
     this.setState({
-      infoMessage: { type: "info", value: "" },
+      infoMessage: { type: "info", value: "Sending..." },
     });
 
     // validate input
@@ -254,10 +252,12 @@ export class EditLineup extends Component {
     );
   };
 
+  // enable right click to drag on map
   onContextMenu = (event) => {
     event.preventDefault();
   };
 
+  // make setting lineup and start exclusive
   setLineupPositionClicked = () => {
     if (this.settingStartPosition) {
       this.settingStartPosition = false;
@@ -274,7 +274,7 @@ export class EditLineup extends Component {
 
   onMapChange = (map) => {
     this.setState({
-      newMapId: map.value,
+      mapId: map.value,
     });
   };
 
@@ -316,35 +316,35 @@ export class EditLineup extends Component {
                 maxScale={10}
                 defaultValue={this.state.defaultMapValue}
               >
-                <Map mapId={this.state.newMapId} onMapClick={this.onMapClick} />
+                <Map mapId={this.state.mapId} onMapClick={this.onMapClick} />
 
                 <div>
-                  {this.state.newX !== -1 ? (
+                  {this.state.x !== -1 ? (
                     <Marker
                       lineup={{
-                        agent: this.state.newAgent.value,
-                        ability: this.state.newAbility.value,
-                        x: this.state.newX,
-                        y: this.state.newY,
+                        agent: this.state.agent,
+                        ability: this.state.ability,
+                        x: this.state.x,
+                        y: this.state.y,
                       }}
                       onClick={() => {
-                        this.setState({ newX: -1, newY: -1 });
+                        this.setState({ x: -1, y: -1 });
                       }}
                     />
                   ) : (
                     ""
                   )}
-                  {this.state.newStartX !== -1 ? (
+                  {this.state.startX !== -1 ? (
                     <img
                       className="marker-icon"
                       src={startIcon}
                       alt="recon bolt"
                       style={{
-                        left: `${this.state.newStartX}px`,
-                        top: `${this.state.newStartY}px`,
+                        left: `${this.state.startX}px`,
+                        top: `${this.state.startY}px`,
                       }}
                       onClick={() => {
-                        this.setState({ newStartX: -1, newStartY: -1 });
+                        this.setState({ startX: -1, startY: -1 });
                       }}
                     />
                   ) : (
@@ -354,10 +354,9 @@ export class EditLineup extends Component {
               </MapInteractionCSS>
             </div>
           </div>
-          <Form
-            updateParent={this.updateState}
+          <EditForm
+            updateState={this.updateState}
             onSubmit={this.onSubmit}
-            infoMessage={this.state.infoMessage}
             state={this.state}
           />
         </div>

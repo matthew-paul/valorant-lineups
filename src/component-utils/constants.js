@@ -3,6 +3,8 @@ import Incendiary from "../resources/Agents/Brimstone/Incendiary.png";
 
 // Kay/O
 import FRAGment from "../resources/Agents/KayO/FRAG-ment.png";
+import ZEROpoint from "../resources/Agents/KayO/ZERO-point.png";
+import FLASHdrive from "../resources/Agents/KayO/FLASH-drive.png";
 
 // Sova
 import ReconBolt from "../resources/Agents/Sova/Recon_Bolt.png";
@@ -27,6 +29,7 @@ export const API_URL =
 export const localStorageExpirationTime = 1000 * 60 * 5; // * 24 * 2; // How long localStorage will keep lineup info before refreshing in milliseconds
 //                                        ms     s    min  hr   days
 
+// Use label/value because that's what react-select uses
 export const AGENT_LIST = [
   //  { value: 1, label: "Astra" },
   //  { value: 2, label: "Breach" },
@@ -50,7 +53,11 @@ export const AGENT_LIST = [
 
 export const ABILITY_LIST = {
   3: [{ value: 1, label: "Incediary", icon: Incendiary }],
-  16: [{ value: 1, label: "FRAG-ment", icon: FRAGment }],
+  16: [
+    { value: 1, label: "FRAG-ment", icon: FRAGment },
+    { value: 2, label: "ZERO-point", icon: ZEROpoint },
+    { value: 3, label: "FLASH-drive", icon: FLASHdrive },
+  ],
   13: [
     { value: 1, label: "Recon Bolt", icon: ReconBolt },
     { value: 2, label: "Shock Dart", icon: ShockBolt },
@@ -103,5 +110,5 @@ export const getTagsFromIds = (tags) => {
 };
 
 export const getImagesFromIds = (images) => {
-  return images.map((image, index) => ({ id: index, text: image }));
+  return images.map((image) => ({ id: image, text: image }));
 };

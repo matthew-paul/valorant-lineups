@@ -4,6 +4,8 @@ import Map from "../component-utils/map-utils/Map";
 import Marker from "../component-utils/map-utils/Marker";
 import StartMarker from "../component-utils/map-utils/StartMarker";
 import {
+  getAgentFromId,
+  getAbilityFromId,
   localStorageExpirationTime,
   API_URL,
   AGENT_LIST,
@@ -115,6 +117,7 @@ export class LineupSite extends Component {
     container: (styles) => ({
       ...styles,
       width: "25%",
+      minWidth: "70px",
       height: "45px",
       paddingRight: "5px",
     }),
@@ -124,32 +127,31 @@ export class LineupSite extends Component {
     }),
   };
 
+  // default values
   state = {
+    loadingText: "loading lineups...",
     savedLineups: {},
-    visibleMarkers: [],
+    enabledMarkers: [],
     hiddenMarkers: [], // user can manually hide markers instead of using filters
-    mapId: 1,
-    mapRotation: 0,
-    agentId: 0,
-    abilityId: 0,
-    selectedAbility: null, // used to explicitly reset ability selection to empty after changing agent
-    abilityList: [],
-    activeMarkerId: null, // used in content frame
-    tags: [],
-    images: [],
-    video: "",
-    description: "",
+    mapId: 1, // selected map, default ascent
+    mapRotation: 0, // 0, 90, 180, 270 degrees
+    agent: { value: 13, label: "Sova" }, // selected agent, default sova
+    ability: null, // selected ability, default none = all abilities
+    filters: [], // filters
+    activeMarkerId: null, // used in content frame, id of lineup that is clicked
+    lineupTags: [], // tags for lineup
     name: "",
+    description: "",
     credits: "",
+    video: "",
+    images: [],
     defaultMapValue: { scale: 0.85, translation: { x: 0, y: 10 } },
-    markerScale: 1,
-    clusters: [],
-    mapArrows: [],
-    selectedCluster: null,
-    lineupMarkers: [],
+    markerScale: 1, // adjust scale based on map zoom level
+    clusters: [], // each marker is a cluster of multiple points, if there is only one lineup for a cluster it uses that automatically when clicked
+    mapArrows: [], // lines leading from starting point to lineup position
+    selectedCluster: null, // shows multiple lines if there are multiple lineups per marker
+    lineupMarkers: [], // starting points shown when a cluster with multiple markers is clicked
   };
-
-  lineupRetrievalRetries = 0;
 
   componentDidMount() {
     document.title = "View Lineups";
@@ -161,6 +163,10 @@ export class LineupSite extends Component {
     const localStorageLineupsExpirationDate = localStorage.getItem(
       "savedLineupsExpiration"
     );
+
+    let allLineups = [];
+    // store lineups by map in this object, and write it to the state
+    let categorizedLineups = {};
 
     // check if it is time to refresh lineups
     if (
@@ -174,12 +180,10 @@ export class LineupSite extends Component {
           localStorageExpirationTime / 60 / 1000
         } minutes`
       );
-      localStorage.clear();
-
-      // store lineups by map in this object, and write it to the state
-      let categorizedLineups = {};
+      localStorage.removeItem("savedLineups");
 
       this.getLineupsFromDatabase((lineups) => {
+        allLineups = lineups;
         lineups.forEach((lineup) => {
           let mapId = lineup["mapId"];
           if (mapId in categorizedLineups) {
@@ -187,10 +191,6 @@ export class LineupSite extends Component {
           } else {
             categorizedLineups[mapId] = [lineup];
           }
-        });
-
-        this.setState({
-          savedLineups: categorizedLineups,
         });
 
         localStorage.setItem(
@@ -201,14 +201,22 @@ export class LineupSite extends Component {
           "savedLineupsExpiration",
           Date.now() + localStorageExpirationTime
         );
+
+        this.setState({ loadingText: "" });
       });
     }
     // otherwise just retrieve lineups from local storage
     else {
-      this.setState({
-        savedLineups: JSON.parse(localStorageLineups),
-      });
+      categorizedLineups = JSON.parse(localStorageLineups);
+      let key;
+      for (key in categorizedLineups) {
+        allLineups.push(...categorizedLineups[key]);
+      }
     }
+
+    this.setState({
+      savedLineups: categorizedLineups,
+    });
 
     // update hidden markers if user has added them before
     const localStorageHiddenMarkers = localStorage.getItem("hiddenMarkers");
@@ -243,7 +251,7 @@ export class LineupSite extends Component {
   };
 
   getMarkerFromId = (id) => {
-    return this.state.visibleMarkers.filter((marker) => marker.id === id)[0];
+    return this.state.enabledMarkers.filter((marker) => marker.id === id)[0];
   };
 
   onClusterHover = (cluster) => {
@@ -329,8 +337,13 @@ export class LineupSite extends Component {
     window.open("/edit", "_blank");
   };
 
-  onMapSwitch = (e) => {
-    let selectedMap = e.value;
+  updateActiveMarker = (marker) => {
+    this.editMarker(marker);
+  };
+
+  onMapSwitch = (map) => {
+    // example: { value: 1, label: "Ascent", icon: AscentMap }
+    let selectedMap = map.value;
 
     if (selectedMap === this.state.mapId) {
       return;
@@ -341,9 +354,10 @@ export class LineupSite extends Component {
       clusters: [],
       mapArrows: [],
       selectedCluster: null,
-      visibleMarkers: [],
-      tags: [],
+      enabledMarkers: [],
+      filters: [],
       name: "",
+      lineupTags: [],
       description: "",
       credits: "",
       activeMarkerId: null,
@@ -364,11 +378,10 @@ export class LineupSite extends Component {
     this.setState(
       {
         clusters: [],
-        agentId: agent.value,
-        abilityId: 0,
+        agent: agent,
+        ability: null,
         selectedCluster: null,
         mapArrows: [],
-        abilityList: ABILITY_LIST[agent.value],
       },
       this.updateMap
     );
@@ -379,8 +392,7 @@ export class LineupSite extends Component {
 
     this.setState(
       {
-        abilityId: ability.value,
-        selectedAbility: ability,
+        ability: ability,
       },
       this.updateMap
     );
@@ -389,47 +401,38 @@ export class LineupSite extends Component {
   onTagChange = (newTags) => {
     this.setState(
       {
-        tags: newTags,
+        mapArrows: [],
+        filters: newTags,
       },
       this.updateMap
     );
   };
 
   updateMap = () => {
+    this.setState({ loadingText: "loading..." });
     // make sure map and agent is selected
-    if (this.state.agentId === 0 || this.state.mapId === 0) {
+    if (this.state.agent === null || this.state.mapId === 0) {
       this.setState({
         clusters: [],
+        loadingText: "",
       });
       return;
     }
 
-    // make sure map has markers saved in state
-    if (Object.keys(this.state.savedLineups).length === 0) {
-      // retry up to 2 times to give api time to return lineups
-      if (this.lineupRetrievalRetries === 2) {
-        // don't reset retries because api is only called when component is loaded, so savedLineups will not change after initial call
-        return;
-      } else {
-        this.lineupRetrievalRetries += 1;
-        setTimeout(this.updateMap, 1000); // retry updating map after 1 seconds
-        return;
-      }
-    } else if (
-      !(this.state.mapId in this.state.savedLineups) ||
-      this.state.savedLineups[this.state.mapId].length === 0
-    ) {
+    if (this.state.savedLineups[this.state.mapId] === undefined) {
       return;
     }
+
+    console.log(this.state.savedLineups[this.state.mapId]);
 
     // get marker list and filter based on agent/ability
     let filteredList = this.state.savedLineups[this.state.mapId].filter(
       (marker) => {
         // Check agent and ability matches
-        if (parseInt(marker.agent) !== this.state.agentId) return false;
+        if (parseInt(marker.agent) !== this.state.agent.value) return false;
         if (
-          this.state.abilityId !== 0 &&
-          parseInt(marker.ability) !== this.state.abilityId
+          this.state.ability !== null &&
+          parseInt(marker.ability) !== this.state.ability.value
         )
           return false;
         if (this.state.hiddenMarkers.includes(marker.id)) return false;
@@ -438,25 +441,27 @@ export class LineupSite extends Component {
     );
 
     // filter based on tags
-    let selectedTagsList = this.state.tags.map((pair) => pair.value);
-    if (selectedTagsList.length !== 0) {
+    let filtersList = this.state.filters.map((pair) => pair.value);
+    if (filtersList.length !== 0) {
       filteredList = filteredList.filter((marker) => {
-        return selectedTagsList.every((selectedTag) =>
+        return filtersList.every((selectedTag) =>
           marker.tags.includes(selectedTag)
         );
       });
     }
 
-    // TODO: cluster markers based on distance
+    // sort markers by X value for clustering
     filteredList = filteredList.sort((a, b) => {
       return a.x - b.x;
     });
 
+    let clusters = getClustersFromMarkers(filteredList);
+
     this.setState({
-      mapArrows: [],
       selectedCluster: null,
-      visibleMarkers: filteredList,
-      clusters: getClustersFromMarkers(filteredList),
+      enabledMarkers: filteredList, // markers that are not hidden
+      clusters: clusters, // markers that are shown on map
+      loadingText: "",
     });
   };
 
@@ -469,8 +474,8 @@ export class LineupSite extends Component {
       <Marker
         key={cluster["points"][0]["id"]}
         lineup={{
-          agent: cluster["agent"],
-          ability: cluster["ability"],
+          agent: getAgentFromId(cluster["agent"]),
+          ability: getAbilityFromId(cluster["agent"], cluster["ability"]),
           x: cluster["center"]["x"],
           y: cluster["center"]["y"],
         }}
@@ -495,7 +500,9 @@ export class LineupSite extends Component {
           y={point.startY}
           scale={this.state.markerScale}
           rotation={this.state.mapRotation}
-          onClick={() => this.editMarker(this.getMarkerFromId(point["id"]))}
+          onClick={() =>
+            this.updateActiveMarker(this.getMarkerFromId(point["id"]))
+          }
         />
       ));
     }
@@ -513,6 +520,7 @@ export class LineupSite extends Component {
     this.setState(
       {
         newState,
+        mapArrows: [],
       },
       this.updateMap
     );
@@ -522,9 +530,11 @@ export class LineupSite extends Component {
     this.setState(
       {
         hiddenMarkers: [],
+        mapArrows: [],
       },
       this.updateMap
     );
+    localStorage.removeItem("hiddenMarkers");
   };
 
   rotateMapLeft = () => {
@@ -542,7 +552,6 @@ export class LineupSite extends Component {
       mapRotation: newRotation,
     });
   };
-
   render() {
     return (
       <div className="outer-frame">
@@ -556,6 +565,7 @@ export class LineupSite extends Component {
               onChange={this.onMapSwitch}
             />
             <Select
+              value={this.state.agent}
               label="Agent select"
               placeholder="Agent..."
               options={AGENT_LIST}
@@ -563,17 +573,21 @@ export class LineupSite extends Component {
               onChange={this.onAgentChange}
             />
             <Select
-              value={this.state.selectedAbility}
+              value={this.state.ability}
               label="Ability select"
               placeholder="Ability..."
-              options={this.state.abilityList}
+              options={
+                this.state.agent !== null
+                  ? ABILITY_LIST[this.state.agent.value]
+                  : []
+              }
               styles={this.customStyles}
               onChange={this.onAbilityChange}
             />
             <MultiSelect
               className="lineup-filter-multi-select"
               options={TAG_LIST}
-              value={this.state.tags}
+              value={this.state.filters}
               labelledBy="Select"
               hasSelectAll={false}
               disableSearch={false}

@@ -33,8 +33,8 @@ const TagList = ({ tags }) => {
 
   return (
     <div className="lineup-tags-container">
-      {sortItems(getTagsFromIds(tags)).map((tag) => (
-        <TagItem label={tag.label} />
+      {sortItems(getTagsFromIds(tags)).map((tag, index) => (
+        <TagItem key={index} label={tag.label} />
       ))}
     </div>
   );
