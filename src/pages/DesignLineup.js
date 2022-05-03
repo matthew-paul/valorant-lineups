@@ -33,7 +33,7 @@ export class DesignLineup extends Component {
     description: "",
     agent: 0, // actual agent list starts at 1
     ability: 0, // actual ability list starts at 1
-    mapId: 1,
+    map: MAP_LIST[0],
     tags: [],
     images: [],
     video: "",
@@ -154,7 +154,7 @@ export class DesignLineup extends Component {
       description: this.state.description,
       agent: this.state.agent.value,
       ability: this.state.ability.value,
-      mapId: this.state.mapId,
+      mapId: this.state.map.value,
       tags: tagList,
       images: imageList,
       video: videoString,
@@ -241,12 +241,6 @@ export class DesignLineup extends Component {
     this.settingStartPosition = true;
   };
 
-  onMapChange = (map) => {
-    this.setState({
-      mapId: map.value,
-    });
-  };
-
   updateScale = () => {};
 
   render() {
@@ -258,10 +252,10 @@ export class DesignLineup extends Component {
             <div className="map-select-point">
               <Select
                 label="Map select"
+                value={this.state.map}
                 defaultValue={MAP_LIST[0]}
                 options={MAP_LIST}
                 styles={this.customStyles}
-                onChange={this.onMapChange}
               />
               <button
                 className="map-button"
@@ -281,7 +275,7 @@ export class DesignLineup extends Component {
               onContextMenu={this.onContextMenu}
             >
               <MapInteractionCSS updateScale={this.updateScale} maxScale={6}>
-                <Map mapId={this.state.mapId} onMapClick={this.onMapClick} />
+                <Map map={this.state.map} onMapClick={this.onMapClick} />
 
                 <div>
                   {this.state.x !== -1 ? (

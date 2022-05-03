@@ -112,3 +112,7 @@ export const getTagsFromIds = (tags) => {
 export const getImagesFromIds = (images) => {
   return images.map((image) => ({ id: image, text: image }));
 };
+
+export const getMapFromId = (id) => {
+  return MAP_LIST.find((item) => item.value === id);
+};
