@@ -133,7 +133,7 @@ export class LineupSite extends Component {
     savedLineups: {},
     enabledMarkers: [],
     hiddenMarkers: [], // user can manually hide markers instead of using filters
-    mapId: 1, // selected map, default ascent
+    map: MAP_LIST[0], // selected map, default ascent
     mapRotation: 0, // 0, 90, 180, 270 degrees
     agent: { value: 13, label: "Sova" }, // selected agent, default sova
     ability: null, // selected ability, default none = all abilities
@@ -340,9 +340,9 @@ export class LineupSite extends Component {
 
   onMapSwitch = (map) => {
     // example: { value: 1, label: "Ascent", icon: AscentMap }
-    let selectedMap = map.value;
+    let selectedMap = map;
 
-    if (selectedMap === this.state.mapId) {
+    if (selectedMap === this.state.map) {
       return;
     }
 
@@ -364,7 +364,7 @@ export class LineupSite extends Component {
 
     // update map image, Map will automatically call updateMap after image has been loaded
     this.setState({
-      mapId: selectedMap,
+      map: selectedMap,
     });
   };
 
@@ -408,7 +408,7 @@ export class LineupSite extends Component {
   updateMap = () => {
     this.setState({ loadingText: "loading..." });
     // make sure map and agent is selected
-    if (this.state.agent === null || this.state.mapId === 0) {
+    if (this.state.agent === null || this.state.map === null) {
       this.setState({
         clusters: [],
         loadingText: "",
@@ -416,14 +416,14 @@ export class LineupSite extends Component {
       return;
     }
 
-    if (this.state.savedLineups[this.state.mapId] === undefined) {
+    if (this.state.savedLineups[this.state.map.value] === undefined) {
       return;
     }
 
-    console.log(this.state.savedLineups[this.state.mapId]);
+    console.log(this.state.savedLineups[this.state.map.value]);
 
     // get marker list and filter based on agent/ability
-    let filteredList = this.state.savedLineups[this.state.mapId].filter(
+    let filteredList = this.state.savedLineups[this.state.map.value].filter(
       (marker) => {
         // Check agent and ability matches
         if (parseInt(marker.agent) !== this.state.agent.value) return false;
@@ -618,7 +618,7 @@ export class LineupSite extends Component {
             <div id="lineup-site-map">
               <Map
                 rotation={this.state.mapRotation}
-                mapId={this.state.mapId}
+                map={this.state.map}
                 onMapClick={this.onMapClick}
                 updateMap={this.updateMap}
               />

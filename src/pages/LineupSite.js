@@ -5,6 +5,7 @@ import Select from "react-select";
 import { GrRotateLeft, GrRotateRight } from "react-icons/gr";
 
 import {
+  getMapFromId,
   getAgentFromId,
   getAbilityFromId,
   localStorageExpirationTime,
@@ -134,7 +135,7 @@ export class LineupSite extends Component {
     savedLineups: {},
     enabledMarkers: [],
     hiddenMarkers: [], // user can manually hide markers instead of using filters
-    mapId: 1, // selected map, default ascent
+    map: MAP_LIST[0], // selected map, default ascent
     mapRotation: 0, // 0, 90, 180, 270 degrees
     agent: { value: 13, label: "Sova" }, // selected agent, default sova
     ability: null, // selected ability, default none = all abilities
@@ -203,51 +204,21 @@ export class LineupSite extends Component {
           Date.now() + localStorageExpirationTime
         );
 
-        this.setState({ savedLineups: categorizedLineups }, this.updateMap);
+        this.setState({ savedLineups: categorizedLineups }, () =>
+          this.loadLineupFromURL(allLineups)
+        );
       });
     }
     // otherwise just retrieve lineups from local storage
     else {
       categorizedLineups = JSON.parse(localStorageLineups);
-      this.setState({ savedLineups: categorizedLineups }, this.updateMap);
+      this.setState({ savedLineups: categorizedLineups }, () =>
+        this.loadLineupFromURL(allLineups)
+      );
       let key;
       for (key in categorizedLineups) {
         allLineups.push(...categorizedLineups[key]);
       }
-    }
-
-    if ("lineupId" in this.props.params) {
-      let filteredLineups = allLineups.filter(
-        (lineup) => lineup.id === this.props.params.lineupId
-      );
-      if (filteredLineups.length === 1) {
-        let lineup = filteredLineups[0];
-        this.setState(
-          {
-            activeMarkerId: lineup.id,
-            name: lineup.name,
-            lineupTags: lineup.tags,
-            description: lineup.description,
-            credits: lineup.credits,
-            video: lineup.video,
-            images: lineup.images,
-            mapId: lineup.mapId,
-            agent: getAgentFromId(lineup.agent),
-            ability: null,
-            mapArrows: [
-              {
-                x: lineup.x + 13,
-                y: lineup.y + 13,
-                startX: lineup.startX + 13,
-                startY: lineup.startY + 13,
-              },
-            ],
-          },
-          this.updateMap
-        );
-      }
-    } else {
-      this.updateMap();
     }
 
     // process clicking back button correcly, resetting map if there is no id in url
@@ -269,7 +240,7 @@ export class LineupSite extends Component {
               credits: lineup.credits,
               video: lineup.video,
               images: lineup.images,
-              mapId: lineup.mapId,
+              map: getMapFromId(lineup.mapId),
               agent: getAgentFromId(lineup.agent),
               ability: null,
               mapArrows: [
@@ -313,6 +284,44 @@ export class LineupSite extends Component {
       });
     }
   }
+
+  loadLineupFromURL = (allLineups) => {
+    if ("lineupId" in this.props.params) {
+      let filteredLineups = allLineups.filter(
+        (lineup) => lineup.id === this.props.params.lineupId
+      );
+      if (filteredLineups.length === 1) {
+        let lineup = filteredLineups[0];
+        this.setState(
+          {
+            activeMarkerId: lineup.id,
+            name: lineup.name,
+            lineupTags: lineup.tags,
+            description: lineup.description,
+            credits: lineup.credits,
+            video: lineup.video,
+            images: lineup.images,
+            map: getMapFromId(lineup.mapId),
+            agent: getAgentFromId(lineup.agent),
+            ability: null,
+            mapArrows: [
+              {
+                x: lineup.x + 13,
+                y: lineup.y + 13,
+                startX: lineup.startX + 13,
+                startY: lineup.startY + 13,
+              },
+            ],
+          },
+          this.updateMap
+        );
+      }
+    } else {
+      console.log("no params");
+      console.log(this.props.params);
+      this.updateMap();
+    }
+  };
 
   getLineupsFromDatabase(callback) {
     let requestOptions = {
@@ -435,9 +444,9 @@ export class LineupSite extends Component {
 
   onMapSwitch = (map) => {
     // example: { value: 1, label: "Ascent", icon: AscentMap }
-    let selectedMap = map.value;
+    let selectedMap = map;
 
-    if (selectedMap === this.state.mapId) {
+    if (selectedMap === this.state.map) {
       return;
     }
 
@@ -459,7 +468,7 @@ export class LineupSite extends Component {
 
     // update map image, Map will automatically call updateMap after image has been loaded
     this.setState({
-      mapId: selectedMap,
+      map: selectedMap,
     });
   };
 
@@ -503,7 +512,7 @@ export class LineupSite extends Component {
   updateMap = () => {
     this.setState({ loading: true });
     // make sure map and agent is selected
-    if (this.state.agent === null || this.state.mapId === 0) {
+    if (this.state.agent === null || this.state.map === null) {
       this.setState({
         clusters: [],
         loading: false,
@@ -511,13 +520,13 @@ export class LineupSite extends Component {
       return;
     }
 
-    if (this.state.savedLineups[this.state.mapId] === undefined) {
-      console.log("no lineups for map", this.state.mapId);
+    if (this.state.savedLineups[this.state.map.value] === undefined) {
+      console.log("no lineups for map", this.state.map);
       return;
     }
 
     // get marker list and filter based on agent/ability
-    let filteredList = this.state.savedLineups[this.state.mapId].filter(
+    let filteredList = this.state.savedLineups[this.state.map.value].filter(
       (marker) => {
         // Check agent and ability matches
         if (parseInt(marker.agent) !== this.state.agent.value) return false;
@@ -652,6 +661,7 @@ export class LineupSite extends Component {
             <Select
               label="Map select"
               defaultValue={MAP_LIST[0]}
+              value={this.state.map}
               options={MAP_LIST}
               styles={this.customStyles}
               onChange={this.onMapSwitch}
@@ -718,7 +728,7 @@ export class LineupSite extends Component {
             <div id="lineup-site-map">
               <Map
                 rotation={this.state.mapRotation}
-                mapId={this.state.mapId}
+                map={this.state.map}
                 onMapClick={this.onMapClick}
                 updateMap={this.updateMap}
               />

@@ -9,6 +9,7 @@ import Marker from "../component-utils/map-utils/Marker.js";
 import startIcon from "../resources/start-icon.png";
 import {
   MAP_LIST,
+  getMapFromId,
   getAgentFromId,
   getAbilityFromId,
   getTagsFromIds,
@@ -25,7 +26,7 @@ export class EditLineup extends Component {
       id: marker.id, // id does not change for edit/delete, always created from aws request
       name: marker.name,
       description: marker.description,
-      mapId: marker.mapId,
+      map: getMapFromId(marker.mapId),
       agent: getAgentFromId(marker.agent),
       ability: getAbilityFromId(marker.agent, marker.ability),
       tags: getTagsFromIds(marker.tags),
@@ -66,7 +67,7 @@ export class EditLineup extends Component {
       description: "",
       agent: null, // actual agent list starts at 1
       ability: null, // actual ability list starts at 1
-      mapId: 1,
+      map: MAP_LIST[0],
       tags: [],
       images: [],
       video: "",
@@ -179,7 +180,7 @@ export class EditLineup extends Component {
         description: this.state.description,
         agent: this.state.agent.value,
         ability: this.state.ability.value,
-        mapId: this.state.mapId,
+        mapId: this.state.map.value,
         tags: tagList,
         images: imageList,
         video: this.state.video,
@@ -272,12 +273,6 @@ export class EditLineup extends Component {
     this.settingStartPosition = true;
   };
 
-  onMapChange = (map) => {
-    this.setState({
-      mapId: map.value,
-    });
-  };
-
   updateScale = () => {};
 
   render() {
@@ -289,10 +284,10 @@ export class EditLineup extends Component {
             <div className="map-select-point">
               <Select
                 label="Map select"
+                value={this.state.map}
                 defaultValue={MAP_LIST[0]}
                 options={MAP_LIST}
                 styles={this.customStyles}
-                onChange={this.onMapChange}
               />
               <button
                 className="map-button"
@@ -316,7 +311,7 @@ export class EditLineup extends Component {
                 maxScale={10}
                 defaultValue={this.state.defaultMapValue}
               >
-                <Map mapId={this.state.mapId} onMapClick={this.onMapClick} />
+                <Map map={this.state.map} onMapClick={this.onMapClick} />
 
                 <div>
                   {this.state.x !== -1 ? (
