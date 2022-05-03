@@ -202,21 +202,18 @@ export class LineupSite extends Component {
           Date.now() + localStorageExpirationTime
         );
 
-        this.setState({ loadingText: "" });
+        this.setState({ savedLineups: categorizedLineups }, this.updateMap);
       });
     }
     // otherwise just retrieve lineups from local storage
     else {
       categorizedLineups = JSON.parse(localStorageLineups);
+      this.setState({ savedLineups: categorizedLineups }, this.updateMap);
       let key;
       for (key in categorizedLineups) {
         allLineups.push(...categorizedLineups[key]);
       }
     }
-
-    this.setState({
-      savedLineups: categorizedLineups,
-    });
 
     // update hidden markers if user has added them before
     const localStorageHiddenMarkers = localStorage.getItem("hiddenMarkers");
