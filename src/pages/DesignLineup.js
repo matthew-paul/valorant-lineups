@@ -152,8 +152,8 @@ export class DesignLineup extends Component {
     let lineupData = {
       name: this.state.name,
       description: this.state.description,
-      agent: this.state.agent,
-      ability: this.state.ability,
+      agent: this.state.agent.value,
+      ability: this.state.ability.value,
       mapId: this.state.mapId,
       tags: tagList,
       images: imageList,
