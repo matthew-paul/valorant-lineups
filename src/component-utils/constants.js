@@ -6,6 +6,10 @@ import FRAGment from "../resources/Agents/KayO/FRAG-ment.png";
 import ZEROpoint from "../resources/Agents/KayO/ZERO-point.png";
 import FLASHdrive from "../resources/Agents/KayO/FLASH-drive.png";
 
+// Sage
+import BarrierOrb from "../resources/Agents/Sage/Barrier_Orb.png";
+import SlowOrb from "../resources/Agents/Sage/Slow_Orb.png";
+
 // Sova
 import ReconBolt from "../resources/Agents/Sova/Recon_Bolt.png";
 import ShockBolt from "../resources/Agents/Sova/Shock_Bolt.png";
@@ -44,7 +48,7 @@ export const AGENT_LIST = [
   //  { value: 8, label: "Phoenix" },
   //  { value: 9, label: "Raze" },
   //  { value: 10, label: "Reyna" },
-  //  { value: 11, label: "Sage" },
+  { value: 11, label: "Sage" },
   //  { value: 12, label: "Skye" },
   { value: 13, label: "Sova" },
   { value: 14, label: "Viper" },
@@ -57,6 +61,10 @@ export const ABILITY_LIST = {
     { value: 1, label: "FRAG-ment", icon: FRAGment },
     { value: 2, label: "ZERO-point", icon: ZEROpoint },
     { value: 3, label: "FLASH-drive", icon: FLASHdrive },
+  ],
+  11: [
+    { value: 1, label: "Barrier Orb", icon: BarrierOrb },
+    { value: 2, label: "Slow Orb", icon: SlowOrb },
   ],
   13: [
     { value: 1, label: "Recon Bolt", icon: ReconBolt },
