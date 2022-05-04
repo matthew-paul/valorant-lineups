@@ -241,6 +241,20 @@ export class DesignLineup extends Component {
     this.settingStartPosition = true;
   };
 
+  onMapChange = (map) => {
+    // example: { value: 1, label: "Ascent", icon: AscentMap }
+    let selectedMap = map;
+
+    if (selectedMap === this.state.map) {
+      return;
+    }
+
+    // update map image, Map will automatically call updateMap after image has been loaded
+    this.setState({
+      map: selectedMap,
+    });
+  };
+
   updateScale = () => {};
 
   render() {
@@ -256,6 +270,7 @@ export class DesignLineup extends Component {
                 defaultValue={MAP_LIST[0]}
                 options={MAP_LIST}
                 styles={this.customStyles}
+                onChange={this.onMapChange}
               />
               <button
                 className="map-button"
