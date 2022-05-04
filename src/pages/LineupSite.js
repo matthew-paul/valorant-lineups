@@ -442,7 +442,7 @@ export class LineupSite extends Component {
     });
   };
 
-  onMapSwitch = (map) => {
+  onMapChange = (map) => {
     // example: { value: 1, label: "Ascent", icon: AscentMap }
     let selectedMap = map;
 
@@ -664,7 +664,7 @@ export class LineupSite extends Component {
               value={this.state.map}
               options={MAP_LIST}
               styles={this.customStyles}
-              onChange={this.onMapSwitch}
+              onChange={this.onMapChange}
             />
             <Select
               value={this.state.agent}

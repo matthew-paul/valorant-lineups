@@ -1,6 +1,10 @@
 // Brimstone
 import Incendiary from "../resources/Agents/Brimstone/Incendiary.png";
 
+// Fade
+import Haunt from "../resources/Agents/Fade/Haunt.png";
+import Seize from "../resources/Agents/Fade/Seize.png";
+
 // Kay/O
 import FRAGment from "../resources/Agents/KayO/FRAG-ment.png";
 import ZEROpoint from "../resources/Agents/KayO/ZERO-point.png";
@@ -39,7 +43,7 @@ export const AGENT_LIST = [
   //  { value: 2, label: "Breach" },
   { value: 3, label: "Brimstone" },
   //  { value: 4, label: "Cypher" },
-  //  { value: 18, label: "Fade" },
+  { value: 18, label: "Fade" },
   //  { value: 5, label: "Jett" },
   //  { value: 6, label: "Killjoy" },
   { value: 16, label: "Kay/O" },
@@ -57,6 +61,10 @@ export const AGENT_LIST = [
 
 export const ABILITY_LIST = {
   3: [{ value: 1, label: "Incediary", icon: Incendiary }],
+  18: [
+    { value: 1, label: "Haunt", icon: Haunt },
+    { value: 2, label: "Seize", icon: Seize },
+  ],
   16: [
     { value: 1, label: "FRAG-ment", icon: FRAGment },
     { value: 2, label: "ZERO-point", icon: ZEROpoint },
