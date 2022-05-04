@@ -32,7 +32,7 @@ To Visit App:
 
 ## Reflection
 
-This was a side project I created in about 4 weeks based off [this google slides](https://docs.google.com/presentation/d/1lC66dZQBioIc2E_sOvXS3ZoNykfSPl0Xj5qaDqknwwA/present?slide=id.g8d7eda0435_9_159), which had the same idea, but was not as interactive or manageable.
+This was a side project I created in a few weeks based off [this google slides](https://docs.google.com/presentation/d/1lC66dZQBioIc2E_sOvXS3ZoNykfSPl0Xj5qaDqknwwA/present?slide=id.g8d7eda0435_9_159), which had the same idea, but was not as interactive or manageable.
 
 I wanted to build a website that could provide an easy way to access lineups during a game using an interactive map with filters to quickly choose which lineup would be best for the current situation.
 
