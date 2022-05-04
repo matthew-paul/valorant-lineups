@@ -19,7 +19,11 @@ import Select from "react-select";
 
 export class EditLineup extends Component {
   componentDidMount() {
+    document.title = "Edit Lineup";
+
     let marker = JSON.parse(localStorage.getItem("editMarker"));
+
+    console.log(marker.images);
 
     this.setState({
       marker: marker, // used to store previous values
@@ -38,8 +42,6 @@ export class EditLineup extends Component {
       startX: marker.startX,
       startY: marker.startY,
     });
-
-    document.title = "Edit Lineup";
   }
 
   customStyles = {

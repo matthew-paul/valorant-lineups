@@ -724,6 +724,7 @@ export class LineupSite extends Component {
             defaultValue={this.state.defaultMapValue}
             updateScale={this.updateScale}
             maxScale={16}
+            minScale={0.5}
           >
             <div id="lineup-site-map">
               <Map
