@@ -8,13 +8,18 @@ const Info = () => {
   return (
     <div className="info-container">
       <h1 className="info-header">Info</h1>
-      <button
-        style={{ width: 100, height: 50 }}
-        onClick={() => localStorage.clear()}
-      >
-        Clear local storage
-      </button>
+
       <div className="info-content">
+        <a
+          href="https://github.com/matthew-paul/valorant-lineups"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+          https://github.com/matthew-paul/valorant-lineups
+        </a>
+      </div>
+
+      <div className="info-bottom">
         <text>
           'Valorant Lineups' was created under Riot Games' "Legal Jibber Jabber"
           policy using assets owned by Riot Games.

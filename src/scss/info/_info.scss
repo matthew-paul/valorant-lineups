@@ -1,5 +1,8 @@
 @import '../utils';
 
+text {
+    color: white;
+}
 
 .info-container {
     display: flex;
@@ -14,7 +17,7 @@
     padding-top: 5px;
 }
 
-.info-content {
+.info-bottom {
     width: 100%;
     padding: 5px 20px 5px 20px;
     bottom: 10px;
@@ -24,7 +27,7 @@
     border-color: white;
 }
 
-.info-content > text { 
+.info-bottom > text { 
     font-size: 1.5rem;
     text-align: center;
     color: white;
