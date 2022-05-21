@@ -28,10 +28,6 @@ const EmailForm = (props) => {
   const sendEmail = async (e) => {
     e.preventDefault();
 
-    if (ipAddress === "") {
-      setSendingMessage(["Please try again in a few seconds", "error"]);
-    }
-
     let validate = validateForm();
     if (!validate[0]) {
       setSendingMessage([validate[1].toString(), "error"]);

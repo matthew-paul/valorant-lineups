@@ -6,6 +6,8 @@ import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
+document.title = "VValorant Lineups";
+
 root.render(
   <React.StrictMode>
     <App />
