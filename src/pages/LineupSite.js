@@ -494,6 +494,7 @@ export class LineupSite extends Component {
     this.setState(
       {
         ability: ability,
+        mapArrows: [],
       },
       this.updateMap
     );
