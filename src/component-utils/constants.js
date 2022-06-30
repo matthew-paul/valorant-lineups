@@ -30,6 +30,7 @@ import HavenMap from "../resources/Maps/haven_map.png";
 import IceboxMap from "../resources/Maps/icebox_map.png";
 import SplitMap from "../resources/Maps/split_map.png";
 import FractureMap from "../resources/Maps/fracture_map.png";
+import PearlMap from "../resources/Maps/pearl_map.png";
 
 export const API_URL =
   "https://uh5it8zn19.execute-api.us-east-1.amazonaws.com/development";
@@ -91,6 +92,7 @@ export const MAP_LIST = [
   { value: 7, label: "Fracture", icon: FractureMap },
   { value: 4, label: "Haven", icon: HavenMap },
   { value: 5, label: "Icebox", icon: IceboxMap },
+  { value: 8, label: "Pearl", icon: PearlMap },
   { value: 6, label: "Split", icon: SplitMap },
 ];
 
