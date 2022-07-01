@@ -523,9 +523,11 @@ export class LineupSite extends Component {
 
     if (this.state.savedLineups[this.state.map.value] === undefined) {
       console.log("no lineups for map", this.state.map);
-      this.setState({
-        loading: false,
-      });
+      if (Object.keys(this.state.savedLineups).length !== 0) {
+        this.setState({
+          loading: false,
+        });
+      }
       return;
     }
 
