@@ -6,7 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-document.title = "VValorant Lineups";
+document.title = "Valorant Lineups";
 
 root.render(
   <React.StrictMode>
