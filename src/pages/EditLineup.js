@@ -23,7 +23,11 @@ export class EditLineup extends Component {
 
     let marker = JSON.parse(localStorage.getItem("editMarker"));
 
-    console.log(marker.images);
+    let images = [];
+    for (let i = 0; i < marker.images.length; i++) {
+      images.push(marker.images[i].substring(50));
+    }
+    console.log(images.join(" "));
 
     this.setState({
       marker: marker, // used to store previous values
