@@ -13,14 +13,30 @@ text {
     @include debug-border(red);
 }
 
+.info-content {
+    width: 50%;
+    text-decoration: none;
+    color: white;
+    font-size: 1.2rem;
+    text-align: centersssssss;
+}
+
+.link {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    text-indent: 0;
+}
+
 .info-header {
-    padding-top: 5px;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
 
 .info-bottom {
     width: 100%;
-    padding: 5px 20px 5px 20px;
-    bottom: 10px;
+    padding: .313rem 1.25px 5px .313px;
+    bottom: .625px;
     text-align: center;
     position: absolute;
     border-top-style: solid;
@@ -31,4 +47,14 @@ text {
     font-size: 1.5rem;
     text-align: center;
     color: white;
+}
+
+#clear-local-storage {
+    width: 2rem;
+    height: 2rem;
+    position: fixed;
+    right: .1rem;
+    top: .1rem;
+    background-color: black;
+    cursor: pointer;
 }
