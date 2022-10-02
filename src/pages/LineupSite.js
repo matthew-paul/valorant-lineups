@@ -199,6 +199,7 @@ export class LineupSite extends Component {
           "savedLineups",
           JSON.stringify(categorizedLineups)
         );
+
         localStorage.setItem(
           "savedLineupsExpiration",
           Date.now() + localStorageExpirationTime
