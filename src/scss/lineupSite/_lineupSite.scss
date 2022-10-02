@@ -81,13 +81,14 @@ $select-height: 45px;
 .map-info-text-container {
     position: absolute;
     z-index: 1;
-    bottom: 10px;
-    left: 100px;
+    top: 60px;
+    left: 55px;
     width: 250px;
 }
 
 .map-info-text {
-    color: white
+    color: white;
+    font-size: 1rem;
 }
 
 .rotate-map-button {

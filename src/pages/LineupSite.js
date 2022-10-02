@@ -174,7 +174,6 @@ export class LineupSite extends Component {
     if (
       localStorageLineups === null ||
       localStorageLineupsExpirationDate === null ||
-      localStorageLineupsExpirationDate.toString().toLowerCase() === "never" ||
       Date.now() >= localStorageLineupsExpirationDate
     ) {
       console.log(
@@ -724,7 +723,7 @@ export class LineupSite extends Component {
           </div>
           {this.state.loading && (
             <div className="map-info-text-container">
-              <div className="map-info-text">loading...</div>
+              <div className="map-info-text">loading lineups...</div>
             </div>
           )}
           <MapInteractionCSS
