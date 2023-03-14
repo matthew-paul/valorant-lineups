@@ -5,6 +5,11 @@ import Incendiary from "../resources/Agents/Brimstone/Incendiary.png";
 import Haunt from "../resources/Agents/Fade/Haunt.png";
 import Seize from "../resources/Agents/Fade/Seize.png";
 
+// Gekko
+import MoshPit from "../resources/Agents/Gekko/Mosh_Pit.png";
+import Dizzy from "../resources/Agents/Gekko/Dizzy.png";
+import Wingman from "../resources/Agents/Gekko/Wingman.png";
+
 // Kay/O
 import FRAGment from "../resources/Agents/KayO/FRAG-ment.png";
 import ZEROpoint from "../resources/Agents/KayO/ZERO-point.png";
@@ -31,6 +36,7 @@ import IceboxMap from "../resources/Maps/icebox_map.png";
 import SplitMap from "../resources/Maps/split_map.png";
 import FractureMap from "../resources/Maps/fracture_map.png";
 import PearlMap from "../resources/Maps/pearl_map.png";
+import LotusMap from "../resources/Maps/lotus_map.png";
 
 export const API_URL =
   "https://uh5it8zn19.execute-api.us-east-1.amazonaws.com/development";
@@ -40,24 +46,26 @@ export const localStorageExpirationTime = 1000 * 60 * 60 * 24 * 14; // How long 
 
 // Use label/value because that's what react-select uses
 export const AGENT_LIST = [
-  //  { value: 1, label: "Astra" },
-  //  { value: 2, label: "Breach" },
+  // { value: 1, label: "Astra" },
+  // { value: 2, label: "Breach" },
   { value: 3, label: "Brimstone" },
   //  { value: 4, label: "Cypher" },
   { value: 18, label: "Fade" },
-  //  { value: 5, label: "Jett" },
-  //  { value: 6, label: "Killjoy" },
+  { value: 20, label: "Gekko" },
+  // { value: 19, label: "Harbor" },
+  // { value: 5, label: "Jett" },
+  // { value: 6, label: "Killjoy" },
   { value: 16, label: "Kay/O" },
-  //  { value: 17, label: "Neon" },
-  //  { value: 7, label: "Omen" },
-  //  { value: 8, label: "Phoenix" },
-  //  { value: 9, label: "Raze" },
-  //  { value: 10, label: "Reyna" },
+  // { value: 17, label: "Neon" },
+  // { value: 7, label: "Omen" },
+  // { value: 8, label: "Phoenix" },
+  // { value: 9, label: "Raze" },
+  // { value: 10, label: "Reyna" },
   { value: 11, label: "Sage" },
-  //  { value: 12, label: "Skye" },
+  // { value: 12, label: "Skye" },
   { value: 13, label: "Sova" },
   { value: 14, label: "Viper" },
-  //  { value: 15, label: "Yoru" },
+  // { value: 15, label: "Yoru" },
 ];
 
 export const ABILITY_LIST = {
@@ -65,6 +73,11 @@ export const ABILITY_LIST = {
   18: [
     { value: 1, label: "Haunt", icon: Haunt },
     { value: 2, label: "Seize", icon: Seize },
+  ],
+  20: [
+    { value: 1, label: "Mosh Pit", icon: MoshPit },
+    { value: 2, label: "Wingman", icon: Wingman },
+    { value: 3, label: "Dizzy", icon: Dizzy },
   ],
   16: [
     { value: 1, label: "FRAG-ment", icon: FRAGment },
@@ -92,6 +105,7 @@ export const MAP_LIST = [
   { value: 7, label: "Fracture", icon: FractureMap },
   { value: 4, label: "Haven", icon: HavenMap },
   { value: 5, label: "Icebox", icon: IceboxMap },
+  { value: 9, label: "Lotus", icon: LotusMap},
   { value: 8, label: "Pearl", icon: PearlMap },
   { value: 6, label: "Split", icon: SplitMap },
 ];
@@ -115,22 +129,22 @@ export const TAG_LIST = [
   { value: 15, label: "Single Shock Dart" },
 ];
 
-export const getAgentFromId = (id) => {
-  return AGENT_LIST.find((item) => item.value === id);
+export const getAgentFromId = (agentId) => {
+  return AGENT_LIST.find((agent) => agent.value === agentId);
 };
 
 export const getAbilityFromId = (agentId, abilityId) => {
-  return ABILITY_LIST[agentId].find((item) => item.value === abilityId);
+  return ABILITY_LIST[agentId].find((ability) => ability.value === abilityId);
 };
 
-export const getTagsFromIds = (tags) => {
-  return TAG_LIST.filter((tag) => tags.includes(tag.value));
+export const getTagsFromIds = (tagIds) => {
+  return TAG_LIST.filter((tag) => tagIds.includes(tag.value));
 };
 
-export const getImagesFromIds = (images) => {
-  return images.map((image) => ({ id: image, text: image }));
+export const getImagesFromIds = (imageIds) => {
+  return imageIds.map((image) => ({ id: image, text: image }));
 };
 
-export const getMapFromId = (id) => {
-  return MAP_LIST.find((item) => item.value === id);
+export const getMapFromId = (mapId) => {
+  return MAP_LIST.find((map) => map.value === mapId);
 };
