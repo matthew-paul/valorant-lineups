@@ -10,6 +10,9 @@ import MoshPit from "../resources/Agents/Gekko/Mosh_Pit.png";
 import Dizzy from "../resources/Agents/Gekko/Dizzy.png";
 import Wingman from "../resources/Agents/Gekko/Wingman.png";
 
+// Killjoy
+import Nanoswarm from "../resources/Agents/Killjoy/Nanoswarm.png";
+
 // Kay/O
 import FRAGment from "../resources/Agents/KayO/FRAG-ment.png";
 import ZEROpoint from "../resources/Agents/KayO/ZERO-point.png";
@@ -54,7 +57,7 @@ export const AGENT_LIST = [
   { value: 20, label: "Gekko" },
   // { value: 19, label: "Harbor" },
   // { value: 5, label: "Jett" },
-  // { value: 6, label: "Killjoy" },
+  { value: 6, label: "Killjoy" },
   { value: 16, label: "Kay/O" },
   // { value: 17, label: "Neon" },
   // { value: 7, label: "Omen" },
@@ -78,6 +81,9 @@ export const ABILITY_LIST = {
     { value: 1, label: "Mosh Pit", icon: MoshPit },
     { value: 2, label: "Wingman", icon: Wingman },
     { value: 3, label: "Dizzy", icon: Dizzy },
+  ],
+  6: [
+    { value: 1, label: "Nanoswarm", icon: Nanoswarm },
   ],
   16: [
     { value: 1, label: "FRAG-ment", icon: FRAGment },
