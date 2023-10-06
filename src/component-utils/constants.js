@@ -40,6 +40,7 @@ import SplitMap from "../resources/Maps/split_map.png";
 import FractureMap from "../resources/Maps/fracture_map.png";
 import PearlMap from "../resources/Maps/pearl_map.png";
 import LotusMap from "../resources/Maps/lotus_map.png";
+import SunsetMap from "../resources/Maps/sunset_map.png";
 
 export const API_URL =
   "https://uh5it8zn19.execute-api.us-east-1.amazonaws.com/development";
@@ -111,9 +112,10 @@ export const MAP_LIST = [
   { value: 7, label: "Fracture", icon: FractureMap },
   { value: 4, label: "Haven", icon: HavenMap },
   { value: 5, label: "Icebox", icon: IceboxMap },
-  { value: 9, label: "Lotus", icon: LotusMap},
+  { value: 9, label: "Lotus", icon: LotusMap },
   { value: 8, label: "Pearl", icon: PearlMap },
   { value: 6, label: "Split", icon: SplitMap },
+  { value: 10, label: "Sunset", icon: SunsetMap },
 ];
 
 export const TAG_LIST = [
