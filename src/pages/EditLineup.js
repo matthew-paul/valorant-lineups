@@ -23,6 +23,7 @@ export class EditLineup extends Component {
 
     let marker = JSON.parse(localStorage.getItem("editMarker"));
 
+    if (marker == null) return;
     let images = [];
     for (let i = 0; i < marker.images.length; i++) {
       images.push(marker.images[i].substring(50));
@@ -279,7 +280,7 @@ export class EditLineup extends Component {
     this.settingStartPosition = true;
   };
 
-  updateScale = () => {};
+  updateScale = () => { };
 
   render() {
     return (
