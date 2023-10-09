@@ -1,3 +1,6 @@
+// Breach
+import Aftershock from "../resources/Agents/Breach/Aftershock.png";
+
 // Brimstone
 import Incendiary from "../resources/Agents/Brimstone/Incendiary.png";
 
@@ -51,7 +54,7 @@ export const localStorageExpirationTime = 1000 * 60 * 60 * 24 * 14; // How long 
 // Use label/value because that's what react-select uses
 export const AGENT_LIST = [
   // { value: 1, label: "Astra" },
-  // { value: 2, label: "Breach" },
+  { value: 2, label: "Breach" },
   { value: 3, label: "Brimstone" },
   //  { value: 4, label: "Cypher" },
   { value: 18, label: "Fade" },
@@ -73,6 +76,7 @@ export const AGENT_LIST = [
 ];
 
 export const ABILITY_LIST = {
+  2: [{ value: 1, label: "Aftershock", icon: Aftershock }],
   3: [{ value: 1, label: "Incediary", icon: Incendiary }],
   18: [
     { value: 1, label: "Haunt", icon: Haunt },
