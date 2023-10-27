@@ -174,7 +174,7 @@ export class LineupSite extends Component {
     if (
       localStorageLineups === null ||
       localStorageLineupsExpirationDate === null ||
-      Date.now() >= localStorageLineupsExpirationDate
+      localStorageLineupsExpirationDate + localStorageExpirationTime >= Date.now()
     ) {
       console.log(
         `refreshing lineups, expiration in ${
@@ -201,7 +201,7 @@ export class LineupSite extends Component {
 
         localStorage.setItem(
           "savedLineupsExpiration",
-          Date.now() + localStorageExpirationTime
+          Date.now()
         );
 
         this.setState({ savedLineups: categorizedLineups }, () =>

@@ -48,7 +48,7 @@ import SunsetMap from "../resources/Maps/sunset_map.png";
 export const API_URL =
   "https://uh5it8zn19.execute-api.us-east-1.amazonaws.com/development";
 
-export const localStorageExpirationTime = 1000 * 60 * 60 * 24 * 14; // How long localStorage will keep lineup info before refreshing in milliseconds
+export const localStorageExpirationTime = 1000 * 60 * 15 * 1 * 1; // How long localStorage will keep lineup info before refreshing in milliseconds
 //                                        ms     s    min  hr   days
 
 // Use label/value because that's what react-select uses

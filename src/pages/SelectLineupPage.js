@@ -173,7 +173,7 @@ export class LineupSite extends Component {
       localStorageLineups === null ||
       localStorageLineupsExpirationDate === null ||
       localStorageLineupsExpirationDate.toString().toLowerCase() === "never" ||
-      Date.now() >= localStorageLineupsExpirationDate
+      localStorageLineupsExpirationDate + localStorageExpirationTime >= Date.now()
     ) {
       console.log(
         `refreshing lineups, expiration in ${
@@ -199,7 +199,7 @@ export class LineupSite extends Component {
         );
         localStorage.setItem(
           "savedLineupsExpiration",
-          Date.now() + localStorageExpirationTime
+          Date.now()
         );
 
         this.setState({ savedLineups: categorizedLineups }, this.updateMap);
