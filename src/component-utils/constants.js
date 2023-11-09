@@ -4,6 +4,11 @@ import Aftershock from "../resources/Agents/Breach/Aftershock.png";
 // Brimstone
 import Incendiary from "../resources/Agents/Brimstone/Incendiary.png";
 
+// Cypher
+import Trapwire from '../resources/Agents/Cypher/Trapwire.png'
+import CyberCage from '../resources/Agents/Cypher/Cyber_Cage.png'
+import Spycam from '../resources/Agents/Cypher/Spycam.png'
+
 // Fade
 import Haunt from "../resources/Agents/Fade/Haunt.png";
 import Seize from "../resources/Agents/Fade/Seize.png";
@@ -56,10 +61,13 @@ export const AGENT_LIST = [
   // { value: 1, label: "Astra" },
   { value: 2, label: "Breach" },
   { value: 3, label: "Brimstone" },
-  //  { value: 4, label: "Cypher" },
+  // { value: 19, label: "Chamber" },
+  { value: 4, label: "Cypher" },
+  // { value: 22, label: "Deadlock" },
   { value: 18, label: "Fade" },
   { value: 20, label: "Gekko" },
-  // { value: 19, label: "Harbor" },
+  // { value: 21, label: "Harbor" },
+  // { value: 23, label: "Iso" },
   // { value: 5, label: "Jett" },
   { value: 6, label: "Killjoy" },
   { value: 16, label: "Kay/O" },
@@ -78,6 +86,11 @@ export const AGENT_LIST = [
 export const ABILITY_LIST = {
   2: [{ value: 1, label: "Aftershock", icon: Aftershock }],
   3: [{ value: 1, label: "Incediary", icon: Incendiary }],
+  4: [
+    { value: 1, label: "Trapwire", icon: Trapwire},
+    { value: 2, label: "Cyber Cage", icon: CyberCage},
+    { value: 3, label: "Spycam", icon: Spycam},
+  ],
   18: [
     { value: 1, label: "Haunt", icon: Haunt },
     { value: 2, label: "Seize", icon: Seize },
