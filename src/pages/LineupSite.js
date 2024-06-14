@@ -135,7 +135,7 @@ export class LineupSite extends Component {
     savedLineups: {},
     enabledMarkers: [],
     hiddenMarkers: [], // user can manually hide markers instead of using filters
-    map: MAP_LIST[0], // selected map, default ascent
+    map: MAP_LIST[1], // selected map, default ascent
     mapRotation: 0, // 0, 90, 180, 270 degrees
     agent: { value: 13, label: "Sova" }, // selected agent, default sova
     ability: null, // selected ability, default none = all abilities

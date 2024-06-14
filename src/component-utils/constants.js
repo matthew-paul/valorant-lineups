@@ -39,6 +39,7 @@ import SnakeBite from "../resources/Agents/Viper/Snake_Bite.png";
 import PoisonCloud from "../resources/Agents/Viper/Poison_Cloud.png";
 
 // Maps
+import AbyssMap from "../resources/Maps/abyss_map.png";
 import AscentMap from "../resources/Maps/ascent_map.png";
 import BindMap from "../resources/Maps/bind_map.png";
 import BreezeMap from "../resources/Maps/breeze_map.png";
@@ -53,7 +54,7 @@ import SunsetMap from "../resources/Maps/sunset_map.png";
 export const API_URL =
   "https://uh5it8zn19.execute-api.us-east-1.amazonaws.com/development";
 
-export const localStorageExpirationTime = 1000 * 60 * 15 * 1 * 1; // How long localStorage will keep lineup info before refreshing in milliseconds
+export const localStorageExpirationTime = 1000 * 60 * 60 * 24 * 10; // How long localStorage will keep lineup info before refreshing in milliseconds
 //                                        ms     s    min  hr   days
 
 // Use label/value because that's what react-select uses
@@ -123,6 +124,7 @@ export const ABILITY_LIST = {
 };
 
 export const MAP_LIST = [
+  { value: 11, label: "Abyss", icon: AbyssMap },
   { value: 1, label: "Ascent", icon: AscentMap },
   { value: 2, label: "Bind", icon: BindMap },
   { value: 3, label: "Breeze", icon: BreezeMap },
