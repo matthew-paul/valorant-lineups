@@ -162,9 +162,9 @@ export class LineupSite extends Component {
 
     // attempt to read lineup info from localstorage and check expiration date
     const localStorageLineups = localStorage.getItem("savedLineups");
-    const localStorageLineupsExpirationDate = localStorage.getItem(
-      "savedLineupsExpiration"
-    );
+    const localStorageLastRetrievedTime = parseFloat(localStorage.getItem(
+      "lastRetrievedTime"
+    ));
 
     let allLineups = [];
     // store lineups by map in this object, and write it to the state
@@ -173,14 +173,16 @@ export class LineupSite extends Component {
     // check if it is time to refresh lineups
     if (
       localStorageLineups === null ||
-      localStorageLineupsExpirationDate === null ||
-      localStorageLineupsExpirationDate + localStorageExpirationTime >= Date.now()
+      localStorageLastRetrievedTime === null ||
+      localStorageLastRetrievedTime + localStorageExpirationTime <= Date.now()
     ) {
       console.log(
         `refreshing lineups, expiration in ${
           localStorageExpirationTime / 60 / 1000
         } minutes`
       );
+      console.log(`localStorage + expiration = ${localStorageLastRetrievedTime + localStorageExpirationTime}`)
+      console.log(`current date: ${Date.now()}`)
       localStorage.removeItem("savedLineups");
 
       this.getLineupsFromDatabase((lineups) => {
@@ -200,7 +202,7 @@ export class LineupSite extends Component {
         );
 
         localStorage.setItem(
-          "savedLineupsExpiration",
+          "lastRetrievedTime",
           Date.now()
         );
 
