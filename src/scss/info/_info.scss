@@ -1,9 +1,5 @@
 @import '../utils';
 
-text {
-    color: white;
-}
-
 .info-container {
     display: flex;
     flex: 1;
@@ -18,7 +14,7 @@ text {
     text-decoration: none;
     color: white;
     font-size: 1.2rem;
-    text-align: centersssssss;
+    text-align: center;
 }
 
 .link {
@@ -43,18 +39,20 @@ text {
     border-color: white;
 }
 
-.info-bottom > text { 
+.info-bottom > span {
     font-size: 1.5rem;
     text-align: center;
     color: white;
 }
 
 #clear-local-storage {
-    width: 2rem;
-    height: 2rem;
+    padding: .5rem;
     position: fixed;
     right: .1rem;
     top: .1rem;
     background-color: black;
+    color: white;
+    border: 1px solid white;
+    border-radius: .25rem;
     cursor: pointer;
 }

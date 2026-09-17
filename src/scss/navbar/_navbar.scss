@@ -11,6 +11,11 @@ $navbar-color: #060b26;
 }
 
 .menu-bars {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
     margin: 1rem 0.5rem 0rem 0.75rem;
     height: 32px;
     font-size: 2rem;
