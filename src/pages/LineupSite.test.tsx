@@ -81,6 +81,25 @@ describe("LineupSite", () => {
     ).toBeInTheDocument();
   });
 
+  test("loads a video-only lineup from the API and cache without rendering images", async () => {
+    const lineup = makeLineup({ images: [], video: "04K6YaRNtE8?start=70" });
+    fetcher.mockResolvedValue(responseWith([lineup]));
+    const { unmount } = render(
+      <LineupSite navigate={navigate} params={{ lineupId: lineup.id }} />
+    );
+    expect(await screen.findByRole("heading", { name: lineup.name })).toBeInTheDocument();
+    expect(screen.getByTitle("Embedded youtube")).toHaveAttribute(
+      "src", "https://www.youtube.com/embed/04K6YaRNtE8?start=70&rel=0"
+    );
+    expect(screen.queryByRole("img", { name: "lineup info" })).not.toBeInTheDocument();
+
+    unmount();
+    render(<LineupSite navigate={navigate} params={{ lineupId: lineup.id }} />);
+    expect(await screen.findByRole("heading", { name: lineup.name })).toBeInTheDocument();
+    expect(screen.getByTitle("Embedded youtube")).toBeInTheDocument();
+    expect(fetcher).toHaveBeenCalledTimes(1);
+  });
+
   test("keeps the viewer usable for an unknown deep link", async () => {
     fetcher.mockResolvedValue(responseWith([makeLineup()]));
     render(

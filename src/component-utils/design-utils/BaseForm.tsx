@@ -154,7 +154,7 @@ export class BaseForm extends Component<BaseFormProps> {
 
         <div className="row">
           <ReactTags
-            placeholder="Add image link(s) and press enter"
+            placeholder="Image links (optional), then press enter"
             tags={state.images}
             handleDelete={this.handleImageDelete}
             handleAddition={this.handleImageAdd}

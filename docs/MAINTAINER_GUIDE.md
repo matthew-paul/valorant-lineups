@@ -34,7 +34,7 @@ The API endpoint is the `API_URL` constant in [constants.ts](../src/component-ut
 
 Obtain a key through the backend owner's process. The password field masks its display, but the browser necessarily holds it in memory and sends it in the request. Application code does not write the key to local storage. Do not place real keys in source, fixtures, issue reports, or screenshots. A valid key and endpoint do not prove that your browser origin is permitted by the service's CORS configuration.
 
-Host instruction images before authoring: the form stores URLs and has no image upload, hosting, or video upload feature. Confirm that the chosen map, agent, ability, and tags are registered in the [catalog](LINEUP_DATA.md#stable-catalog-ids).
+Images are optional: you can save a lineup with a YouTube video and add images later through `/select` and `/edit`. When adding images, host them first: the form stores URLs and has no image upload, hosting, or video upload feature. Confirm that the chosen map, agent, ability, and tags are registered in the [catalog](LINEUP_DATA.md#stable-catalog-ids).
 
 ## Fields, defaults, and validation
 
@@ -48,7 +48,7 @@ The create page initially selects the first catalog map, currently **Abyss**. Ag
 | Agent | Required selection | Stored as a numeric catalog ID. Changing it clears the ability selection. |
 | Ability | Required selection from the selected agent's options | Stored as its agent-scoped numeric ID. |
 | Tags | Optional; any selected catalog tags | Stored as numeric IDs. Viewer filters require all selected tags. |
-| Images | At least one committed image tag; no blank tag text | URLs are trimmed. Reachability, file type, URL scheme, and image content are not validated by this form. |
+| Images | Optional; committed tags must have nonblank text | URLs are trimmed. Reachability, file type, URL scheme, and image content are not validated by this form. |
 | YouTube video ID or URL | Required; accepted syntax below | Normalized for create and edit, retaining a supported playback timestamp. |
 | Credits | Optional | Submitted as entered. Valid HTTP(S) URLs become links; other values display as text. |
 | Lineup position | Required | Both `x` and `y` must be finite numbers from 0 through 1000. |
@@ -61,7 +61,7 @@ The fetch/cache record validator checks field types and finite numbers rather th
 
 ### Enter image links
 
-Paste a URL into **Add image link(s) and press enter**, then press Enter to commit it as a tag. Text left in the input is not yet part of the record. One entry can contain comma-separated links; the handler trims surrounding whitespace, drops empty entries, and ignores exact duplicate strings already present or repeated in that addition.
+Leave **Image links (optional), then press enter** empty to save without images, or paste a URL and press Enter to commit it as a tag. Text left in the input is not yet part of the record. One entry can contain comma-separated links; the handler trims surrounding whitespace, drops empty entries, and ignores exact duplicate strings already present or repeated in that addition.
 
 For example, entering ` https://example.com/first.jpg, https://example.com/second.jpg, ` creates two image tags in that order. The example host is illustrative; use your actual hosted files. Commas are always treated as separators, so avoid unescaped commas within a single URL. Duplicate detection is textual, not URL canonicalization: different URL strings pointing to the same image remain distinct. Existing stored images are not automatically deduplicated when the editor loads them.
 
@@ -101,7 +101,7 @@ Create and edit offer pan/zoom but no rotation controls. Create uses a maximum m
 
 1. Verify the intended backend and prepare the media and instructions. For a rehearsal, use the [mocked administration tests](../src/pages/LineupAdministration.test.tsx).
 2. Open `/send`, select the map, and place both positions.
-3. Fill the title, agent, ability, image tags, video, and any description, tags, or credits.
+3. Fill the title, agent, ability, and video. Add any optional images, description, tags, or credits.
 4. Review the [data QA checklist](#data-qa-checklist), then enter the authorized API key.
 5. When the remote create is intended, click **Enter** once and wait for the status.
 

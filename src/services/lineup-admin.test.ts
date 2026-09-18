@@ -54,7 +54,6 @@ describe("validateLineupForm", () => {
     ["blank title", { name: "  " }, "Enter a lineup title"],
     ["agent", { agent: null }, "Select an agent"],
     ["ability", { ability: null }, "Select an ability"],
-    ["image", { images: [] }, "Enter an image link"],
     ["blank image", { images: [{ id: "empty", text: " " }] }, "Enter an image link"],
     ["video", { video: "" }, "Enter a youtube video id"],
     ["blank video", { video: " " }, "Enter a youtube video id"],
@@ -80,6 +79,23 @@ describe("validateLineupForm", () => {
     expect(validateLineupForm(makeFormValues())).toEqual({
       valid: true,
       message: "",
+    });
+  });
+
+  test("accepts a video-only lineup without images", () => {
+    expect(validateLineupForm(makeFormValues({ images: [] }))).toEqual({
+      valid: true,
+      message: "",
+    });
+  });
+
+  test.each([
+    ["", "Enter a youtube video id"],
+    ["invalid", "Enter a valid YouTube video ID or URL"],
+  ])("still requires a valid video when images are absent: %s", (video, message) => {
+    expect(validateLineupForm(makeFormValues({ images: [], video }))).toEqual({
+      valid: false,
+      message,
     });
   });
 });

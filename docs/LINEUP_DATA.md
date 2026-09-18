@@ -50,7 +50,7 @@ All fields below are required by `isLineupRecord`. Additional fields are accepte
 | `ability` | finite `number` | Permanent ability value in `ABILITY_LIST[agent]`. |
 | `mapId` | finite `number` | Permanent `MAP_LIST` value. |
 | `tags` | array of finite numbers | `TAG_LIST` values; an empty list is allowed. |
-| `images` | array of strings | Ordered tutorial-image URLs. Forms require at least one tag, with every tag's text nonblank; payload URLs are trimmed. |
+| `images` | array of strings | Ordered tutorial-image URLs; `[]` represents no images. Image tags are optional in forms, but any supplied tag must have nonblank text; payload URLs are trimmed. |
 | `video` | `string` | YouTube video ID, optionally followed by `?start=<seconds>`. Forms validate and normalize IDs/supported URLs; see [form normalization](#form-normalization). |
 | `credits` | `string` | Attribution; may be empty. HTTP(S) URLs render as links, other values as text. Submitted without trimming. |
 | `x`, `y` | finite numbers | Landing marker's top-left coordinates in unscaled 1000 × 1000 map space. |
@@ -58,7 +58,7 @@ All fields below are required by `isLineupRecord`. Additional fields are accepte
 
 The runtime guard checks shape rather than all domain rules. It accepts empty strings/arrays, fractional numeric IDs, out-of-range finite coordinates, unknown catalog IDs, and any string in media fields. It does not check ID uniqueness or media availability. Numeric strings and `null` for required fields fail validation. Passing this guard does not establish valid authoring input.
 
-Authoring additionally requires selected agent/ability, a nonblank title/API key, nonblank image tags, supported YouTube input, and all four coordinates finite and within 0 through 1000 inclusive. The API key is form state, not a `LineupRecord` field. Backend validation and authorization remain separate.
+Authoring additionally requires selected agent/ability, a nonblank title/API key, nonblank text for any supplied image tags, supported YouTube input, and all four coordinates finite and within 0 through 1000 inclusive. The API key is form state, not a `LineupRecord` field. Backend validation and authorization remain separate.
 
 ## Representations and defaults
 

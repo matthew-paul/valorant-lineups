@@ -23,13 +23,19 @@ const positionMarker = (buttonName: string, x: number, y: number): void => {
   fireEvent(map, event);
 };
 
-const fillNewLineup = (): void => {
+const addImageLinks = (links: string): void => {
+  const imageInput = screen.getByLabelText("Image links (optional), then press enter");
+  fireEvent.change(imageInput, { target: { value: links } });
+  fireEvent.keyDown(imageInput, { key: "Enter", keyCode: 13, which: 13 });
+};
+
+const fillNewLineup = (includeImages = true): void => {
   fireEvent.change(screen.getByLabelText("Lineup title"), { target: { value: "New lineup" } });
   choose("Agent select", "Sova");
   choose("Ability select", "Recon Bolt");
-  const imageInput = screen.getByLabelText("Add image link(s) and press enter");
-  fireEvent.change(imageInput, { target: { value: " https://example.com/image.jpg, https://example.com/image.jpg, " } });
-  fireEvent.keyDown(imageInput, { key: "Enter", keyCode: 13, which: 13 });
+  if (includeImages) {
+    addImageLinks(" https://example.com/image.jpg, https://example.com/image.jpg, ");
+  }
   fireEvent.change(screen.getByLabelText("YouTube video ID or URL"), { target: { value: "https://youtu.be/04K6YaRNtE8?t=70" } });
   fireEvent.change(screen.getByLabelText("API key"), { target: { value: "test-key" } });
   positionMarker("Set Lineup Position", 100, 200);
@@ -46,13 +52,13 @@ describe("lineup administration", () => {
     });
   });
 
-  test("submits a normalized create payload once and invalidates cached records", async () => {
+  test.each([true, false])("submits a normalized create payload once and invalidates cached records (includeImages: %s)", async (includeImages) => {
     let resolveRequest!: (response: Response) => void;
     fetcher.mockReturnValue(new Promise<Response>((resolve) => { resolveRequest = resolve; }));
     localStorage.setItem("savedLineups", "{}");
     localStorage.setItem("lastRetrievedTime", "123");
     render(<DesignLineup />);
-    fillNewLineup();
+    fillNewLineup(includeImages);
     const submit = screen.getByRole("button", { name: "Enter" });
     fireEvent.click(submit);
     fireEvent.click(submit);
@@ -64,7 +70,7 @@ describe("lineup administration", () => {
     expect(JSON.parse(String(request?.body))).toMatchObject({
       name: "New lineup", video: "04K6YaRNtE8?start=70", agent: 13, ability: 1,
       x: 100, y: 200, startX: 300, startY: 400,
-      images: ["https://example.com/image.jpg"],
+      images: includeImages ? ["https://example.com/image.jpg"] : [],
     });
     await act(async () => resolveRequest(responseWith()));
     expect(screen.getByRole("status")).toHaveTextContent(/sent lineup to database/i);
@@ -74,10 +80,10 @@ describe("lineup administration", () => {
     expect(localStorage.getItem("lastRetrievedTime")).toBeNull();
   });
 
-  test("retains the form and permits retry after a rejected create request", async () => {
+  test.each([true, false])("retains the form and permits retry after a rejected create request (includeImages: %s)", async (includeImages) => {
     fetcher.mockResolvedValue(responseWith("Unavailable", false));
     render(<DesignLineup />);
-    fillNewLineup();
+    fillNewLineup(includeImages);
     fireEvent.click(screen.getByRole("button", { name: "Enter" }));
     expect(await screen.findByText(/request failed with status 503/i)).toBeInTheDocument();
     expect(screen.getByLabelText("Lineup title")).toHaveValue("New lineup");
@@ -143,6 +149,34 @@ describe("lineup administration", () => {
     await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent(/edit request completed/i));
     expect(fetcher).toHaveBeenCalledTimes(2);
     expect(JSON.parse(String(fetcher.mock.calls[1][1]?.body))).toMatchObject({ video: "04K6YaRNtE8?start=70" });
+  });
+
+  test("saves a video-only edit and allows images to be added after reopening", async () => {
+    const lineup = makeLineup({ images: [], video: "04K6YaRNtE8?start=70" });
+    localStorage.setItem("editMarker", JSON.stringify(lineup));
+    fetcher.mockResolvedValue(responseWith());
+    const { unmount } = render(<EditLineup />);
+    fireEvent.change(screen.getByLabelText("API key"), { target: { value: "test-key" } });
+    fireEvent.change(screen.getByLabelText("Lineup title"), { target: { value: "Video-only lineup" } });
+    fireEvent.click(screen.getByRole("button", { name: "Update" }));
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent(/edit request completed/i));
+    const savedLineup = { ...lineup, name: "Video-only lineup" };
+    expect(JSON.parse(String(fetcher.mock.calls[0][1]?.body))).toEqual(savedLineup);
+    expect(JSON.parse(localStorage.getItem("editMarker") ?? "null")).toEqual(savedLineup);
+
+    unmount();
+    render(<EditLineup />);
+    fireEvent.change(screen.getByLabelText("API key"), { target: { value: "test-key" } });
+    addImageLinks("https://example.com/aim.jpg, https://example.com/result.jpg");
+    fireEvent.click(screen.getByRole("button", { name: "Update" }));
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent(/edit request completed/i));
+    const updatedLineup = {
+      ...savedLineup,
+      images: ["https://example.com/aim.jpg", "https://example.com/result.jpg"],
+    };
+    expect(fetcher).toHaveBeenCalledTimes(2);
+    expect(JSON.parse(String(fetcher.mock.calls[1][1]?.body))).toEqual(updatedLineup);
+    expect(JSON.parse(localStorage.getItem("editMarker") ?? "null")).toEqual(updatedLineup);
   });
 
   test("shows corrupt saved selections without allowing mutations", () => {

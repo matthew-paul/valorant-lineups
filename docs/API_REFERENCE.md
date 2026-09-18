@@ -164,7 +164,7 @@ The caller uses the last successfully saved record's map ID, not an unsaved sele
 
 ### Validation layers
 
-UI create/edit calls `validateLineupForm`: nonblank title/API key; selected agent/ability; at least one image tag with every entry nonblank; supported YouTube input; and all four coordinates finite and within 0 through 1000 inclusive. Description/tags/credits may be empty.
+UI create/edit calls `validateLineupForm`: nonblank title/API key; selected agent/ability; nonblank text for any supplied image tags; supported YouTube input; and all four coordinates finite and within 0 through 1000 inclusive. Images/description/tags/credits may be empty. When no images are supplied, add/edit payloads retain `images: []`; the field is not omitted or set to `null`. The external backend's acceptance of this payload requires separate integration verification.
 
 Builders trim titles/image URLs, convert selects to numeric IDs, and exclude API keys/UI state. Create normalizes its video before building; edit normalizes it inside `buildEditPayload`. Both retain supported start times in the existing `video` string. Exact accepted inputs are in [form normalization](LINEUP_DATA.md#form-normalization).
 

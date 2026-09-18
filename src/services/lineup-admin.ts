@@ -55,10 +55,7 @@ export const validateLineupForm = (
   if (state.agent === null) return { valid: false, message: "Select an agent" };
   if (state.ability === null)
     return { valid: false, message: "Select an ability" };
-  if (
-    state.images.length === 0 ||
-    state.images.some((image) => image.text.trim() === "")
-  )
+  if (state.images.some((image) => image.text.trim() === ""))
     return { valid: false, message: "Enter an image link" };
   if (state.video.trim() === "")
     return { valid: false, message: "Enter a youtube video id" };

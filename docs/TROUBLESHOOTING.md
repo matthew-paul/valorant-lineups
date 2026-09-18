@@ -47,7 +47,7 @@ Use the symptom table to select a narrow investigation. Capture the exact comman
 | `/edit` is empty/disabled | Whether `editMarker` exists | Choose a lineup on `/select` first. Direct navigation does not fetch a record for editing. |
 | Saved-selection error | JSON/type validation and catalog lookup | Re-select a valid supported record. Do not invent defaults that could overwrite the wrong lineup. |
 | Positions disappear after map change | Selected map value | This is intentional: both start and landing coordinates must be placed again for the new image. |
-| Form refuses submission | First visible validation message | Check nonblank title, agent/ability, image tags, YouTube ID/URL, both valid coordinate pairs, and API key. [Maintainer guide](MAINTAINER_GUIDE.md) |
+| Form refuses submission | First visible validation message | Check the [required fields and validation rules](MAINTAINER_GUIDE.md#fields-defaults-and-validation). Images are optional. |
 | POST returns 401/403 or a CORS error | OPTIONS vs POST, header names, key scope, origin | Backend authorization/CORS is external. Do not expose the key in a troubleshooting log or assume the `/development` stage permits test writes. |
 | Submit controls remain disabled | Pending fetch vs settled response | A request guard prevents duplicates; no request timeout is implemented. Check the remote outcome before retrying a possibly completed create/delete. |
 | Delete uses an unexpected map | Last saved marker vs unsaved map selection | Delete deliberately uses the last successfully saved record's map ID. A successful map edit updates that identity. |
