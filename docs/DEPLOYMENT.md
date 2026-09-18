@@ -23,7 +23,7 @@ The diagram describes the confirmed high-level services; it does not specify AWS
 | Frontend host | Vercel, maintainer-confirmed | Team/project identity and permitted deployment scope |
 | Public domain used by copy links | `https://valorant-lineups.com` in [ContentFrame.tsx](../src/component-utils/lineup-site-utils/ContentFrame.tsx) | Vercel domain association, DNS owner and aliases |
 | Git integration / production branch | Not specified in this repository | Actual linked repository, branch tracking and auto-deploy settings |
-| Build configuration | CRA scripts in [package.json](../package.json) | Actual Vercel overrides, root directory and Node version |
+| Build configuration | CRA scripts and Node 24.x requirement in [package.json](../package.json) | Actual Vercel overrides, root directory and effective deployment Node version |
 | Backend runtime | AWS Lambda, maintainer-confirmed | Backend source repository, function name/ARN, version/alias, runtime and release process |
 | Client API URL | [constants.ts](../src/component-utils/constants.ts): `https://uh5it8zn19.execute-api.us-east-1.amazonaws.com/development` | Gateway integration, stage semantics, authorization and CORS configuration |
 | Database/media storage | Not defined here | Data store, backup/restore owner, image-host ownership and upload process |
@@ -46,12 +46,14 @@ The following values are derived from this repository and are compatible targets
 | Verification | `yarn verify` or `npm run verify` before release |
 | Production build | `yarn build` (includes the Sass `prebuild` hook) |
 | Output directory | `build`, not `dist` |
-| Local reference runtime | Node.js 22.13.1; no repository `engines` or `.nvmrc` pin |
+| Node.js runtime | `engines.node` requires `24.x`; see the [verified local toolchain](DEVELOPMENT.md#establish-the-workspace-before-editing) |
 | URL base | `/`; no Router basename or package homepage configured |
 | JavaScript source maps | Disabled by `GENERATE_SOURCEMAP=false` in the build script |
 | Client environment settings | No application-specific environment-variable reads; API/domain/feedback settings are compiled from source |
 
 Install development dependencies for builds because TypeScript, Sass, types and test tools are needed. `build/` is ignored by Git; generated `src/css/main.min.css` and its Sass source map are tracked. Do not copy `src/`, `node_modules/`, or credentials into the static deployment artifact.
+
+The reported deployment failure rejected the discontinued Node.js `18.x` project setting before compilation. The repository now specifies `engines.node: "24.x"`, which [Vercel uses in preference to the project setting](https://vercel.com/docs/functions/runtimes/node-js/node-js-versions#version-overrides-in-packagejson). Deploy the commit containing this requirement; retrying an older commit without it retains the old runtime selection. Keep the dashboard's Node.js Version aligned with `24.x` for consistency. This frontend build requirement does not change the AWS Lambda runtime.
 
 Vercel supports CRA and Git-based previews; the current project can remain a static CRA deployment. Hosting on Vercel does not imply use of Next.js, Vercel Functions, Analytics, or Speed Insights. This repository does not import Vercel analytics packages. [Vercel CRA documentation](https://vercel.com/docs/frameworks/frontend/create-react-app)
 

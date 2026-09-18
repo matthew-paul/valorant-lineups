@@ -47,7 +47,7 @@ This is the primary entry point for LLM agents working in this repository. Read 
 
 ## Commands and verification
 
-Run from the repository root. The reference environment is Node.js 22.13.1; `packageManager` pins Yarn 1.22.22. If `yarn` is absent but Corepack exists, replace `yarn` with `corepack yarn`. On PowerShell, `npm.cmd` avoids the `npm.ps1` wrapper when it causes policy/path errors.
+Run from the repository root with the Node.js version required by `engines.node` in [package.json](package.json); see [Development](docs/DEVELOPMENT.md) for the verified toolchain. `packageManager` pins Yarn 1.22.22. If `yarn` is absent but Corepack exists, replace `yarn` with `corepack yarn`. On PowerShell, `npm.cmd` avoids the `npm.ps1` wrapper when it causes policy/path errors.
 
 ```sh
 yarn install --frozen-lockfile

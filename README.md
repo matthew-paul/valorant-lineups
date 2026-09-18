@@ -23,7 +23,7 @@ The frontend is hosted on **Vercel** and the backend runs on **AWS Lambda**, as 
 
 ### Prerequisites
 
-- Node.js 22.13.1 is the verified reference version. The repository does not pin Node through `engines` or `.nvmrc`.
+- Use the Node.js version required by `engines.node` in [package.json](package.json); see the [verified toolchain](docs/DEVELOPMENT.md#establish-the-workspace-before-editing).
 - [Yarn Classic](https://classic.yarnpkg.com/) 1.22.22
 
 The repository pins Yarn 1.22.22 through `packageManager` and tracks `yarn.lock`, so use Yarn when changing dependencies. If no `yarn` command is installed, use `corepack yarn` in its place. After installing dependencies, all checks also work through `npm run <script>` without creating another lockfile.

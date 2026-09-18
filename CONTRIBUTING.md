@@ -6,7 +6,7 @@ Use this as the contribution and review checklist. LLM agents should begin with 
 
 ### Requirements
 
-- Node.js 22.13.1 is the verified reference version. The project does not enforce an `engines` value or provide an `.nvmrc`; other versions need validation before being documented as supported.
+- Use the Node.js version required by `engines.node` in [package.json](package.json); see the [verified toolchain](docs/DEVELOPMENT.md#establish-the-workspace-before-editing).
 - Yarn Classic 1.22.22, pinned in `package.json`. Use `corepack yarn` if the `yarn` shim is unavailable. The repository tracks a Yarn v1 lockfile and no npm lockfile.
 - A modern browser with `fetch` and local-storage support. Clipboard copying additionally requires HTTPS or localhost.
 

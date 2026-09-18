@@ -15,7 +15,7 @@ rg --files src docs
 
 Preserve unrelated changes already in the working tree. Do not regenerate assets, renumber catalogs, or refresh the dependency graph as a side effect of an unrelated edit. The repository may contain generated `build/`, `coverage/`, and `node_modules/` directories; none is application source.
 
-The verified toolchain is **Node.js 22.13.1** with **Yarn Classic 1.22.22**. [`packageManager`](../package.json) pins Yarn, and [`yarn.lock`](../yarn.lock) records dependency resolution. There is no checked-in `.nvmrc`, `.node-version`, or `engines` restriction. That means Node 22.13.1 is a tested baseline, not a claim that every other Node release works or fails.
+Use **Node.js 24.x** with **Yarn Classic 1.22.22**. [`package.json`](../package.json) requires Node 24 through `engines.node` and pins Yarn through `packageManager`; [`yarn.lock`](../yarn.lock) records dependency resolution. The verified local runtime is Node.js 24.21.0. There is no checked-in `.nvmrc` or `.node-version`. See [Deployment](DEPLOYMENT.md#build-contract) for how the Node requirement selects Vercel's build runtime.
 
 ### Install and run
 
