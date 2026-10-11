@@ -283,6 +283,8 @@ Clipboard writes use an encoded ID on the fixed production domain `https://valor
 
 `EmailForm` performs its IP lookup when the feedback form mounts, using an `AbortController`. A failed lookup leaves the IP empty and does not block sending. Submitting trims fields, rejects whitespace-only name/message, disables repeated sends, and invokes EmailJS. Success leaves the button disabled and schedules popup closure after three seconds; failure re-enables retry. Cleanup aborts the lookup, clears the close timer, and suppresses late state changes. It cannot cancel an EmailJS send already submitted. Service/template/public-key identifiers are compiled into this component; security and external-configuration ownership are detailed in [SECURITY.md](SECURITY.md).
 
+`YoutubeEmbed` uses the [YouTube IFrame API](https://developers.google.com/youtube/iframe_api_reference) to seek to the saved timestamp and resume playback. Its normalized video value keys the player lifecycle, including timestamp changes on the same video. The iframe lives inside a React-owned host because the API removes it on destruction. Cleanup destroys the player and ignores obsolete loading/readiness callbacks. The shared [API loader](../src/services/youtube-player.ts) loads one script, preserves existing readiness callbacks, and permits retry after loading failure. Replay readiness and fallback behavior are described in the [viewer guide](USER_GUIDE.md#move-the-map-and-inspect-media).
+
 ## Maintenance limits and change boundaries
 
 - Viewer and selector share algorithms but retain similar page/interaction code. Change both callers when a shared behavior is implemented in a page rather than a service.

@@ -88,9 +88,11 @@ describe("LineupSite", () => {
       <LineupSite navigate={navigate} params={{ lineupId: lineup.id }} />
     );
     expect(await screen.findByRole("heading", { name: lineup.name })).toBeInTheDocument();
-    expect(screen.getByTitle("Embedded youtube")).toHaveAttribute(
-      "src", "https://www.youtube.com/embed/04K6YaRNtE8?start=70&rel=0"
-    );
+    const videoUrl = new URL(screen.getByTitle("Embedded youtube").getAttribute("src") ?? "");
+    expect(videoUrl.origin).toBe("https://www.youtube.com");
+    expect(videoUrl.pathname).toBe("/embed/04K6YaRNtE8");
+    expect(videoUrl.searchParams.get("start")).toBe("70");
+    expect(screen.getByRole("button", { name: "Replay from 1:10" })).toBeInTheDocument();
     expect(screen.queryByRole("img", { name: "lineup info" })).not.toBeInTheDocument();
 
     unmount();

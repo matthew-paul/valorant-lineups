@@ -31,7 +31,8 @@ All named scripts also work through Yarn. When using `corepack yarn test`, pass 
 | [lineup-data.test.ts](../src/services/lineup-data.test.ts) | Record/cache parsing, expiry and map buckets, storage failures, fetching, filters, clusters and arrow geometry |
 | [lineup-admin.test.ts](../src/services/lineup-admin.test.ts) | Form validation, timestamped payloads, request headers, success and failure responses |
 | [youtube-video.test.ts](../src/services/youtube-video.test.ts) | Supported video IDs/URLs, timestamp normalization, repeated saves, malformed timestamps and unsupported inputs |
-| [YoutubeEmbed.test.tsx](../src/component-utils/lineup-site-utils/YoutubeEmbed.test.tsx) | Timestamped iframe URLs, legacy bare IDs, start-time changes, invalid video values |
+| [YoutubeEmbed.test.tsx](../src/component-utils/lineup-site-utils/YoutubeEmbed.test.tsx) | Timestamped iframe URLs, replay seek/resume, player readiness/failure, changing videos/timestamps, StrictMode and unmount cleanup |
+| [youtube-player.test.ts](../src/services/youtube-player.test.ts) | Shared YouTube API loading, callback preservation, failure/timeout cleanup and retries |
 | [LineupSite.test.tsx](../src/pages/LineupSite.test.tsx) | Deep-link/parameter selection, unknown IDs, request/storage failures, retained cluster choices, image-load versus request state |
 | [SelectLineupPage.test.tsx](../src/pages/SelectLineupPage.test.tsx) | Single-marker edit selection, tab opening, map-change refresh, storage failure |
 | [LineupAdministration.test.tsx](../src/pages/LineupAdministration.test.tsx) | Actual create/edit forms, normalized request data, duplicate-submit guards, retries, map resets, updated-map deletion, corrupt stored selections |
@@ -104,6 +105,7 @@ Use local or preview frontend URLs with known synthetic/test data when authoring
 6. Render `/send`, `/select`, and `/edit` without a production key. Exercise field input and marker placement; test real mutation requests only against an explicitly identified test backend or as part of an authorized data operation.
 7. Inspect menu keyboard focus, Escape, form labels, desktop layout, narrow viewports, slow/error media, and blocked storage.
 8. Check console/network output for actual errors; distinguish known toolchain migration notices from failures.
+9. Play and pause a timestamped video, then use **Replay from m:ss** repeatedly. Confirm it resumes at the saved time without reloading. Switch to another timestamp on the same video and to a video without a timestamp. Check keyboard activation and player-loading failures. Mocked player tests do not establish live YouTube playback or browser autoplay behavior.
 
 Record browser/version, viewport/device, routes and interactions checked, data source, and limitations. If no browser is available, report that directly rather than converting jsdom results into a claim of visual verification.
 

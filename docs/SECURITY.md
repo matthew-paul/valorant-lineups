@@ -41,7 +41,7 @@ The reset control on `/about` targets these four keys. There is no application a
 | Viewer/selector load when cache is missing/invalid/expired | API Gateway URL in [constants.ts](../src/component-utils/constants.ts) | GET retrieves lineup records; no form API key is sent with GET |
 | Authorized create/edit/delete | Same API Gateway endpoint | Lineup mutation body and runtime API-key header |
 | Display a lineup screenshot | The record's image host | Browser image request to the supplied URL |
-| Display a lineup video | `www.youtube.com` iframe from [YoutubeEmbed.tsx](../src/component-utils/lineup-site-utils/YoutubeEmbed.tsx) | Video ID and browser iframe request; YouTube may load further resources |
+| Display a lineup video | `www.youtube.com` iframe and IFrame API script from [YoutubeEmbed.tsx](../src/component-utils/lineup-site-utils/YoutubeEmbed.tsx) and [youtube-player.ts](../src/services/youtube-player.ts) | Video ID, start time, current site origin and browser requests; the API enables replay controls, and YouTube may load further resources |
 | Load styles/fonts | Google Fonts imports in [scss](../src/scss) | Font stylesheet and font resource requests |
 | Mount feedback form | `https://geolocation-db.com/json/` | Public-IP lookup; returned `IPv4` is held in component state if present |
 | Submit feedback | EmailJS, configured in [EmailForm.tsx](../src/component-utils/lineup-site-utils/EmailForm.tsx) | `from_name`, `message`, optional `reply_to`, `ip_address`, `lineup_id` plus EmailJS identifiers |

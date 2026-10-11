@@ -129,14 +129,60 @@ $height-aspect-ratio: 23vw;
 
 #video-frame {
     @include frame-settings(red);
+    height: auto;
+}
+
+.video-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 8px;
+    color: white;
+}
+
+.video-replay {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 40px;
+    padding: 8px 12px;
+    border: 1px solid white;
+    border-radius: 4px;
+    background: #222;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+
+    svg {
+        flex-shrink: 0;
+        font-size: 20px;
+    }
+
+    &:hover:not(:disabled) {
+        background: #444;
+    }
+
+    &:focus-visible {
+        outline: 2px solid #bfe0ff;
+        outline-offset: 2px;
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: default;
+    }
 }
 
 .video-responsive {
-    height: 100%;
+    height: $height-aspect-ratio;
     @include debug-border(teal);
 }
 
 .video-responsive iframe {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: contain;

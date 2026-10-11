@@ -65,6 +65,8 @@ Map zoom buttons are not shown. Instruction images use a separate zoom component
 
 The details panel shows the selected lineup's title, tags, description, credits, YouTube video, and images where those fields are present. HTTP(S) credits open as links in a new tab; other credit values display as plain text. YouTube videos with a saved [playback timestamp](LINEUP_DATA.md#form-normalization) request playback at that time; videos without one start at the beginning. Video playback and images depend on their hosts and can fail even when the lineup record loads. The viewer does not validate whether instructions still work in the current game version.
 
+Use **Replay from m:ss** above the video to jump back to the saved timestamp and resume playback without reloading the player. The label shows hours for longer timestamps and **0:00** when no timestamp was saved. Replay becomes available when the player is ready; if its controls cannot load, a message directs you to the video's own controls.
+
 ## Share links and use browser history
 
 Opening a lineup changes the address to `/:lineupId`. Visiting that link selects the record's map and agent and opens its details. If the record is not already visible under the current filters, the viewer clears ability and tag restrictions when selecting it. Hidden-lineup preferences still apply to its map marker.
