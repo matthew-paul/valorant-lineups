@@ -9,6 +9,16 @@ const makeApi = (): YouTubePlayerApi => ({
   Player: jest.fn(() => ({
     seekTo: jest.fn(),
     playVideo: jest.fn(),
+    pauseVideo: jest.fn(),
+    getCurrentTime: jest.fn(() => 0),
+    getPlayerState: jest.fn(() => -1),
+    getPlaybackRate: jest.fn(() => 1),
+    setPlaybackRate: jest.fn(),
+    getVolume: jest.fn(() => 100),
+    setVolume: jest.fn(),
+    isMuted: jest.fn(() => false),
+    mute: jest.fn(),
+    unMute: jest.fn(),
     destroy: jest.fn(),
   })),
 });
