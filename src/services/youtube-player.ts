@@ -1,29 +1,13 @@
 export interface YouTubePlayer {
   seekTo: (seconds: number, allowSeekAhead: boolean) => void;
   playVideo: () => void;
-  pauseVideo: () => void;
-  getCurrentTime: () => number;
-  getPlayerState: () => number;
-  getPlaybackRate: () => number;
-  setPlaybackRate: (rate: number) => void;
-  getVolume: () => number;
-  setVolume: (volume: number) => void;
-  isMuted: () => boolean;
-  mute: () => void;
-  unMute: () => void;
   destroy: () => void;
 }
 
 export interface YouTubePlayerApi {
   Player: new (
     iframe: HTMLIFrameElement,
-    options: {
-      events: {
-        onReady: () => void;
-        onError: () => void;
-        onStateChange: (event: { data: number }) => void;
-      };
-    }
+    options: { events: { onReady: () => void; onError: () => void } }
   ) => YouTubePlayer;
 }
 
