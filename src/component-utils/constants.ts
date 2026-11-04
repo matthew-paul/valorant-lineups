@@ -51,6 +51,7 @@ import PearlMap from "../resources/Maps/pearl_map.png";
 import LotusMap from "../resources/Maps/lotus_map.png";
 import SunsetMap from "../resources/Maps/sunset_map.png";
 import SummitMap from "../resources/Maps/summit_map.png";
+import CorrodeMap from "../resources/Maps/corrode_map.png";
 
 import type {
   AbilityOption,
@@ -135,6 +136,7 @@ export const MAP_LIST: MapOption[] = [
   { value: 1, label: "Ascent", icon: AscentMap },
   { value: 2, label: "Bind", icon: BindMap },
   { value: 3, label: "Breeze", icon: BreezeMap },
+  { value: 13, label: "Corrode", icon: CorrodeMap },
   { value: 7, label: "Fracture", icon: FractureMap },
   { value: 4, label: "Haven", icon: HavenMap },
   { value: 5, label: "Icebox", icon: IceboxMap },

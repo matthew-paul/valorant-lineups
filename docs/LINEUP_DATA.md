@@ -100,6 +100,7 @@ Paths are under [src/resources/Maps](../src/resources/Maps). Every listed PNG is
 | 1 | Ascent | `ascent_map.png` |
 | 2 | Bind | `bind_map.png` |
 | 3 | Breeze | `breeze_map.png` |
+| 13 | Corrode | `corrode_map.png` |
 | 7 | Fracture | `fracture_map.png` |
 | 4 | Haven | `haven_map.png` |
 | 5 | Icebox | `icebox_map.png` |

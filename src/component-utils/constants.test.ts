@@ -27,6 +27,10 @@ describe("lineup constants lookups", () => {
       value: 12,
       label: "Summit",
     });
+    expect(getMapFromId(13)).toMatchObject({
+      value: 13,
+      label: "Corrode",
+    });
   });
 
   it("returns undefined instead of throwing for unknown IDs", () => {
